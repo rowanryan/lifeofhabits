@@ -64,7 +64,7 @@ export function AppSidebarItem(props: AppSidebarItemProps) {
 
     return (
         <SidebarMenuItem>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild tooltip={props.label}>
                 <Link href={props.href}>
                     {props.icon}
                     <span>{props.label}</span>
