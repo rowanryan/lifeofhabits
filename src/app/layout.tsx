@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "NextJS Shadcn Boilerplate",
+    title: "Next Boiler",
 };
 
 export default function RootLayout({
