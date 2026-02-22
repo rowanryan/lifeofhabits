@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
+import { MobileMenu } from "./components/MobileMenu";
 import type { NavigationLinkProps } from "./components/NavigationLink";
 import { NavigationLink } from "./components/NavigationLink";
 import { UserButton } from "./components/UserButton";
@@ -69,33 +70,47 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
                 className,
             )}
         >
-            <nav className="flex -ml-2 items-center gap-1">
-                {navigationLinks.map((link) => (
-                    <NavigationLink key={link.href} {...link} />
-                ))}
-            </nav>
+            <div className="flex items-center gap-4">
+                <p className="font-semibold">Next Boiler</p>
 
-            {user ? (
-                <UserButton
-                    user={{
-                        id: user.id,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        emailAddress: user.primaryEmailAddress?.emailAddress,
-                        imageUrl: user.imageUrl,
-                    }}
-                />
-            ) : (
-                <UserButton
-                    user={{
-                        id: "",
-                        firstName: "John",
-                        lastName: "Doe",
-                        emailAddress: "john.doe@example.com",
-                        imageUrl: "https://avatar.vercel.sh/johndoe?rounded=60",
-                    }}
-                />
-            )}
+                <nav className="hidden items-center gap-1 @xl/shell:flex">
+                    {navigationLinks.map((link) => (
+                        <NavigationLink key={link.href} {...link} />
+                    ))}
+                </nav>
+            </div>
+
+            <div className="flex items-center gap-2">
+                <div className="hidden @xl/shell:block">
+                    {user ? (
+                        <UserButton
+                            user={{
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                emailAddress:
+                                    user.primaryEmailAddress?.emailAddress,
+                                imageUrl: user.imageUrl,
+                            }}
+                        />
+                    ) : (
+                        <UserButton
+                            user={{
+                                id: "",
+                                firstName: "John",
+                                lastName: "Doe",
+                                emailAddress: "john.doe@example.com",
+                                imageUrl:
+                                    "https://avatar.vercel.sh/johndoe?rounded=60",
+                            }}
+                        />
+                    )}
+                </div>
+
+                <div className="block @xl/shell:hidden -mr-2">
+                    <MobileMenu />
+                </div>
+            </div>
         </header>
     );
 }
