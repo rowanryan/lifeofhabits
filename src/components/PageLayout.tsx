@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -70,15 +70,10 @@ function PageBreadcrumb({
     ...props
 }: PageBreadcrumbProps & React.ComponentProps<typeof Breadcrumb>) {
     const isMobile = useIsMobile();
-    const pathname = usePathname();
     const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
     const visibleBreadcrumbs = breadcrumbs.filter((bc) => !bc.isHidden);
     const lastBreadcrumb = visibleBreadcrumbs[visibleBreadcrumbs.length - 1];
-
-    React.useEffect(() => {
-        setIsDropdownOpen(false);
-    }, [pathname]);
 
     if (isMobile && lastBreadcrumb) {
         return (
@@ -98,8 +93,8 @@ function PageBreadcrumb({
                                 </BreadcrumbPage>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
-                                {visibleBreadcrumbs.map((bc, index) => (
-                                    <DropdownMenuItem key={index}>
+                                {visibleBreadcrumbs.map((bc) => (
+                                    <DropdownMenuItem key={bc.href}>
                                         <BreadcrumbLink
                                             asChild
                                             onClick={() =>
@@ -124,7 +119,7 @@ function PageBreadcrumb({
         <Breadcrumb {...props}>
             <BreadcrumbList>
                 {visibleBreadcrumbs.map((bc, index) => (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={bc.href}>
                         <BreadcrumbItem>
                             {index < visibleBreadcrumbs.length - 1 ? (
                                 <BreadcrumbLink asChild>
@@ -189,8 +184,8 @@ function PageSideMenu({
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Sections</SelectLabel>
-                            {sideMenuLinks.map((link, index) => (
-                                <SelectItem key={index} value={link.href}>
+                            {sideMenuLinks.map((link) => (
+                                <SelectItem key={link.href} value={link.href}>
                                     {link.label}
                                 </SelectItem>
                             ))}
@@ -200,10 +195,10 @@ function PageSideMenu({
             </div>
 
             <div className="hidden @xl/sidemenu:block @xl/sidemenu:col-span-2 space-y-1">
-                {sideMenuLinks.map((link, index) => (
+                {sideMenuLinks.map((link) => (
                     <Button
                         asChild
-                        key={index}
+                        key={link.href}
                         variant={link.isActive ? "secondary" : "ghost"}
                         className="w-full justify-start"
                     >

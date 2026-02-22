@@ -45,8 +45,8 @@ export function AppSidebarItem(props: AppSidebarItemProps) {
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                         <SidebarMenuSub>
-                            {props.links.map((subItem, index) => (
-                                <SidebarMenuSubItem key={index}>
+                            {props.links.map((subItem) => (
+                                <SidebarMenuSubItem key={subItem.href}>
                                     <SidebarMenuSubButton asChild>
                                         <Link href={subItem.href}>
                                             <span>{subItem.label}</span>

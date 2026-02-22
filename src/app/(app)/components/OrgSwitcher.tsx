@@ -81,9 +81,9 @@ export function OrgSwitcher() {
                         <DropdownMenuLabel className="text-muted-foreground text-xs">
                             Organizations
                         </DropdownMenuLabel>
-                        {dummyOrgs.map((org, index) => (
+                        {dummyOrgs.map((org) => (
                             <DropdownMenuItem
-                                key={index}
+                                key={org.name}
                                 onClick={() => setActiveOrg(org)}
                                 className="gap-2 p-2"
                             >

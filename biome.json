@@ -25,5 +25,35 @@
     },
     "files": {
         "includes": ["**", "!**/.next", "!**/node_modules"]
-    }
+    },
+    "overrides": [
+        {
+            "includes": ["src/components/ui/**"],
+            "linter": {
+                "rules": {
+                    "a11y": {
+                        "noNoninteractiveTabindex": "off",
+                        "noRedundantRoles": "off",
+                        "noStaticElementInteractions": "off",
+                        "useAriaPropsForRole": "off",
+                        "useAriaPropsSupportedByRole": "off",
+                        "useFocusableInteractive": "off",
+                        "useKeyWithClickEvents": "off",
+                        "useSemanticElements": "off"
+                    },
+                    "correctness": {
+                        "useExhaustiveDependencies": "off"
+                    },
+                    "security": {
+                        "noDangerouslySetInnerHtml": "off"
+                    },
+                    "suspicious": {
+                        "noArrayIndexKey": "off",
+                        "noDocumentCookie": "off",
+                        "noDoubleEquals": "off"
+                    }
+                }
+            }
+        }
+    ]
 }

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import type z from "zod";
 import { type Context, createContext } from "./shared";
 
@@ -51,8 +49,8 @@ export const createQueryClient = <TContext extends Context = Context>(
     ): (input: z.input<TSchema>) => Promise<TOutput>;
     function query<TInputOrSchema = void, TOutput = unknown>(
         fnOrSchema: QueryFn<TInputOrSchema, TOutput, TContext> | z.ZodTypeAny,
-        fn?: QueryFn<any, TOutput, TContext>,
-    ): any {
+        fn?: QueryFn<unknown, TOutput, TContext>,
+    ): unknown {
         // If two parameters provided, first is schema, second is function
         if (fn !== undefined) {
             const schema = fnOrSchema as z.ZodTypeAny;
@@ -126,7 +124,8 @@ export const adminQuery = authQuery.use(async (ctx) => {
 });
 
 // Utility types to infer input and output from any query
-export type QueryInput<T extends (...args: any[]) => any> = Parameters<T>[0];
-export type QueryOutput<T extends (...args: any[]) => any> = Awaited<
+export type QueryInput<T extends (...args: unknown[]) => unknown> =
+    Parameters<T>[0];
+export type QueryOutput<T extends (...args: unknown[]) => unknown> = Awaited<
     ReturnType<T>
 >;
