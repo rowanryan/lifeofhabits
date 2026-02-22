@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import {
     LogOutIcon,
     MonitorIcon,
@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
@@ -21,26 +20,23 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getFullName, getInitials } from "@/lib/utils";
+import { cn, getFullName, getInitials } from "@/lib/utils";
 
 export type UserButtonProps = {
-    user: {
-        id: string;
-        firstName: string | null | undefined;
-        lastName: string | null | undefined;
-        emailAddress: string | null | undefined;
-        imageUrl: string;
-    };
+    className?: string;
 };
 
-export function UserButton({ user }: UserButtonProps) {
+export function UserButton({ className }: UserButtonProps) {
     const { signOut } = useAuth();
     const { setTheme } = useTheme();
+    const { user } = useUser();
+
+    if (!user) return null;
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Avatar className="size-8 rounded-lg">
+                <Avatar className={cn("size-8 rounded-lg", className)}>
                     <AvatarImage
                         src={user.imageUrl}
                         alt={
@@ -81,9 +77,9 @@ export function UserButton({ user }: UserButtonProps) {
                                 {getFullName(user.firstName, user.lastName) ??
                                     "Unknown"}
                             </span>
-                            {user.emailAddress && (
+                            {user.primaryEmailAddress?.emailAddress && (
                                 <span className="truncate text-xs">
-                                    {user.emailAddress}
+                                    {user.primaryEmailAddress.emailAddress}
                                 </span>
                             )}
                         </div>

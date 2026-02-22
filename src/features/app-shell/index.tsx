@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./components/MobileMenu";
 import type { NavigationLinkProps } from "./components/NavigationLink";
@@ -61,7 +60,6 @@ type AppShellHeaderProps = {
 
 function AppShellHeader({ className }: AppShellHeaderProps) {
     const { navigationLinks } = useAppShell();
-    const { user } = useUser();
 
     return (
         <header
@@ -81,35 +79,9 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
             </div>
 
             <div className="flex items-center gap-2">
-                <div className="hidden @xl/shell:block">
-                    {user ? (
-                        <UserButton
-                            user={{
-                                id: user.id,
-                                firstName: user.firstName,
-                                lastName: user.lastName,
-                                emailAddress:
-                                    user.primaryEmailAddress?.emailAddress,
-                                imageUrl: user.imageUrl,
-                            }}
-                        />
-                    ) : (
-                        <UserButton
-                            user={{
-                                id: "",
-                                firstName: "John",
-                                lastName: "Doe",
-                                emailAddress: "john.doe@example.com",
-                                imageUrl:
-                                    "https://avatar.vercel.sh/johndoe?rounded=60",
-                            }}
-                        />
-                    )}
-                </div>
+                <UserButton className="hidden @xl/shell:block" />
 
-                <div className="block @xl/shell:hidden -mr-2">
-                    <MobileMenu />
-                </div>
+                <MobileMenu className="block @xl/shell:hidden -mr-2" />
             </div>
         </header>
     );

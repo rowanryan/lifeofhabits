@@ -13,16 +13,18 @@ import {
 } from "@/components/ui/sheet";
 import { useAppShell } from "../providers/AppShellProvider";
 
-export type MobileMenuProps = React.ComponentProps<typeof Sheet>;
+export type MobileMenuProps = {
+    className?: string;
+};
 
-export function MobileMenu(props: MobileMenuProps) {
+export function MobileMenu({ className }: MobileMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
     const { navigationLinks } = useAppShell();
 
     return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen} {...props}>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className={className}>
                     <MenuIcon />
                 </Button>
             </SheetTrigger>
