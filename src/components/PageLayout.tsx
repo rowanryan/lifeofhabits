@@ -1,13 +1,10 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import * as React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-import { SidebarTrigger } from "./ui/sidebar";
-import { Separator } from "./ui/separator";
+import { cn } from "@/lib/utils";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -16,6 +13,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "./ui/breadcrumb";
+import { Button } from "./ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,7 +29,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "./ui/select";
-import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { SidebarTrigger } from "./ui/sidebar";
 
 type PageTitleProps = {
     title: string;
@@ -74,7 +73,7 @@ function PageBreadcrumb({
     const pathname = usePathname();
     const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
-    const visibleBreadcrumbs = breadcrumbs.filter(bc => !bc.isHidden);
+    const visibleBreadcrumbs = breadcrumbs.filter((bc) => !bc.isHidden);
     const lastBreadcrumb = visibleBreadcrumbs[visibleBreadcrumbs.length - 1];
 
     React.useEffect(() => {
@@ -163,14 +162,14 @@ function PageSideMenu({
     const [isSelectOpen, setIsSelectOpen] = React.useState(false);
 
     const activeLinkHref = React.useMemo(() => {
-        return sideMenuLinks.find(link => link.isActive)?.href;
+        return sideMenuLinks.find((link) => link.isActive)?.href;
     }, [sideMenuLinks]);
 
     return (
         <div
             className={cn(
                 "@container/sidemenu grid grid-cols-12 gap-4",
-                className
+                className,
             )}
             {...props}
         >
@@ -179,7 +178,7 @@ function PageSideMenu({
                     open={isSelectOpen}
                     onOpenChange={setIsSelectOpen}
                     value={activeLinkHref}
-                    onValueChange={value => {
+                    onValueChange={(value) => {
                         setIsSelectOpen(false);
                         router.push(value);
                     }}
@@ -211,7 +210,7 @@ function PageSideMenu({
                         <Link
                             href={link.href}
                             className={cn(
-                                !link.isActive && "text-muted-foreground"
+                                !link.isActive && "text-muted-foreground",
                             )}
                         >
                             {link.label}
@@ -258,7 +257,7 @@ function PageLayout({
             <div
                 className={cn(
                     "@container/layout flex flex-1 flex-col p-4 pt-0 container mx-auto",
-                    className
+                    className,
                 )}
                 {...props}
             >

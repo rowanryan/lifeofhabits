@@ -1,7 +1,7 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
 import {
     Collapsible,
     CollapsibleContent,
@@ -14,7 +14,6 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { ChevronRight } from "lucide-react";
 
 export type AppSidebarLink = {
     type: "link";

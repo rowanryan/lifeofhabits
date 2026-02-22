@@ -1,8 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
-import { getFullName, getInitials } from "@/lib/utils";
+import {
+    ChevronsUpDownIcon,
+    LogOutIcon,
+    MonitorIcon,
+    MoonIcon,
+    Settings2Icon,
+    SunIcon,
+} from "lucide-react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,14 +23,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
-import {
-    ChevronsUpDownIcon,
-    LogOutIcon,
-    MonitorIcon,
-    MoonIcon,
-    SunIcon,
-    Settings2Icon,
-} from "lucide-react";
+import { getFullName, getInitials } from "@/lib/utils";
 
 export type NavUserProps = {
     user: {
@@ -90,7 +90,7 @@ export function NavUser({ user }: NavUserProps) {
                                 alt={
                                     getFullName(
                                         user.firstName,
-                                        user.lastName
+                                        user.lastName,
                                     ) ?? "Unknown"
                                 }
                             />

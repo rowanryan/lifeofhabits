@@ -1,7 +1,13 @@
 "use client";
 
+import {
+    AudioWaveformIcon,
+    ChevronsUpDown,
+    CommandIcon,
+    GalleryVerticalEndIcon,
+    Plus,
+} from "lucide-react";
 import * as React from "react";
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,13 +22,6 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
-import {
-    AudioWaveformIcon,
-    ChevronsUpDown,
-    CommandIcon,
-    GalleryVerticalEndIcon,
-    Plus,
-} from "lucide-react";
 
 const dummyOrgs = [
     {

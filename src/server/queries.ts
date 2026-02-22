@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import z from "zod";
-import { createContext, type Context } from "./shared";
+import type z from "zod";
+import { type Context, createContext } from "./shared";
 
 type QueryFn<TInput, TOutput, TContext extends Context> = (params: {
     input: TInput;
@@ -10,7 +10,7 @@ type QueryFn<TInput, TOutput, TContext extends Context> = (params: {
 
 type MiddlewareFn<
     TBaseContext extends Context,
-    TExtendedContext extends Context
+    TExtendedContext extends Context,
 > = (ctx: TBaseContext) => Promise<TExtendedContext> | TExtendedContext;
 
 type QueryClientOptions<TContext extends Context = Context> = {
@@ -20,38 +20,38 @@ type QueryClientOptions<TContext extends Context = Context> = {
 type QueryClient<TContext extends Context = Context> = {
     query: {
         <TInput = void, TOutput = unknown>(
-            fn: QueryFn<TInput, TOutput, TContext>
+            fn: QueryFn<TInput, TOutput, TContext>,
         ): TInput extends void
             ? (input?: TInput) => Promise<TOutput>
             : (input: TInput) => Promise<TOutput>;
         <TSchema extends z.ZodTypeAny, TOutput = unknown>(
             schema: TSchema,
-            fn: QueryFn<z.infer<TSchema>, TOutput, TContext>
+            fn: QueryFn<z.infer<TSchema>, TOutput, TContext>,
         ): (input: z.input<TSchema>) => Promise<TOutput>;
     };
     use: <TExtendedContext extends Context>(
-        middleware: MiddlewareFn<TContext, TExtendedContext>
+        middleware: MiddlewareFn<TContext, TExtendedContext>,
     ) => QueryClient<TExtendedContext>;
 };
 
 export const createQueryClient = <TContext extends Context = Context>(
-    options?: QueryClientOptions<TContext>
+    options?: QueryClientOptions<TContext>,
 ): QueryClient<TContext> => {
     const getContext =
         options?.context ?? (createContext as () => Promise<TContext>);
 
     function query<TInput = void, TOutput = unknown>(
-        fn: QueryFn<TInput, TOutput, TContext>
+        fn: QueryFn<TInput, TOutput, TContext>,
     ): TInput extends void
         ? (input?: TInput) => Promise<TOutput>
         : (input: TInput) => Promise<TOutput>;
     function query<TSchema extends z.ZodTypeAny, TOutput = unknown>(
         schema: TSchema,
-        fn: QueryFn<z.infer<TSchema>, TOutput, TContext>
+        fn: QueryFn<z.infer<TSchema>, TOutput, TContext>,
     ): (input: z.input<TSchema>) => Promise<TOutput>;
     function query<TInputOrSchema = void, TOutput = unknown>(
         fnOrSchema: QueryFn<TInputOrSchema, TOutput, TContext> | z.ZodTypeAny,
-        fn?: QueryFn<any, TOutput, TContext>
+        fn?: QueryFn<any, TOutput, TContext>,
     ): any {
         // If two parameters provided, first is schema, second is function
         if (fn !== undefined) {
@@ -73,7 +73,7 @@ export const createQueryClient = <TContext extends Context = Context>(
     const client: QueryClient<TContext> = {
         query,
         use: <TExtendedContext extends Context>(
-            middleware: MiddlewareFn<TContext, TExtendedContext>
+            middleware: MiddlewareFn<TContext, TExtendedContext>,
         ) => {
             return createQueryClient<TExtendedContext>({
                 context: async () => {
@@ -91,7 +91,7 @@ export const createQueryClient = <TContext extends Context = Context>(
 export const queryClient = createQueryClient();
 
 // Auth query client - checks if user is signed in
-export const authQuery = queryClient.use(async ctx => {
+export const authQuery = queryClient.use(async (ctx) => {
     if (!ctx.clerkAuth.userId) {
         throw new Error("Unauthorized");
     }
@@ -102,7 +102,7 @@ export const authQuery = queryClient.use(async ctx => {
     };
 });
 
-export const orgQuery = authQuery.use(async ctx => {
+export const orgQuery = authQuery.use(async (ctx) => {
     if (!ctx.clerkAuth.orgId) {
         throw new Error("Forbidden");
     }
@@ -114,7 +114,7 @@ export const orgQuery = authQuery.use(async ctx => {
     };
 });
 
-export const adminQuery = authQuery.use(async ctx => {
+export const adminQuery = authQuery.use(async (ctx) => {
     if (ctx.clerkAuth.sessionClaims?.role !== "admin") {
         throw new Error("Forbidden");
     }

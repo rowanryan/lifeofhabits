@@ -1,9 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { AppSidebarItem } from "./AppSidebarItem";
-import { NavUser } from "./NavUser";
-import { OrgSwitcher } from "./OrgSwitcher";
+import { LayoutDashboardIcon } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -14,7 +12,9 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "@/components/ui/sidebar";
-import { LayoutDashboardIcon } from "lucide-react";
+import { AppSidebarItem } from "./AppSidebarItem";
+import { NavUser } from "./NavUser";
+import { OrgSwitcher } from "./OrgSwitcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { user } = useUser();

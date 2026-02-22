@@ -3,11 +3,9 @@ import { AppSidebar } from "./components/AppSidebar";
 
 export default function AppLayout({ children }: React.PropsWithChildren) {
     return (
-        <>
-            <SidebarProvider>
-                <AppSidebar />
-                <SidebarInset>{children}</SidebarInset>
-            </SidebarProvider>
-        </>
+        <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>{children}</SidebarInset>
+        </SidebarProvider>
     );
 }
