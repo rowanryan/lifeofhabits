@@ -1,7 +1,10 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { env } from "./env";
 
-export default clerkMiddleware(async (auth) => {
-    await auth.protect();
+export default clerkMiddleware(async auth => {
+    if (!env.CLERK_BYPASS_PROTECTION) {
+        await auth.protect();
+    }
 });
 
 export const config = {

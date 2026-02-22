@@ -4,6 +4,8 @@ import z from "zod";
 export const env = createEnv({
     server: {
         CLERK_SECRET_KEY: z.string(),
+
+        CLERK_BYPASS_PROTECTION: z.boolean().default(false),
     },
 
     client: {
