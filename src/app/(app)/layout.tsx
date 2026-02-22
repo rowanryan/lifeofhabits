@@ -1,11 +1,14 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "./components/AppSidebar";
+import {
+    AppShell,
+    AppShellContent,
+    AppShellHeader,
+} from "@/components/AppShell";
 
 export default function AppLayout({ children }: React.PropsWithChildren) {
     return (
-        <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>{children}</SidebarInset>
-        </SidebarProvider>
+        <AppShell>
+            <AppShellHeader></AppShellHeader>
+            <AppShellContent>{children}</AppShellContent>
+        </AppShell>
     );
 }
