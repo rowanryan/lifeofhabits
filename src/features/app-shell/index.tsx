@@ -1,8 +1,10 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import type { NavigationLinkProps } from "./components/NavigationLink";
 import { NavigationLink } from "./components/NavigationLink";
+import { UserButton } from "./components/UserButton";
 import { AppShellProvider, useAppShell } from "./providers/AppShellProvider";
 
 type AppShellProps = React.ComponentProps<"div"> & {
@@ -58,17 +60,42 @@ type AppShellHeaderProps = {
 
 function AppShellHeader({ className }: AppShellHeaderProps) {
     const { navigationLinks } = useAppShell();
+    const { user } = useUser();
 
     return (
         <header
             className={cn(
-                "flex items-center px-2 pt-1 justify-between h-14",
+                "flex items-center pt-1 px-4 justify-between h-14",
                 className,
             )}
         >
-            {navigationLinks.map((link) => (
-                <NavigationLink key={link.href} {...link} />
-            ))}
+            <nav className="flex -ml-2 items-center gap-1">
+                {navigationLinks.map((link) => (
+                    <NavigationLink key={link.href} {...link} />
+                ))}
+            </nav>
+
+            {user ? (
+                <UserButton
+                    user={{
+                        id: user.id,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        emailAddress: user.primaryEmailAddress?.emailAddress,
+                        imageUrl: user.imageUrl,
+                    }}
+                />
+            ) : (
+                <UserButton
+                    user={{
+                        id: "",
+                        firstName: "John",
+                        lastName: "Doe",
+                        emailAddress: "john.doe@example.com",
+                        imageUrl: "https://avatar.vercel.sh/johndoe?rounded=60",
+                    }}
+                />
+            )}
         </header>
     );
 }
