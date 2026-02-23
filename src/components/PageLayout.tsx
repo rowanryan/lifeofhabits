@@ -44,7 +44,7 @@ function PageTitle({
 }: PageTitleProps & React.ComponentProps<"div">) {
     return (
         <div className={cn("flex flex-col", className)} {...props}>
-            <h2 className="text-xl @xl/layout:text-2xl font-semibold tracking-tight">
+            <h2 className="text-2xl @xl/layout:text-3xl font-semibold tracking-tight">
                 {title}
             </h2>
             {description && (
@@ -251,7 +251,7 @@ function PageLayout({
                 <PageTitle
                     title={title}
                     description={description}
-                    className="mb-4"
+                    className="mb-4 @xl/layout:mt-2"
                 />
             )}
 
