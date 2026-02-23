@@ -1,11 +1,11 @@
 import { enUS } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
-import { NextIntlClientProvider } from "next-intl";
+import { type Locale, NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { getPreferredLocale } from "@/i18n/utils/locale";
 
-const LOCALIZATIONS = {
+const LOCALIZATIONS: Record<Locale, typeof enUS> = {
     en: enUS,
 };
 
@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 }
 
 async function LocalizedProviders({ children }: { children: React.ReactNode }) {
-    const locale = await getPreferredLocale();
+    const locale = await getLocale();
 
     return (
         <ClerkProvider
