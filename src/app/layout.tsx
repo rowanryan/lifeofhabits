@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
+import { shadcn } from "@clerk/themes";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -28,7 +29,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <ClerkProvider>
+        <ClerkProvider
+            appearance={{
+                baseTheme: shadcn,
+            }}
+        >
             <html
                 suppressHydrationWarning
                 lang="en"
