@@ -1,10 +1,13 @@
 "use client";
 
-import { MenuIcon } from "lucide-react";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { ChevronRightIcon, LogOutIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
     Sheet,
     SheetContent,
@@ -12,6 +15,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import { getFullName, getInitials } from "@/lib/utils";
 import { useAppShell } from "../providers/AppShellProvider";
 
 export type MobileMenuProps = {
@@ -23,6 +27,8 @@ export function MobileMenu({ className }: MobileMenuProps) {
     const pathname = usePathname();
     const previousPathnameRef = useRef(pathname);
     const { navigationLinks } = useAppShell();
+    const { user } = useUser();
+    const { signOut } = useAuth();
 
     useEffect(() => {
         if (previousPathnameRef.current !== pathname) {
@@ -47,7 +53,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
                     <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
 
-                <nav className="flex flex-col gap-2 px-3">
+                <nav className="flex flex-col gap-1 px-3">
                     {navigationLinks.map((link) => (
                         <Button
                             key={link.href}
@@ -62,6 +68,60 @@ export function MobileMenu({ className }: MobileMenuProps) {
                         </Button>
                     ))}
                 </nav>
+
+                <Separator className="my-4" />
+
+                {user && (
+                    <div className="px-4 space-y-4">
+                        <Link
+                            href="/settings/account"
+                            className="flex items-center group gap-2 text-left text-sm"
+                        >
+                            <Avatar className="size-8 rounded-lg">
+                                <AvatarImage
+                                    src={user.imageUrl}
+                                    alt={
+                                        getFullName(
+                                            user.firstName,
+                                            user.lastName,
+                                        ) ?? "Unknown"
+                                    }
+                                />
+                                <AvatarFallback className="rounded-lg">
+                                    {getInitials(
+                                        user.firstName,
+                                        user.lastName,
+                                    ) ?? "?"}
+                                </AvatarFallback>
+                            </Avatar>
+
+                            <div className="grid flex-1 text-left text-sm leading-tight">
+                                <span className="truncate font-medium">
+                                    {getFullName(
+                                        user.firstName,
+                                        user.lastName,
+                                    ) ?? "Unknown"}
+                                </span>
+                                {user.primaryEmailAddress?.emailAddress && (
+                                    <span className="truncate text-xs">
+                                        {user.primaryEmailAddress.emailAddress}
+                                    </span>
+                                )}
+                            </div>
+
+                            <ChevronRightIcon className="shrink-0 size-5" />
+                        </Link>
+
+                        <Button
+                            variant="destructive"
+                            className="w-full justify-start"
+                            onClick={() => signOut({ redirectUrl: "/" })}
+                        >
+                            <LogOutIcon />
+                            Sign out
+                        </Button>
+                    </div>
+                )}
             </SheetContent>
         </Sheet>
     );

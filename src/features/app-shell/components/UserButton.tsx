@@ -5,8 +5,8 @@ import {
     LogOutIcon,
     MonitorIcon,
     MoonIcon,
-    Settings2Icon,
     SunIcon,
+    UserIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -90,9 +90,9 @@ export function UserButton({ className }: UserButtonProps) {
 
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                        <Link href="/settings">
-                            <Settings2Icon />
-                            Settings
+                        <Link href="/settings/account">
+                            <UserIcon />
+                            Account
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>

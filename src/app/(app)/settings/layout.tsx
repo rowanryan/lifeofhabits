@@ -12,7 +12,7 @@ export default function SettingsLayout({ children }: React.PropsWithChildren) {
             sideMenuLinks={[
                 {
                     label: "General",
-                    href: "/settings/general",
+                    href: "/settings",
                     isActive: segment === null,
                 },
                 {
