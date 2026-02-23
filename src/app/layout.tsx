@@ -1,12 +1,9 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Figtree, Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { shadcn } from "@clerk/themes";
-import { NextIntlClientProvider } from "next-intl";
+import { Providers } from "./providers";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -30,50 +27,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <NextIntlClientProvider>
-            <ClerkProvider
-                appearance={{
-                    theme: shadcn,
-                    variables: {
-                        colorBackground: "var(--background)",
-                    },
-                    elements: {
-                        cardBox: {
-                            boxShadow: "none",
-                        },
-                        footer: {
-                            backgroundColor: "var(--background)",
-                        },
-                        footerActionLink: {
-                            color: "var(--foreground)",
-                            "&:hover": {
-                                color: "var(--foreground)",
-                            },
-                        },
-                    },
-                }}
+        <html suppressHydrationWarning lang="en" className={figtree.variable}>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <html
-                    suppressHydrationWarning
-                    lang="en"
-                    className={figtree.variable}
-                >
-                    <body
-                        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-                    >
-                        <ThemeProvider
-                            enableSystem
-                            disableTransitionOnChange
-                            attribute="class"
-                            defaultTheme="system"
-                        >
-                            <NextTopLoader showSpinner />
-                            {children}
-                            <Toaster closeButton position="top-center" />
-                        </ThemeProvider>
-                    </body>
-                </html>
-            </ClerkProvider>
-        </NextIntlClientProvider>
+                <Providers>
+                    <NextTopLoader showSpinner />
+                    {children}
+                    <Toaster closeButton />
+                </Providers>
+            </body>
+        </html>
     );
 }

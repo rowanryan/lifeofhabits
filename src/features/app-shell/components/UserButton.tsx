@@ -9,6 +9,7 @@ import {
     UserIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -27,6 +28,8 @@ export type UserButtonProps = {
 };
 
 export function UserButton({ className }: UserButtonProps) {
+    const tAuth = useTranslations("AppShell.Auth");
+    const tCommon = useTranslations("Common.ThemeSelector");
     const { signOut } = useAuth();
     const { setTheme } = useTheme();
     const { user } = useUser();
@@ -92,26 +95,26 @@ export function UserButton({ className }: UserButtonProps) {
                     <DropdownMenuItem asChild>
                         <Link href="/settings/account">
                             <UserIcon />
-                            Account
+                            {tAuth("Account")}
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuLabel>Theme</DropdownMenuLabel>
+                <DropdownMenuLabel>{tCommon("Title")}</DropdownMenuLabel>
                 <DropdownMenuGroup>
                     <DropdownMenuItem onClick={() => setTheme("system")}>
                         <MonitorIcon />
-                        System
+                        {tCommon("Options.System")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme("light")}>
                         <SunIcon />
-                        Light
+                        {tCommon("Options.Light")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme("dark")}>
                         <MoonIcon />
-                        Dark
+                        {tCommon("Options.Dark")}
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
 
@@ -119,7 +122,7 @@ export function UserButton({ className }: UserButtonProps) {
 
                 <DropdownMenuItem onClick={() => signOut({ redirectUrl: "/" })}>
                     <LogOutIcon />
-                    Sign out
+                    {tAuth("SignOut")}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

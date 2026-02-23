@@ -1,5 +1,6 @@
 "use client";
 
+import { env } from "@/env";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./components/MobileMenu";
 import type { NavigationLinkProps } from "./components/NavigationLink";
@@ -69,7 +70,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
             )}
         >
             <div className="flex items-center gap-4">
-                <p className="font-semibold">Next Boiler</p>
+                <p className="font-semibold">{env.NEXT_PUBLIC_APP_NAME}</p>
 
                 <nav className="hidden items-center gap-1 @xl/shell:flex">
                     {navigationLinks.map((link) => (

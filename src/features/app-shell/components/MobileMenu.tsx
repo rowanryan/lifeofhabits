@@ -4,6 +4,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { ChevronRightIcon, LogOutIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,8 @@ export function MobileMenu({ className }: MobileMenuProps) {
     const { navigationLinks } = useAppShell();
     const { user } = useUser();
     const { signOut } = useAuth();
+    const tAuth = useTranslations("AppShell.Auth");
+    const tMobileMenu = useTranslations("AppShell.MobileMenu");
 
     useEffect(() => {
         if (previousPathnameRef.current !== pathname) {
@@ -50,7 +53,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
                 className="h-full! max-h-[calc(100vh-3.5rem)] overflow-y-auto"
             >
                 <SheetHeader>
-                    <SheetTitle>Menu</SheetTitle>
+                    <SheetTitle>{tMobileMenu("Title")}</SheetTitle>
                 </SheetHeader>
 
                 <nav className="flex flex-col gap-1 px-3">
@@ -118,7 +121,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
                             onClick={() => signOut({ redirectUrl: "/" })}
                         >
                             <LogOutIcon />
-                            Sign out
+                            {tAuth("SignOut")}
                         </Button>
                     </div>
                 )}

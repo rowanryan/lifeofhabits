@@ -1,20 +1,33 @@
 {
+    "Common": {
+        "ThemeSelector": {
+            "Title": "Theme",
+            "Description": "Choose your preferred theme for the application.",
+            "Options": {
+                "System": "System",
+                "Light": "Light",
+                "Dark": "Dark"
+            }
+        }
+    },
+    "AppShell": {
+        "Navigation": {
+            "Home": "Home",
+            "Settings": "Settings"
+        },
+        "Auth": {
+            "Account": "Account",
+            "SignOut": "Sign out"
+        },
+        "MobileMenu": {
+            "Title": "Menu"
+        }
+    },
     "Settings": {
         "Title": "Settings",
         "SideMenu": {
             "General": "General",
             "Account": "Account"
-        },
-        "General": {
-            "ThemeSelector": {
-                "Title": "Theme",
-                "Description": "Choose your preferred theme for the application.",
-                "Options": {
-                    "System": "System",
-                    "Light": "Light",
-                    "Dark": "Dark"
-                }
-            }
         }
     }
 }

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 
 export function ThemeSelector() {
-    const t = useTranslations("Settings.General.ThemeSelector");
+    const t = useTranslations("Common.ThemeSelector");
     const { setTheme, theme } = useTheme();
 
     return (
