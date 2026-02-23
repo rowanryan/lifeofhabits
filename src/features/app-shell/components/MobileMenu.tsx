@@ -2,7 +2,8 @@
 
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
@@ -19,7 +20,16 @@ export type MobileMenuProps = {
 
 export function MobileMenu({ className }: MobileMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+    const previousPathnameRef = useRef(pathname);
     const { navigationLinks } = useAppShell();
+
+    useEffect(() => {
+        if (previousPathnameRef.current !== pathname) {
+            setIsOpen(false);
+            previousPathnameRef.current = pathname;
+        }
+    }, [pathname]);
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
