@@ -1,0 +1,27 @@
+#!/bin/sh
+
+branch_name=$(git symbolic-ref --short HEAD)
+
+# Allow main/master branches
+if [ "$branch_name" = "main" ] || [ "$branch_name" = "master" ]; then
+  exit 0
+fi
+
+# Check if branch name starts with one of the allowed prefixes
+if ! echo "$branch_name" | grep -qE "^(feat|fix|refactor|docs|test|chore|cursor)/"; then
+  echo "❌ Invalid branch name format!"
+  echo ""
+  echo "Branch name must start with one of:"
+  echo "  feat/     - A new feature"
+  echo "  fix/      - A bug fix"
+  echo "  refactor/ - Code refactoring"
+  echo "  docs/     - Documentation changes"
+  echo "  test/     - Test changes"
+  echo "  chore/    - Maintenance tasks"
+  echo "  cursor/   - Cursor AI changes"
+  echo ""
+  echo "Example: feat/add-user-authentication"
+  echo ""
+  echo "Your branch is: $branch_name"
+  exit 1
+fi

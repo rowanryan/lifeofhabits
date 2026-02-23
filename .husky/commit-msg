@@ -1,0 +1,22 @@
+#!/bin/sh
+
+commit_msg=$(cat "$1")
+
+# Check if commit message starts with one of the allowed prefixes
+if ! echo "$commit_msg" | grep -qE "^(feat|chore|fix|refactor|docs|lint|test):"; then
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Commit message must start with one of:"
+  echo "  feat:     - A new feature"
+  echo "  chore:    - Maintenance tasks"
+  echo "  fix:      - A bug fix"
+  echo "  refactor: - Code refactoring"
+  echo "  docs:     - Documentation changes"
+  echo "  lint:     - Linting fixes"
+  echo "  test:     - Test changes"
+  echo ""
+  echo "Example: feat: add user authentication"
+  echo ""
+  echo "Your message was: $commit_msg"
+  exit 1
+fi
