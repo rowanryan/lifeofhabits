@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./components/MobileMenu";
@@ -61,30 +62,50 @@ type AppShellHeaderProps = {
 
 function AppShellHeader({ className }: AppShellHeaderProps) {
     const { navigationLinks } = useAppShell();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+
+        handleScroll();
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <header
+        <div
             className={cn(
-                "flex sticky top-0 bg-appshell/50 backdrop-blur-lg inset-x-0 items-center pt-1 px-4 justify-between h-14",
-                className,
+                "sticky top-0 inset-x-0 z-50 transition-all duration-200 ease-out",
+                isScrolled && "px-2 @xl/shell:px-4 pt-2",
             )}
         >
-            <div className="flex items-center gap-4">
-                <p className="font-semibold">{env.NEXT_PUBLIC_APP_NAME}</p>
+            <header
+                className={cn(
+                    "flex bg-appshell/50 backdrop-blur-lg items-center px-4 justify-between h-14",
+                    isScrolled &&
+                        "rounded-full shadow-lg border border-border/50",
+                    className,
+                )}
+            >
+                <div className="flex items-center gap-4">
+                    <p className="font-semibold">{env.NEXT_PUBLIC_APP_NAME}</p>
 
-                <nav className="hidden items-center gap-1 @xl/shell:flex">
-                    {navigationLinks.map((link) => (
-                        <NavigationLink key={link.href} {...link} />
-                    ))}
-                </nav>
-            </div>
+                    <nav className="hidden items-center gap-1 @xl/shell:flex">
+                        {navigationLinks.map((link) => (
+                            <NavigationLink key={link.href} {...link} />
+                        ))}
+                    </nav>
+                </div>
 
-            <div className="flex items-center gap-2">
-                <UserButton className="hidden @xl/shell:block" />
+                <div className="flex items-center gap-2">
+                    <UserButton className="hidden @xl/shell:block" />
 
-                <MobileMenu className="block @xl/shell:hidden -mr-2" />
-            </div>
-        </header>
+                    <MobileMenu className="block @xl/shell:hidden -mr-2" />
+                </div>
+            </header>
+        </div>
     );
 }
 
