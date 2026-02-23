@@ -5,7 +5,10 @@ export const env = createEnv({
     server: {
         CLERK_SECRET_KEY: z.string(),
 
-        CLERK_BYPASS_PROTECTION: z.coerce.boolean().default(false),
+        CLERK_BYPASS_PROTECTION: z
+            .string()
+            .optional()
+            .transform(val => val === "true"),
     },
 
     client: {
