@@ -65,7 +65,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
     return (
         <header
             className={cn(
-                "flex items-center pt-1 px-4 justify-between h-14",
+                "flex sticky top-0 bg-appshell/50 backdrop-blur-lg inset-x-0 items-center pt-1 px-4 justify-between h-14",
                 className,
             )}
         >
