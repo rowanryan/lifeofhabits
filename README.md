@@ -1,6 +1,6 @@
 # Next Boiler
 
-[![I18n Check](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml/badge.svg)](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml)
+[![Checks](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml/badge.svg)](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml)
 
 A modern, production-ready Next.js boilerplate with authentication, database, styling, and internationalization pre-configured.
 
