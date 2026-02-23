@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -29,8 +30,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "./ui/select";
-import { Separator } from "./ui/separator";
-import { SidebarTrigger } from "./ui/sidebar";
 
 type PageTitleProps = {
     title: string;
@@ -57,7 +56,7 @@ function PageTitle({
     );
 }
 
-type PageBreadcrumbProps = {
+type PageBreadcrumbsProps = {
     breadcrumbs: {
         label: string;
         href: string;
@@ -65,10 +64,10 @@ type PageBreadcrumbProps = {
     }[];
 };
 
-function PageBreadcrumb({
+function PageBreadcrumbs({
     breadcrumbs,
     ...props
-}: PageBreadcrumbProps & React.ComponentProps<typeof Breadcrumb>) {
+}: PageBreadcrumbsProps & React.ComponentProps<typeof Breadcrumb>) {
     const isMobile = useIsMobile();
     const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
@@ -88,9 +87,10 @@ function PageBreadcrumb({
                                 asChild
                                 disabled={visibleBreadcrumbs.length === 1}
                             >
-                                <BreadcrumbPage>
+                                <Button variant="secondary" size="sm">
                                     {lastBreadcrumb.label}
-                                </BreadcrumbPage>
+                                    <ChevronDownIcon />
+                                </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
                                 {visibleBreadcrumbs.map((bc) => (
@@ -222,7 +222,7 @@ function PageSideMenu({
 }
 
 type PageLayoutProps = Partial<
-    PageTitleProps & PageBreadcrumbProps & PageSideMenuProps
+    PageTitleProps & PageBreadcrumbsProps & PageSideMenuProps
 > &
     React.ComponentProps<"div">;
 
@@ -236,44 +236,34 @@ function PageLayout({
     ...props
 }: React.PropsWithChildren<PageLayoutProps>) {
     return (
-        <>
-            <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-                <div className="flex items-center gap-2 px-4">
-                    <SidebarTrigger className="-ml-1" />
+        <div
+            className={cn(
+                "@container/layout flex flex-1 flex-col p-4 pt-6 container mx-auto",
+                className,
+            )}
+            {...props}
+        >
+            {breadcrumbs && (
+                <PageBreadcrumbs breadcrumbs={breadcrumbs} className="mb-3" />
+            )}
 
-                    <Separator orientation="vertical" className="mr-2" />
+            {title && (
+                <PageTitle
+                    title={title}
+                    description={description}
+                    className="mb-4"
+                />
+            )}
 
-                    {breadcrumbs && (
-                        <PageBreadcrumb breadcrumbs={breadcrumbs} />
-                    )}
-                </div>
-            </header>
-
-            <div
-                className={cn(
-                    "@container/layout flex flex-1 flex-col p-4 pt-0 container mx-auto",
-                    className,
-                )}
-                {...props}
-            >
-                {title && (
-                    <PageTitle
-                        title={title}
-                        description={description}
-                        className="@xl/layout:mt-4 mb-4"
-                    />
-                )}
-
-                {sideMenuLinks ? (
-                    <PageSideMenu sideMenuLinks={sideMenuLinks}>
-                        {children}
-                    </PageSideMenu>
-                ) : (
-                    children
-                )}
-            </div>
-        </>
+            {sideMenuLinks ? (
+                <PageSideMenu sideMenuLinks={sideMenuLinks}>
+                    {children}
+                </PageSideMenu>
+            ) : (
+                children
+            )}
+        </div>
     );
 }
 
-export { PageTitle, PageBreadcrumb, PageSideMenu, PageLayout };
+export { PageTitle, PageBreadcrumbs, PageSideMenu, PageLayout };
