@@ -1,6 +1,6 @@
 "use client";
 
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegments } from "next/navigation";
 import {
     AppShell,
     AppShellContent,
@@ -8,7 +8,7 @@ import {
 } from "@/features/app-shell";
 
 export default function AppLayout({ children }: React.PropsWithChildren) {
-    const segment = useSelectedLayoutSegment();
+    const segments = useSelectedLayoutSegments();
 
     return (
         <AppShell
@@ -16,7 +16,12 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
                 {
                     label: "Home",
                     href: "/",
-                    isActive: segment === null,
+                    isActive: segments.length === 0,
+                },
+                {
+                    label: "Settings",
+                    href: "/settings",
+                    isActive: segments.at(0) === "settings",
                 },
             ]}
         >
