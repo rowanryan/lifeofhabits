@@ -10,7 +10,14 @@ export const env = createEnv({
             .enum(["development", "test", "production"])
             .default("development"),
         DATABASE_URL: z.string(),
+        APP_NAME: z.string().default("Next Boiler"),
     },
 
-    experimental__runtimeEnv: {},
+    client: {
+        NEXT_PUBLIC_APP_NAME: z.string().default("Next Boiler"),
+    },
+
+    experimental__runtimeEnv: {
+        NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    },
 });
