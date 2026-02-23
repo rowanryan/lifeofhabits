@@ -1,0 +1,20 @@
+{
+    "Settings": {
+        "Title": "Settings",
+        "SideMenu": {
+            "General": "General",
+            "Account": "Account"
+        },
+        "General": {
+            "ThemeSelector": {
+                "Title": "Theme",
+                "Description": "Choose your preferred theme for the application.",
+                "Options": {
+                    "System": "System",
+                    "Light": "Light",
+                    "Dark": "Dark"
+                }
+            }
+        }
+    }
+}

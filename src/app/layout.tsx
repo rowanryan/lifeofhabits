@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { shadcn } from "@clerk/themes";
+import { NextIntlClientProvider } from "next-intl";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -29,48 +30,50 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <ClerkProvider
-            appearance={{
-                theme: shadcn,
-                variables: {
-                    colorBackground: "var(--background)",
-                },
-                elements: {
-                    cardBox: {
-                        boxShadow: "none",
+        <NextIntlClientProvider>
+            <ClerkProvider
+                appearance={{
+                    theme: shadcn,
+                    variables: {
+                        colorBackground: "var(--background)",
                     },
-                    footer: {
-                        backgroundColor: "var(--background)",
-                    },
-                    footerActionLink: {
-                        color: "var(--foreground)",
-                        "&:hover": {
+                    elements: {
+                        cardBox: {
+                            boxShadow: "none",
+                        },
+                        footer: {
+                            backgroundColor: "var(--background)",
+                        },
+                        footerActionLink: {
                             color: "var(--foreground)",
+                            "&:hover": {
+                                color: "var(--foreground)",
+                            },
                         },
                     },
-                },
-            }}
-        >
-            <html
-                suppressHydrationWarning
-                lang="en"
-                className={figtree.variable}
+                }}
             >
-                <body
-                    className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                <html
+                    suppressHydrationWarning
+                    lang="en"
+                    className={figtree.variable}
                 >
-                    <ThemeProvider
-                        enableSystem
-                        disableTransitionOnChange
-                        attribute="class"
-                        defaultTheme="system"
+                    <body
+                        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                     >
-                        <NextTopLoader showSpinner />
-                        {children}
-                        <Toaster closeButton position="top-center" />
-                    </ThemeProvider>
-                </body>
-            </html>
-        </ClerkProvider>
+                        <ThemeProvider
+                            enableSystem
+                            disableTransitionOnChange
+                            attribute="class"
+                            defaultTheme="system"
+                        >
+                            <NextTopLoader showSpinner />
+                            {children}
+                            <Toaster closeButton position="top-center" />
+                        </ThemeProvider>
+                    </body>
+                </html>
+            </ClerkProvider>
+        </NextIntlClientProvider>
     );
 }

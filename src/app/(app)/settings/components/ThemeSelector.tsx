@@ -1,6 +1,7 @@
 "use client";
 
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,15 +13,14 @@ import {
 } from "@/components/ui/card";
 
 export function ThemeSelector() {
+    const t = useTranslations("Settings.General.ThemeSelector");
     const { setTheme, theme } = useTheme();
 
     return (
         <Card className="@container/card">
             <CardHeader>
-                <CardTitle>Theme</CardTitle>
-                <CardDescription>
-                    Choose your preferred theme for the application.
-                </CardDescription>
+                <CardTitle>{t("Title")}</CardTitle>
+                <CardDescription>{t("Description")}</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -29,19 +29,19 @@ export function ThemeSelector() {
                         variant={theme === "system" ? "default" : "outline"}
                         onClick={() => setTheme("system")}
                     >
-                        <MonitorIcon /> System
+                        <MonitorIcon /> {t("Options.System")}
                     </Button>
                     <Button
                         variant={theme === "light" ? "default" : "outline"}
                         onClick={() => setTheme("light")}
                     >
-                        <SunIcon /> Light
+                        <SunIcon /> {t("Options.Light")}
                     </Button>
                     <Button
                         variant={theme === "dark" ? "default" : "outline"}
                         onClick={() => setTheme("dark")}
                     >
-                        <MoonIcon /> Dark
+                        <MoonIcon /> {t("Options.Dark")}
                     </Button>
                 </div>
             </CardContent>
