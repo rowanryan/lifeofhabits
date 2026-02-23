@@ -31,7 +31,24 @@ export default function RootLayout({
     return (
         <ClerkProvider
             appearance={{
-                baseTheme: shadcn,
+                theme: shadcn,
+                variables: {
+                    colorBackground: "var(--background)",
+                },
+                elements: {
+                    cardBox: {
+                        boxShadow: "none",
+                    },
+                    footer: {
+                        backgroundColor: "var(--background)",
+                    },
+                    footerActionLink: {
+                        color: "var(--foreground)",
+                        "&:hover": {
+                            color: "var(--foreground)",
+                        },
+                    },
+                },
             }}
         >
             <html
