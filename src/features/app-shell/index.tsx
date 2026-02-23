@@ -78,7 +78,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
         <div
             className={cn(
                 "sticky top-0 inset-x-0 z-50 transition-all duration-200 ease-out",
-                isScrolled && "px-2 @xl/shell:px-4 pt-2",
+                isScrolled && "px-2 @xl/shell:px-6 pt-2",
             )}
         >
             <header
