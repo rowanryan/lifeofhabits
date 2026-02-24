@@ -1,3 +1,9 @@
+import { Profile } from "./components/Profile";
+
 export default function Page() {
-    return null;
+    return (
+        <div className="space-y-4">
+            <Profile />
+        </div>
+    );
 }

@@ -28,6 +28,17 @@
         "SideMenu": {
             "General": "General",
             "Account": "Account"
+        },
+        "Account": {
+            "Profile": {
+                "Title": "Profile",
+                "Description": "Manage your profile information.",
+                "Toast": {
+                    "Updating": "Updating your profile image...",
+                    "Success": "Your profile image has been updated successfully.",
+                    "Error": "Something went wrong while updating your profile image. Please try again."
+                }
+            }
         }
     }
 }
