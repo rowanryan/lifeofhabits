@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { env } from "@/env";
+import { useIsScrolled } from "@/hooks/use-is-scrolled";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./components/MobileMenu";
 import type { NavigationLinkProps } from "./components/NavigationLink";
@@ -62,17 +62,7 @@ type AppShellHeaderProps = {
 
 function AppShellHeader({ className }: AppShellHeaderProps) {
     const { navigationLinks } = useAppShell();
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-
-        handleScroll();
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    const isScrolled = useIsScrolled();
 
     return (
         <div
