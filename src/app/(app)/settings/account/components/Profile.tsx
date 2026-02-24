@@ -47,7 +47,7 @@ export function Profile() {
             <CardContent>
                 <div className="flex items-center gap-4">
                     <div className="relative group">
-                        <Avatar className="size-12 @xl/card:size-16 rounded-full">
+                        <Avatar className="size-14 @xl/card:size-16 rounded-full">
                             <AvatarImage
                                 src={user.imageUrl}
                                 alt={
