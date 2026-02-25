@@ -75,7 +75,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
                 className={cn(
                     "flex bg-appshell/50 backdrop-blur-lg items-center px-4 justify-between h-14",
                     isScrolled &&
-                        "rounded-full shadow-lg border border-border/50",
+                        "rounded-full shadow-sm border border-border/50",
                     className,
                 )}
             >
