@@ -68,12 +68,16 @@ export function Profile() {
                     }),
                     {
                         loading: t("Form.Toast.Loading"),
-                        success: t("Form.Toast.Success"),
-                        error: t("Form.Toast.Error"),
+                        success: () => {
+                            setIsLoading(false);
+                            return t("Form.Toast.Success");
+                        },
+                        error: () => {
+                            setIsLoading(false);
+                            return t("Form.Toast.Error");
+                        },
                     },
                 );
-
-                setIsLoading(false);
             }
         },
         [user, t],
@@ -88,7 +92,7 @@ export function Profile() {
         }
     }, [user, form.reset]);
 
-    if (!user) return <Skeleton className="h-12 rounded-lg" />;
+    if (!user) return <Skeleton className="h-64 rounded-lg" />;
 
     return (
         <Card className="@container/card">
