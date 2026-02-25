@@ -15,6 +15,7 @@ import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -187,16 +188,17 @@ export function Profile() {
                         </FieldGroup>
                     </FieldSet>
                 </form>
+            </CardContent>
 
+            <CardFooter>
                 <Button
                     type="submit"
                     form="profile-form"
                     disabled={!form.formState.isDirty || isLoading}
-                    className="mt-6"
                 >
                     {isLoading && <Spinner />} {t("Form.SaveButton")}
                 </Button>
-            </CardContent>
+            </CardFooter>
         </Card>
     );
 }

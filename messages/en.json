@@ -52,6 +52,19 @@
                         "Error": "Something went wrong while updating your profile information. Please try again."
                     }
                 }
+            },
+            "EmailAddresses": {
+                "Title": "Email addresses",
+                "Description": "Manage your email addresses.",
+                "AddButton": "Add",
+                "Primary": "Primary",
+                "VerificationStatus": {
+                    "Verified": "Verified",
+                    "Unverified": "Unverified",
+                    "Expired": "Expired",
+                    "Failed": "Failed",
+                    "Transferable": "Transferable"
+                }
             }
         }
     }
