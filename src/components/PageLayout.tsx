@@ -194,7 +194,7 @@ function PageSideMenu({
                 </Select>
             </div>
 
-            <div className="hidden @xl/sidemenu:block @xl/sidemenu:col-span-2 space-y-1">
+            <div className="hidden sticky top-20 self-start @xl/sidemenu:block @xl/sidemenu:col-span-2 space-y-1">
                 {sideMenuLinks.map((link) => (
                     <Button
                         asChild
