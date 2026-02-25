@@ -33,10 +33,24 @@
             "Profile": {
                 "Title": "Profile",
                 "Description": "Manage your profile information.",
-                "Toast": {
-                    "Updating": "Updating your profile image...",
-                    "Success": "Your profile image has been updated successfully.",
-                    "Error": "Something went wrong while updating your profile image. Please try again."
+                "Picture": {
+                    "Title": "Profile picture",
+                    "Description": "Maximum of 10MB",
+                    "Toast": {
+                        "Loading": "Updating your profile image...",
+                        "Success": "Your profile image has been updated successfully.",
+                        "Error": "Something went wrong while updating your profile image. Please try again."
+                    }
+                },
+                "Form": {
+                    "FirstName": "First name",
+                    "LastName": "Last name",
+                    "SaveButton": "Save changes",
+                    "Toast": {
+                        "Loading": "Updating your profile information...",
+                        "Success": "Your profile information has been updated successfully.",
+                        "Error": "Something went wrong while updating your profile information. Please try again."
+                    }
                 }
             }
         }
