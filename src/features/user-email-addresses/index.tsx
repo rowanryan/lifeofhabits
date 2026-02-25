@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { AddEmailAddress } from "./components/AddEmailAddress";
 
 type VerificationStatus =
     | "unverified"
@@ -31,7 +32,7 @@ type VerificationStatus =
     | "failed"
     | "expired";
 
-export function EmailAddresses() {
+export function UserEmailAddresses() {
     const t = useTranslations("Settings.Account.EmailAddresses");
     const { user } = useUser();
 
@@ -60,7 +61,7 @@ export function EmailAddresses() {
         }
     }, [user]);
 
-    if (!emailAddresses) return <Skeleton className="h-12 rounded-lg" />;
+    if (!emailAddresses) return <Skeleton className="h-48 rounded-lg" />;
 
     return (
         <Card className="@container/card">
@@ -68,9 +69,11 @@ export function EmailAddresses() {
                 <CardTitle>{t("Title")}</CardTitle>
                 <CardDescription>{t("Description")}</CardDescription>
                 <CardAction>
-                    <Button size="sm">
-                        <PlusIcon /> {t("AddButton")}
-                    </Button>
+                    <AddEmailAddress>
+                        <Button size="sm">
+                            <PlusIcon /> {t("AddButton")}
+                        </Button>
+                    </AddEmailAddress>
                 </CardAction>
             </CardHeader>
 

@@ -64,6 +64,20 @@
                     "Expired": "Expired",
                     "Failed": "Failed",
                     "Transferable": "Transferable"
+                },
+                "CreateEmailAddress": {
+                    "Title": "Add email address",
+                    "Description": "Add a new email address to your account.",
+                    "Cancel": "Cancel",
+                    "Confirm": "Add",
+                    "Form": {
+                        "EmailAddress": "Email address",
+                        "Toast": {
+                            "Loading": "Adding your email address...",
+                            "Success": "Your email address has been added successfully.",
+                            "Error": "Something went wrong while adding your email address. Please try again."
+                        }
+                    }
                 }
             }
         }
