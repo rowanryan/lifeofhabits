@@ -121,6 +121,7 @@ export function UserEmailAddresses() {
                             <ItemActions>
                                 <EmailActionsDropdown
                                     emailId={ea.id}
+                                    emailAddress={ea.emailAddress}
                                     isPrimary={ea.isPrimary}
                                     isVerified={ea.verificationStatus === "verified"}
                                 />

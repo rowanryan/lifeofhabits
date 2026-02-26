@@ -7,6 +7,16 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ReverificationDialog } from "@/components/ReverificationDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -17,6 +27,7 @@ import {
 
 type EmailActionsDropdownProps = {
     emailId: string;
+    emailAddress: string;
     isPrimary: boolean;
     isVerified: boolean;
 };
@@ -29,18 +40,38 @@ type ReverificationHandlers = {
 
 export function EmailActionsDropdown({
     emailId,
+    emailAddress,
     isPrimary,
     isVerified,
 }: EmailActionsDropdownProps) {
     const { user } = useUser();
     const t = useTranslations("Settings.Account.EmailAddresses.Actions");
     const [showReverification, setShowReverification] = useState(false);
+    const [showRemoveConfirmation, setShowRemoveConfirmation] = useState(false);
     const [reverificationHandlers, setReverificationHandlers] =
         useState<ReverificationHandlers | null>(null);
 
     const setAsPrimary = useReverification(
         async () => {
             await user?.update({ primaryEmailAddressId: emailId });
+        },
+        {
+            onNeedsReverification: ({ complete, cancel, level }) => {
+                setReverificationHandlers({ complete, cancel, level });
+                setShowReverification(true);
+            },
+        },
+    );
+
+    const removeEmail = useReverification(
+        async () => {
+            const emailToRemove = user?.emailAddresses.find(
+                (ea) => ea.id === emailId,
+            );
+            if (emailToRemove) {
+                await emailToRemove.destroy();
+                toast.success(t("RemoveSuccess"));
+            }
         },
         {
             onNeedsReverification: ({ complete, cancel, level }) => {
@@ -60,6 +91,20 @@ export function EmailActionsDropdown({
         }
     };
 
+    const handleRemove = () => {
+        setShowRemoveConfirmation(true);
+    };
+
+    const handleConfirmRemove = async () => {
+        setShowRemoveConfirmation(false);
+        try {
+            await removeEmail();
+        } catch (error) {
+            console.error("Error removing email:", error);
+            toast.error(t("RemoveError"));
+        }
+    };
+
     const handleReverificationComplete = () => {
         reverificationHandlers?.complete();
         setShowReverification(false);
@@ -73,6 +118,7 @@ export function EmailActionsDropdown({
     };
 
     const canSetAsPrimary = !isPrimary && isVerified;
+    const canRemove = !isPrimary;
 
     return (
         <>
@@ -94,7 +140,11 @@ export function EmailActionsDropdown({
                         <ShieldCheckIcon />
                         {t("Verify")}
                     </DropdownMenuItem>
-                    <DropdownMenuItem variant="destructive" disabled>
+                    <DropdownMenuItem
+                        variant="destructive"
+                        onClick={handleRemove}
+                        disabled={!canRemove}
+                    >
                         <TrashIcon />
                         {t("Remove")}
                     </DropdownMenuItem>
@@ -107,6 +157,33 @@ export function EmailActionsDropdown({
                 onCancel={handleReverificationCancel}
                 level={reverificationHandlers?.level}
             />
+
+            <AlertDialog
+                open={showRemoveConfirmation}
+                onOpenChange={setShowRemoveConfirmation}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t("RemoveConfirmTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("RemoveConfirmDescription", { email: emailAddress })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>
+                            {t("RemoveConfirmCancel")}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            onClick={handleConfirmRemove}
+                        >
+                            {t("RemoveConfirmAction")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 }

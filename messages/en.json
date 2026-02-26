@@ -78,7 +78,13 @@
                     "Verify": "Verify",
                     "Remove": "Remove",
                     "SetAsPrimarySuccess": "Email address set as primary.",
-                    "SetAsPrimaryError": "Failed to set email as primary. Please try again."
+                    "SetAsPrimaryError": "Failed to set email as primary. Please try again.",
+                    "RemoveConfirmTitle": "Remove email address",
+                    "RemoveConfirmDescription": "Are you sure you want to remove {email}? This action cannot be undone.",
+                    "RemoveConfirmCancel": "Cancel",
+                    "RemoveConfirmAction": "Remove",
+                    "RemoveSuccess": "Email address removed successfully.",
+                    "RemoveError": "Failed to remove email address. Please try again."
                 },
                 "CreateEmailAddress": {
                     "Title": "Add email address",
