@@ -78,7 +78,7 @@ export function UserEmailAddresses() {
             </CardHeader>
 
             <CardContent>
-                <ItemGroup>
+                <ItemGroup className="gap-2">
                     {emailAddresses.map((ea) => (
                         <Item key={ea.id} variant="outline">
                             <ItemContent className="gap-1">
