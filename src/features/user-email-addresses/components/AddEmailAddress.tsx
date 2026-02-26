@@ -1,8 +1,13 @@
 "use client";
 
+import { useReverification, useUser } from "@clerk/nextjs";
+import type {
+    EmailAddressResource,
+    SessionVerificationLevel,
+} from "@clerk/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { FormField } from "@/components/FormField";
@@ -19,6 +24,8 @@ import {
 } from "@/components/ui/dialog";
 import { FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ReverificationDialog } from "./ReverificationDialog";
+import { VerifyEmailDialog } from "./VerifyEmailDialog";
 
 type AddEmailAddressProps = React.PropsWithChildren;
 
@@ -26,8 +33,23 @@ const formSchema = z.object({
     emailAddress: z.email(),
 });
 
+type ReverificationHandlers = {
+    complete: () => void;
+    cancel: () => void;
+    level: SessionVerificationLevel | undefined;
+};
+
 export function AddEmailAddress({ children }: AddEmailAddressProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [nestedDialog, setNestedDialog] = useState<
+        "reverification" | "verification" | null
+    >(null);
+    const [emailResource, setEmailResource] =
+        useState<EmailAddressResource | null>(null);
+    const [reverificationHandlers, setReverificationHandlers] =
+        useState<ReverificationHandlers | null>(null);
+
+    const { user } = useUser();
     const t = useTranslations(
         "Settings.Account.EmailAddresses.CreateEmailAddress",
     );
@@ -39,12 +61,79 @@ export function AddEmailAddress({ children }: AddEmailAddressProps) {
         },
     });
 
-    const onCreate = useCallback((values: z.infer<typeof formSchema>) => {
-        console.log(values);
-    }, []);
+    const createEmailAddress = useReverification(
+        (emailAddress: string) =>
+            user?.createEmailAddress({
+                email: emailAddress,
+            }),
+        {
+            onNeedsReverification: ({ complete, cancel, level }) => {
+                setReverificationHandlers({ complete, cancel, level });
+                setNestedDialog("reverification");
+            },
+        },
+    );
+
+    const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            const result = await createEmailAddress(values.emailAddress);
+
+            if (result) {
+                await user?.reload();
+
+                const newEmailAddress = user?.emailAddresses.find(
+                    (ea) => ea.id === result.id,
+                );
+
+                if (newEmailAddress) {
+                    setEmailResource(newEmailAddress);
+                    await newEmailAddress.prepareVerification({
+                        strategy: "email_code",
+                    });
+                    setNestedDialog("verification");
+                }
+            }
+        } catch (error) {
+            console.error("Error creating email address:", error);
+        }
+    };
+
+    const handleReverificationComplete = () => {
+        reverificationHandlers?.complete();
+        setNestedDialog(null);
+        setReverificationHandlers(null);
+    };
+
+    const handleReverificationCancel = () => {
+        reverificationHandlers?.cancel();
+        setNestedDialog(null);
+        setReverificationHandlers(null);
+    };
+
+    const handleVerificationComplete = () => {
+        setNestedDialog(null);
+        setEmailResource(null);
+        setIsDialogOpen(false);
+        form.reset();
+    };
+
+    const handleVerificationCancel = () => {
+        setNestedDialog(null);
+        setEmailResource(null);
+    };
+
+    const handleDialogOpenChange = (open: boolean) => {
+        setIsDialogOpen(open);
+        if (!open) {
+            setNestedDialog(null);
+            setEmailResource(null);
+            setReverificationHandlers(null);
+            form.reset();
+        }
+    };
 
     return (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
             <DialogTrigger asChild>{children}</DialogTrigger>
 
             <DialogContent>
@@ -55,7 +144,7 @@ export function AddEmailAddress({ children }: AddEmailAddressProps) {
 
                 <form
                     id="create-email-address-form"
-                    onSubmit={form.handleSubmit(onCreate)}
+                    onSubmit={form.handleSubmit(handleSubmit)}
                 >
                     <FieldSet>
                         <Controller
@@ -82,8 +171,30 @@ export function AddEmailAddress({ children }: AddEmailAddressProps) {
                     <DialogClose asChild>
                         <Button variant="secondary">{t("Cancel")}</Button>
                     </DialogClose>
-                    <Button>{t("Confirm")}</Button>
+                    <Button
+                        type="submit"
+                        form="create-email-address-form"
+                        disabled={form.formState.isSubmitting}
+                    >
+                        {t("Confirm")}
+                    </Button>
                 </DialogFooter>
+
+                <ReverificationDialog
+                    open={nestedDialog === "reverification"}
+                    onComplete={handleReverificationComplete}
+                    onCancel={handleReverificationCancel}
+                    level={reverificationHandlers?.level}
+                />
+
+                {emailResource && (
+                    <VerifyEmailDialog
+                        open={nestedDialog === "verification"}
+                        onComplete={handleVerificationComplete}
+                        onCancel={handleVerificationCancel}
+                        emailResource={emailResource}
+                    />
+                )}
             </DialogContent>
         </Dialog>
     );

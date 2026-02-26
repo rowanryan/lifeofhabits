@@ -77,6 +77,24 @@
                             "Success": "Your email address has been added successfully.",
                             "Error": "Something went wrong while adding your email address. Please try again."
                         }
+                    },
+                    "Reverification": {
+                        "Title": "Verify your identity",
+                        "Description": "Enter the verification code sent to {email}",
+                        "Cancel": "Cancel",
+                        "Verify": "Verify",
+                        "InvalidCode": "Invalid verification code. Please try again.",
+                        "Error": "Something went wrong. Please try again."
+                    },
+                    "VerifyEmail": {
+                        "Title": "Verify your email",
+                        "Description": "Enter the verification code sent to {email}",
+                        "Cancel": "Cancel",
+                        "Verify": "Verify",
+                        "InvalidCode": "Invalid verification code. Please try again.",
+                        "VerificationFailed": "Verification failed. Please try again.",
+                        "ResendCode": "Didn't receive a code? Resend",
+                        "ResendError": "Failed to resend code. Please try again."
                     }
                 }
             }
