@@ -48,9 +48,7 @@ export function ReverificationDialog({
     const verificationRef = useRef<SessionVerificationResource | null>(null);
     const hasStartedRef = useRef(false);
 
-    const t = useTranslations(
-        "Settings.Account.EmailAddresses.CreateEmailAddress.Reverification",
-    );
+    const t = useTranslations("Common.Reverification");
 
     const handleVerify = async () => {
         if (!session || !code) return;

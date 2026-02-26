@@ -8,6 +8,14 @@
                 "Light": "Light",
                 "Dark": "Dark"
             }
+        },
+        "Reverification": {
+            "Title": "Verify your identity",
+            "Description": "Enter the verification code sent to {email}",
+            "Cancel": "Cancel",
+            "Verify": "Verify",
+            "InvalidCode": "Invalid verification code. Please try again.",
+            "Error": "Something went wrong. Please try again."
         }
     },
     "AppShell": {
@@ -64,6 +72,13 @@
                     "Expired": "Expired",
                     "Failed": "Failed",
                     "Transferable": "Transferable"
+                },
+                "Actions": {
+                    "SetAsPrimary": "Set as primary",
+                    "Verify": "Verify",
+                    "Remove": "Remove",
+                    "SetAsPrimarySuccess": "Email address set as primary.",
+                    "SetAsPrimaryError": "Failed to set email as primary. Please try again."
                 },
                 "CreateEmailAddress": {
                     "Title": "Add email address",

@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ReverificationDialog } from "./ReverificationDialog";
+import { ReverificationDialog } from "@/components/ReverificationDialog";
 import { VerifyEmailDialog } from "./VerifyEmailDialog";
 
 type AddEmailAddressProps = React.PropsWithChildren;

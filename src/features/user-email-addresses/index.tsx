@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { EllipsisIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { AddEmailAddress } from "./components/AddEmailAddress";
+import { EmailActionsDropdown } from "./components/EmailActionsDropdown";
 
 type VerificationStatus =
     | "unverified"
@@ -118,9 +119,11 @@ export function UserEmailAddresses() {
                                 </ItemDescription>
                             </ItemContent>
                             <ItemActions>
-                                <Button variant="ghost" size="icon-sm">
-                                    <EllipsisIcon />
-                                </Button>
+                                <EmailActionsDropdown
+                                    emailId={ea.id}
+                                    isPrimary={ea.isPrimary}
+                                    isVerified={ea.verificationStatus === "verified"}
+                                />
                             </ItemActions>
                         </Item>
                     ))}
