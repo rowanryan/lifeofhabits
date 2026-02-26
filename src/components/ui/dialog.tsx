@@ -2,14 +2,52 @@
 
 import { XIcon } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import type * as React from "react";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+type NestedDialogContextValue = {
+    depth: number;
+    registerChild: () => void;
+    unregisterChild: () => void;
+    hasNestedOpen: boolean;
+};
+
+const NestedDialogContext = React.createContext<NestedDialogContextValue>({
+    depth: 0,
+    registerChild: () => {},
+    unregisterChild: () => {},
+    hasNestedOpen: false,
+});
 
 function Dialog({
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
-    return <DialogPrimitive.Root data-slot="dialog" {...props} />;
+    const parent = React.useContext(NestedDialogContext);
+    const [childCount, setChildCount] = React.useState(0);
+
+    React.useEffect(() => {
+        if (props.open) {
+            parent.registerChild();
+            return () => parent.unregisterChild();
+        }
+    }, [props.open, parent]);
+
+    const value = React.useMemo(
+        () => ({
+            depth: parent.depth + 1,
+            registerChild: () => setChildCount((c) => c + 1),
+            unregisterChild: () => setChildCount((c) => c - 1),
+            hasNestedOpen: childCount > 0,
+        }),
+        [parent.depth, childCount],
+    );
+
+    return (
+        <NestedDialogContext.Provider value={value}>
+            <DialogPrimitive.Root data-slot="dialog" {...props} />
+        </NestedDialogContext.Provider>
+    );
 }
 
 function DialogTrigger({
@@ -50,17 +88,32 @@ function DialogContent({
     className,
     children,
     showCloseButton = true,
+    style,
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
 }) {
+    const { depth, hasNestedOpen } = React.useContext(NestedDialogContext);
+    const isNested = depth > 1;
+
     return (
         <DialogPortal>
-            <DialogOverlay />
+            {!isNested && <DialogOverlay />}
             <DialogPrimitive.Content
                 data-slot="dialog-content"
+                data-nested-dialog-open={hasNestedOpen ? "" : undefined}
+                style={
+                    {
+                        "--nested-dialogs": hasNestedOpen ? 1 : 0,
+                        ...style,
+                    } as React.CSSProperties
+                }
                 className={cn(
-                    "bg-background data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/5 grid max-w-[calc(100%-2rem)] gap-6 rounded-4xl p-6 text-sm ring-1 duration-100 sm:max-w-md fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2",
+                    "bg-background ring-foreground/5 grid max-w-[calc(100%-2rem)] gap-6 rounded-4xl p-6 text-sm ring-1 sm:max-w-md fixed left-1/2 z-50 w-full -translate-x-1/2",
+                    "top-[calc(50%-1.25rem*var(--nested-dialogs))] -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))]",
+                    "transition-all duration-150",
+                    "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-100",
+                    "data-nested-dialog-open:after:absolute data-nested-dialog-open:after:inset-0 data-nested-dialog-open:after:rounded-[inherit] data-nested-dialog-open:after:bg-black/5",
                     className,
                 )}
                 {...props}
