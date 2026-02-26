@@ -1,7 +1,7 @@
 "use client";
 
 import { useReverification, useUser } from "@clerk/nextjs";
-import type { SessionVerificationLevel } from "@clerk/types";
+import type { EmailAddressResource, SessionVerificationLevel } from "@clerk/types";
 import { EllipsisIcon, ShieldCheckIcon, StarIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -24,6 +24,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { VerifyEmailDialog } from "./VerifyEmailDialog";
 
 type EmailActionsDropdownProps = {
     emailId: string;
@@ -48,6 +49,9 @@ export function EmailActionsDropdown({
     const t = useTranslations("Settings.Account.EmailAddresses.Actions");
     const [showReverification, setShowReverification] = useState(false);
     const [showRemoveConfirmation, setShowRemoveConfirmation] = useState(false);
+    const [showVerifyDialog, setShowVerifyDialog] = useState(false);
+    const [emailResourceToVerify, setEmailResourceToVerify] =
+        useState<EmailAddressResource | null>(null);
     const [reverificationHandlers, setReverificationHandlers] =
         useState<ReverificationHandlers | null>(null);
 
@@ -105,6 +109,33 @@ export function EmailActionsDropdown({
         }
     };
 
+    const handleVerify = async () => {
+        try {
+            const emailResource = user?.emailAddresses.find(
+                (ea) => ea.id === emailId,
+            );
+            if (emailResource) {
+                await emailResource.prepareVerification({ strategy: "email_code" });
+                setEmailResourceToVerify(emailResource);
+                setShowVerifyDialog(true);
+            }
+        } catch (error) {
+            console.error("Error starting verification:", error);
+            toast.error(t("VerifyError"));
+        }
+    };
+
+    const handleVerifyComplete = () => {
+        setShowVerifyDialog(false);
+        setEmailResourceToVerify(null);
+        toast.success(t("VerifySuccess"));
+    };
+
+    const handleVerifyCancel = () => {
+        setShowVerifyDialog(false);
+        setEmailResourceToVerify(null);
+    };
+
     const handleReverificationComplete = () => {
         reverificationHandlers?.complete();
         setShowReverification(false);
@@ -118,6 +149,7 @@ export function EmailActionsDropdown({
     };
 
     const canSetAsPrimary = !isPrimary && isVerified;
+    const canVerify = !isVerified;
     const canRemove = !isPrimary;
 
     return (
@@ -136,7 +168,10 @@ export function EmailActionsDropdown({
                         <StarIcon />
                         {t("SetAsPrimary")}
                     </DropdownMenuItem>
-                    <DropdownMenuItem disabled>
+                    <DropdownMenuItem
+                        onClick={handleVerify}
+                        disabled={!canVerify}
+                    >
                         <ShieldCheckIcon />
                         {t("Verify")}
                     </DropdownMenuItem>
@@ -184,6 +219,15 @@ export function EmailActionsDropdown({
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            {emailResourceToVerify && (
+                <VerifyEmailDialog
+                    open={showVerifyDialog}
+                    onComplete={handleVerifyComplete}
+                    onCancel={handleVerifyCancel}
+                    emailResource={emailResourceToVerify}
+                />
+            )}
         </>
     );
 }

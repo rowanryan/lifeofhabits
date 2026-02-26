@@ -79,6 +79,8 @@
                     "Remove": "Remove",
                     "SetAsPrimarySuccess": "Email address set as primary.",
                     "SetAsPrimaryError": "Failed to set email as primary. Please try again.",
+                    "VerifySuccess": "Email address verified successfully.",
+                    "VerifyError": "Failed to start verification. Please try again.",
                     "RemoveConfirmTitle": "Remove email address",
                     "RemoveConfirmDescription": "Are you sure you want to remove {email}? This action cannot be undone.",
                     "RemoveConfirmCancel": "Cancel",
