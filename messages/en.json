@@ -120,6 +120,22 @@
                         "ResendError": "Failed to resend code. Please try again."
                     }
                 }
+            },
+            "ConnectedAccounts": {
+                "Title": "Connected accounts",
+                "Description": "Manage your connected accounts.",
+                "AddButton": "Add",
+                "VerificationStatus": {
+                    "Verified": "Verified",
+                    "Unverified": "Unverified",
+                    "Expired": "Expired",
+                    "Failed": "Failed",
+                    "Transferable": "Transferable"
+                },
+                "Actions": {
+                    "Verify": "Verify",
+                    "Remove": "Remove"
+                }
             }
         }
     }

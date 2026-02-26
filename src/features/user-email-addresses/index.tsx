@@ -3,7 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -19,6 +19,7 @@ import {
     ItemContent,
     ItemDescription,
     ItemGroup,
+    ItemSeparator,
     ItemTitle,
 } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -79,54 +80,62 @@ export function UserEmailAddresses() {
             </CardHeader>
 
             <CardContent>
-                <ItemGroup className="gap-2">
-                    {emailAddresses.map((ea) => (
-                        <Item key={ea.id} variant="outline">
-                            <ItemContent className="gap-1">
-                                <ItemTitle>{ea.emailAddress}</ItemTitle>
-                                <ItemDescription className="text-sm">
-                                    {ea.verificationStatus && (
-                                        <span
-                                            className={cn({
-                                                "text-teal-500":
-                                                    ea.verificationStatus ===
-                                                    "verified",
-                                                "text-red-500":
-                                                    ea.verificationStatus ===
-                                                    "failed",
-                                                "text-yellow-500":
-                                                    ea.verificationStatus ===
-                                                        "expired" ||
-                                                    ea.verificationStatus ===
-                                                        "unverified",
-                                                "text-blue-500":
-                                                    ea.verificationStatus ===
-                                                    "transferable",
-                                            })}
-                                        >
-                                            {
-                                                verificationStatusToLabel[
-                                                    ea.verificationStatus
-                                                ]
-                                            }
-                                        </span>
-                                    )}
-                                    {ea.isPrimary && (
-                                        <span className="text-muted-foreground">
-                                            &nbsp;&bull; {t("Primary")}
-                                        </span>
-                                    )}
-                                </ItemDescription>
-                            </ItemContent>
-                            <ItemActions>
-                                <EmailActionsDropdown
-                                    emailId={ea.id}
-                                    emailAddress={ea.emailAddress}
-                                    isPrimary={ea.isPrimary}
-                                    isVerified={ea.verificationStatus === "verified"}
-                                />
-                            </ItemActions>
-                        </Item>
+                <ItemGroup className="gap-0 rounded-2xl border">
+                    {emailAddresses.map((ea, idx) => (
+                        <Fragment key={ea.id}>
+                            <Item>
+                                <ItemContent className="gap-1">
+                                    <ItemTitle>{ea.emailAddress}</ItemTitle>
+                                    <ItemDescription className="text-sm">
+                                        {ea.verificationStatus && (
+                                            <span
+                                                className={cn({
+                                                    "text-teal-500":
+                                                        ea.verificationStatus ===
+                                                        "verified",
+                                                    "text-red-500":
+                                                        ea.verificationStatus ===
+                                                        "failed",
+                                                    "text-yellow-500":
+                                                        ea.verificationStatus ===
+                                                            "expired" ||
+                                                        ea.verificationStatus ===
+                                                            "unverified",
+                                                    "text-blue-500":
+                                                        ea.verificationStatus ===
+                                                        "transferable",
+                                                })}
+                                            >
+                                                {
+                                                    verificationStatusToLabel[
+                                                        ea.verificationStatus
+                                                    ]
+                                                }
+                                            </span>
+                                        )}
+                                        {ea.isPrimary && (
+                                            <span className="text-muted-foreground">
+                                                &nbsp;&bull; {t("Primary")}
+                                            </span>
+                                        )}
+                                    </ItemDescription>
+                                </ItemContent>
+                                <ItemActions>
+                                    <EmailActionsDropdown
+                                        emailId={ea.id}
+                                        emailAddress={ea.emailAddress}
+                                        isPrimary={ea.isPrimary}
+                                        isVerified={
+                                            ea.verificationStatus === "verified"
+                                        }
+                                    />
+                                </ItemActions>
+                            </Item>
+
+                            {idx !== emailAddresses.length - 1 && (
+                                <ItemSeparator className="my-0" />
+                            )}
+                        </Fragment>
                     ))}
                 </ItemGroup>
             </CardContent>
