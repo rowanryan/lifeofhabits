@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { CircleHelpIcon, EllipsisIcon, PlusIcon } from "lucide-react";
+import { CircleHelpIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Fragment, useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getOAuthProvider, type OAuthProviderId } from "@/config/clerk";
 import { cn } from "@/lib/utils";
 import { AddConnectedAccount } from "./components/AddConnectedAccount";
+import { ConnectedAccountActionsDropdown } from "./components/ConnectedAccountActionsDropdown";
 
 type VerificationStatus =
     | "unverified"
@@ -147,9 +148,10 @@ export function UserConnectedAccounts() {
                                         </ItemDescription>
                                     </ItemContent>
                                     <ItemActions>
-                                        <Button variant="ghost" size="icon-sm">
-                                            <EllipsisIcon />
-                                        </Button>
+                                        <ConnectedAccountActionsDropdown
+                                            accountId={account.id}
+                                            isVerified={isVerified}
+                                        />
                                     </ItemActions>
                                 </Item>
 

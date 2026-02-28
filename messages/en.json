@@ -141,7 +141,8 @@
                 },
                 "Actions": {
                     "Verify": "Verify",
-                    "Remove": "Remove"
+                    "Remove": "Remove",
+                    "VerifyError": "Failed to verify connected account. Please try again."
                 }
             }
         }
