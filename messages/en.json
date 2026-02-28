@@ -133,7 +133,11 @@
                     "Unverified": "Unverified",
                     "Expired": "Expired",
                     "Failed": "Failed",
-                    "Transferable": "Transferable"
+                    "Transferable": "Transferable",
+                    "Errors": {
+                        "oauth_identification_claimed": "This email address is already in use with another account.",
+                        "other": "An error occurred while verifying your account. Please try again."
+                    }
                 },
                 "Actions": {
                     "Verify": "Verify",

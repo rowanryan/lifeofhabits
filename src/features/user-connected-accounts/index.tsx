@@ -25,11 +25,33 @@ import {
 } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getOAuthProvider, type OAuthProviderId } from "@/config/clerk";
+import { cn } from "@/lib/utils";
 import { AddConnectedAccount } from "./components/AddConnectedAccount";
+
+type VerificationStatus =
+    | "unverified"
+    | "verified"
+    | "transferable"
+    | "failed"
+    | "expired";
 
 export function UserConnectedAccounts() {
     const { user } = useUser();
     const t = useTranslations("Settings.Account.ConnectedAccounts");
+
+    const verificationStatusToLabel: Record<VerificationStatus, string> = {
+        verified: t("VerificationStatus.Verified"),
+        unverified: t("VerificationStatus.Unverified"),
+        expired: t("VerificationStatus.Expired"),
+        failed: t("VerificationStatus.Failed"),
+        transferable: t("VerificationStatus.Transferable"),
+    };
+
+    const verificationErrorCodes: Record<string, string> = {
+        oauth_identification_claimed: t(
+            "VerificationStatus.Errors.oauth_identification_claimed",
+        ),
+    };
 
     const externalAccounts = useMemo(() => {
         return user?.externalAccounts
@@ -37,7 +59,9 @@ export function UserConnectedAccounts() {
                 id: account.id,
                 provider: account.provider as OAuthProviderId,
                 identifier: account.accountIdentifier(),
-                verification: account.verification,
+                verificationStatus: account.verification
+                    ?.status as VerificationStatus,
+                verificationError: account.verification?.error,
             }))
             .sort((a, b) => a.provider.localeCompare(b.provider));
     }, [user]);
@@ -62,6 +86,13 @@ export function UserConnectedAccounts() {
                 <ItemGroup className="gap-0 rounded-2xl border">
                     {externalAccounts.map((account, idx) => {
                         const provider = getOAuthProvider(account.provider);
+                        const isVerified =
+                            account.verificationStatus === "verified";
+                        const errorMessage = account.verificationError
+                            ? (verificationErrorCodes[
+                                  account.verificationError.code
+                              ] ?? t("VerificationStatus.Errors.other"))
+                            : null;
 
                         return (
                             <Fragment key={account.id}>
@@ -77,8 +108,42 @@ export function UserConnectedAccounts() {
                                         <ItemTitle>
                                             {provider?.name ?? "Unknown"}
                                         </ItemTitle>
-                                        <ItemDescription>
-                                            {account.identifier}
+                                        <ItemDescription
+                                            className={cn({
+                                                "text-red-500":
+                                                    account.verificationStatus ===
+                                                    "failed",
+                                                "text-yellow-500":
+                                                    account.verificationStatus ===
+                                                        "expired" ||
+                                                    account.verificationStatus ===
+                                                        "unverified",
+                                                "text-blue-500":
+                                                    account.verificationStatus ===
+                                                    "transferable",
+                                            })}
+                                        >
+                                            {isVerified ? (
+                                                account.identifier
+                                            ) : (
+                                                <>
+                                                    <span>
+                                                        {
+                                                            verificationStatusToLabel[
+                                                                account
+                                                                    .verificationStatus
+                                                            ]
+                                                        }
+                                                    </span>
+                                                    {errorMessage && (
+                                                        <span>
+                                                            {" "}
+                                                            &bull;{" "}
+                                                            {errorMessage}
+                                                        </span>
+                                                    )}
+                                                </>
+                                            )}
                                         </ItemDescription>
                                     </ItemContent>
                                     <ItemActions>
