@@ -89,10 +89,12 @@ export function ReverificationDialog({
                 verificationRef.current = response;
 
                 if (response.status === "needs_first_factor") {
-                    const factor = response.supportedFirstFactors?.find(
-                        (f): f is EmailCodeFactor =>
-                            f.strategy === "email_code",
+                    const emailFactors = response.supportedFirstFactors?.filter(
+                        (f): f is EmailCodeFactor => f.strategy === "email_code",
                     );
+
+                    const factor =
+                        emailFactors?.find((f) => f.primary) ?? emailFactors?.[0];
 
                     if (factor) {
                         setEmailFactor(factor);
