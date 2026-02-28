@@ -7,6 +7,16 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ReverificationDialog } from "@/components/ReverificationDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -17,6 +27,7 @@ import {
 
 type ConnectedAccountActionsDropdownProps = {
     accountId: string;
+    providerName: string;
     isVerified: boolean;
 };
 
@@ -28,11 +39,13 @@ type ReverificationHandlers = {
 
 export function ConnectedAccountActionsDropdown({
     accountId,
+    providerName,
     isVerified,
 }: ConnectedAccountActionsDropdownProps) {
     const { user } = useUser();
     const t = useTranslations("Settings.Account.ConnectedAccounts.Actions");
     const [showReverification, setShowReverification] = useState(false);
+    const [showRemoveConfirmation, setShowRemoveConfirmation] = useState(false);
     const [reverificationHandlers, setReverificationHandlers] =
         useState<ReverificationHandlers | null>(null);
 
@@ -59,12 +72,44 @@ export function ConnectedAccountActionsDropdown({
         },
     );
 
+    const removeAccount = useReverification(
+        async () => {
+            const accountToRemove = user?.externalAccounts.find(
+                (ea) => ea.id === accountId,
+            );
+            if (accountToRemove) {
+                await accountToRemove.destroy();
+                toast.success(t("RemoveSuccess"));
+            }
+        },
+        {
+            onNeedsReverification: ({ complete, cancel, level }) => {
+                setReverificationHandlers({ complete, cancel, level });
+                setShowReverification(true);
+            },
+        },
+    );
+
     const handleVerify = async () => {
         try {
             await reauthorizeAccount();
         } catch (error) {
             console.error("Error verifying connected account:", error);
             toast.error(t("VerifyError"));
+        }
+    };
+
+    const handleRemove = () => {
+        setShowRemoveConfirmation(true);
+    };
+
+    const handleConfirmRemove = async () => {
+        setShowRemoveConfirmation(false);
+        try {
+            await removeAccount();
+        } catch (error) {
+            console.error("Error removing connected account:", error);
+            toast.error(t("RemoveError"));
         }
     };
 
@@ -100,7 +145,7 @@ export function ConnectedAccountActionsDropdown({
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         variant="destructive"
-                        disabled
+                        onClick={handleRemove}
                     >
                         <TrashIcon />
                         {t("Remove")}
@@ -114,6 +159,33 @@ export function ConnectedAccountActionsDropdown({
                 onCancel={handleReverificationCancel}
                 level={reverificationHandlers?.level}
             />
+
+            <AlertDialog
+                open={showRemoveConfirmation}
+                onOpenChange={setShowRemoveConfirmation}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t("RemoveConfirmTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("RemoveConfirmDescription", { provider: providerName })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>
+                            {t("RemoveConfirmCancel")}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            onClick={handleConfirmRemove}
+                        >
+                            {t("RemoveConfirmAction")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 }

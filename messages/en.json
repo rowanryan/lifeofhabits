@@ -142,7 +142,13 @@
                 "Actions": {
                     "Verify": "Verify",
                     "Remove": "Remove",
-                    "VerifyError": "Failed to verify connected account. Please try again."
+                    "VerifyError": "Failed to verify connected account. Please try again.",
+                    "RemoveConfirmTitle": "Remove connected account",
+                    "RemoveConfirmDescription": "Are you sure you want to remove {provider}? This action cannot be undone.",
+                    "RemoveConfirmCancel": "Cancel",
+                    "RemoveConfirmAction": "Remove",
+                    "RemoveSuccess": "Connected account removed successfully.",
+                    "RemoveError": "Failed to remove connected account. Please try again."
                 }
             }
         }
