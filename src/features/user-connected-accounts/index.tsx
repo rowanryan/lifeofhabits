@@ -1,8 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { SiApple, SiFacebook, SiGoogle } from "@icons-pack/react-simple-icons";
-import { CircleQuestionMarkIcon, EllipsisIcon, PlusIcon } from "lucide-react";
+import { CircleHelpIcon, EllipsisIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Fragment, useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -25,18 +24,8 @@ import {
     ItemTitle,
 } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const ACCOUNT_TO_ICON: Record<string, React.ReactNode> = {
-    google: <SiGoogle className="size-5" />,
-    facebook: <SiFacebook className="size-5" />,
-    apple: <SiApple className="size-5" />,
-};
-
-const ACCOUNT_TO_NAME: Record<string, string> = {
-    google: "Google",
-    facebook: "Facebook",
-    apple: "Apple",
-};
+import { getOAuthProvider, type OAuthProviderId } from "@/config/clerk";
+import { AddConnectedAccount } from "./components/AddConnectedAccount";
 
 export function UserConnectedAccounts() {
     const { user } = useUser();
@@ -46,7 +35,7 @@ export function UserConnectedAccounts() {
         return user?.externalAccounts
             .map((account) => ({
                 id: account.id,
-                provider: account.provider,
+                provider: account.provider as OAuthProviderId,
                 identifier: account.accountIdentifier(),
                 verification: account.verification,
             }))
@@ -61,43 +50,50 @@ export function UserConnectedAccounts() {
                 <CardTitle>{t("Title")}</CardTitle>
                 <CardDescription>{t("Description")}</CardDescription>
                 <CardAction>
-                    <Button size="sm">
-                        <PlusIcon /> {t("AddButton")}
-                    </Button>
+                    <AddConnectedAccount>
+                        <Button size="sm">
+                            <PlusIcon /> {t("AddButton")}
+                        </Button>
+                    </AddConnectedAccount>
                 </CardAction>
             </CardHeader>
 
             <CardContent>
                 <ItemGroup className="gap-0 rounded-2xl border">
-                    {externalAccounts.map((account, idx) => (
-                        <Fragment key={account.id}>
-                            <Item>
-                                <ItemMedia>
-                                    {ACCOUNT_TO_ICON[account.provider] ?? (
-                                        <CircleQuestionMarkIcon />
-                                    )}
-                                </ItemMedia>
-                                <ItemContent>
-                                    <ItemTitle>
-                                        {ACCOUNT_TO_NAME[account.provider] ??
-                                            "Unknown"}
-                                    </ItemTitle>
-                                    <ItemDescription>
-                                        {account.identifier}
-                                    </ItemDescription>
-                                </ItemContent>
-                                <ItemActions>
-                                    <Button variant="ghost" size="icon-sm">
-                                        <EllipsisIcon />
-                                    </Button>
-                                </ItemActions>
-                            </Item>
+                    {externalAccounts.map((account, idx) => {
+                        const provider = getOAuthProvider(account.provider);
 
-                            {idx !== externalAccounts.length - 1 && (
-                                <ItemSeparator className="my-0" />
-                            )}
-                        </Fragment>
-                    ))}
+                        return (
+                            <Fragment key={account.id}>
+                                <Item>
+                                    <ItemMedia>
+                                        {provider ? (
+                                            <provider.icon className="size-5" />
+                                        ) : (
+                                            <CircleHelpIcon className="size-5" />
+                                        )}
+                                    </ItemMedia>
+                                    <ItemContent>
+                                        <ItemTitle>
+                                            {provider?.name ?? "Unknown"}
+                                        </ItemTitle>
+                                        <ItemDescription>
+                                            {account.identifier}
+                                        </ItemDescription>
+                                    </ItemContent>
+                                    <ItemActions>
+                                        <Button variant="ghost" size="icon-sm">
+                                            <EllipsisIcon />
+                                        </Button>
+                                    </ItemActions>
+                                </Item>
+
+                                {idx !== externalAccounts.length - 1 && (
+                                    <ItemSeparator className="my-0" />
+                                )}
+                            </Fragment>
+                        );
+                    })}
                 </ItemGroup>
             </CardContent>
         </Card>

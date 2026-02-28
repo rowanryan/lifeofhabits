@@ -125,6 +125,9 @@
                 "Title": "Connected accounts",
                 "Description": "Manage your connected accounts.",
                 "AddButton": "Add",
+                "AddAccount": {
+                    "Error": "Failed to connect account. Please try again."
+                },
                 "VerificationStatus": {
                     "Verified": "Verified",
                     "Unverified": "Unverified",
