@@ -35,4 +35,6 @@ export const env = createEnv({
         NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL:
             process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL,
     },
+
+    skipValidation: process.env.NODE_ENV === "test",
 });

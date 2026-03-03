@@ -3,6 +3,7 @@ import { mockReset } from "vitest-mock-extended";
 import type { client } from "@/lib/stripe";
 import type { Context } from "@/server/shared";
 import { getStripeCustomer } from "../queries";
+import "@/env";
 
 const mockContext = await vi.hoisted(async () => {
     const { mockDeep } = await import("vitest-mock-extended");

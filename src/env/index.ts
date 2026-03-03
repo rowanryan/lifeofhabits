@@ -21,4 +21,6 @@ export const env = createEnv({
     experimental__runtimeEnv: {
         NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     },
+
+    skipValidation: process.env.NODE_ENV === "test",
 });
