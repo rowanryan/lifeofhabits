@@ -22,6 +22,11 @@ export default function SettingsLayout({ children }: React.PropsWithChildren) {
                     href: "/settings/account",
                     isActive: segment === "account",
                 },
+                {
+                    label: t("SideMenu.Billing"),
+                    href: "/settings/billing",
+                    isActive: segment === "billing",
+                },
             ]}
         >
             {children}

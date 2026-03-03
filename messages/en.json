@@ -35,7 +35,8 @@
         "Title": "Settings",
         "SideMenu": {
             "General": "General",
-            "Account": "Account"
+            "Account": "Account",
+            "Billing": "Billing"
         },
         "Account": {
             "Profile": {
@@ -150,6 +151,20 @@
                     "RemoveSuccess": "Connected account removed successfully.",
                     "RemoveError": "Failed to remove connected account. Please try again."
                 }
+            }
+        },
+        "Billing": {
+            "Plan": {
+                "Title": "Plan",
+                "Description": "Manage your plan."
+            },
+            "PaymentMethods": {
+                "Title": "Payment methods",
+                "Description": "Manage your payment methods."
+            },
+            "Invoices": {
+                "Title": "Invoices",
+                "Description": "View your invoices."
             }
         }
     }
