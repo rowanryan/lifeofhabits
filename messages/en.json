@@ -1,5 +1,12 @@
 {
     "Common": {
+        "Errors": {
+            "ServerAction": {
+                "Unknown": "Oops! Something went wrong.",
+                "Unauthorized": "You have to be signed in to perform this action.",
+                "Forbidden": "You are not allowed to perform this action."
+            }
+        },
         "ThemeSelector": {
             "Title": "Theme",
             "Description": "Choose your preferred theme for the application.",

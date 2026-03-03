@@ -1,15 +1,18 @@
+import { getTranslations } from "next-intl/server";
 import { createSafeActionClient } from "next-safe-action";
 import { createContext } from "./shared";
 
 export class ActionError extends Error {}
 
 export const actionClient = createSafeActionClient({
-    handleServerError: error => {
+    handleServerError: async error => {
         if (error instanceof ActionError) {
             return error.message;
         }
 
-        return "Oops! Something went wrong.";
+        const t = await getTranslations("Common.Errors.ServerAction");
+
+        return t("Unknown");
     },
 }).use(async ({ next }) => {
     const ctx = await createContext();
@@ -21,7 +24,9 @@ export const actionClient = createSafeActionClient({
 
 export const authAction = actionClient.use(async ({ next, ctx }) => {
     if (!ctx.clerkAuth.userId) {
-        throw new Error("Unauthorized");
+        const t = await getTranslations("Common.Errors.ServerAction");
+
+        throw new ActionError(t("Unauthorized"));
     }
 
     return await next({
@@ -34,7 +39,9 @@ export const authAction = actionClient.use(async ({ next, ctx }) => {
 
 export const orgAction = authAction.use(async ({ next, ctx }) => {
     if (!ctx.clerkAuth.orgId) {
-        throw new Error("Forbidden");
+        const t = await getTranslations("Common.Errors.ServerAction");
+
+        throw new ActionError(t("Forbidden"));
     }
 
     return await next({
@@ -48,7 +55,9 @@ export const orgAction = authAction.use(async ({ next, ctx }) => {
 
 export const adminAction = orgAction.use(async ({ next, ctx }) => {
     if (ctx.clerkAuth.sessionClaims?.role !== "admin") {
-        throw new Error("Forbidden");
+        const t = await getTranslations("Common.Errors.ServerAction");
+
+        throw new ActionError(t("Forbidden"));
     }
 
     return await next({
