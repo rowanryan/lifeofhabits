@@ -4,8 +4,7 @@ import { createContext } from "./shared";
 export class ActionError extends Error {}
 
 export const actionClient = createSafeActionClient({
-    handleServerError: (error) => {
-        console.error(error);
+    handleServerError: error => {
         if (error instanceof ActionError) {
             return error.message;
         }
