@@ -7,3 +7,17 @@ declare module "next-intl" {
         Locale: (typeof AVAILABLE_LOCALES)[number];
     }
 }
+
+interface UserData {
+    role?: "admin" | "user";
+}
+
+declare global {
+    interface CustomJwtSessionClaims extends UserData {}
+
+    interface UserPublicMetadata extends UserData {}
+
+    interface UserPrivateMetadata {
+        stripeCustomerId?: string;
+    }
+}
