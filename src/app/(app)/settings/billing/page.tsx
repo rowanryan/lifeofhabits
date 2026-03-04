@@ -5,17 +5,15 @@ import { Plan } from "./components/Plan";
 import { getInvoices, getStripeCustomer } from "./queries";
 
 export default async function Page() {
-    const stripeCustomer = await getStripeCustomer();
+    await getStripeCustomer();
 
-    const invoices = getInvoices({
-        stripeCustomerId: stripeCustomer.id,
-    });
+    const invoices = getInvoices();
 
     return (
         <div className="space-y-4">
             <Plan />
 
-            <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+            <Suspense fallback={<Skeleton className="h-84 w-full" />}>
                 <Invoices queryPromise={invoices} />
             </Suspense>
         </div>

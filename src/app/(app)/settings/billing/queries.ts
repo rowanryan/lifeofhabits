@@ -1,4 +1,3 @@
-import z from "zod";
 import { client } from "@/lib/stripe";
 import { stripeCustomers } from "@/server/db/schema";
 import { authQuery } from "@/server/queries";
@@ -49,15 +48,20 @@ export const getStripeCustomer = authQuery.query(async ({ ctx }) => {
     return stripeCustomer;
 });
 
-export const getInvoices = authQuery.query(
-    z.object({
-        stripeCustomerId: z.string(),
-    }),
-    async ({ input }) => {
-        const invoices = await client.invoices.list({
-            customer: input.stripeCustomerId,
-        });
+export const getInvoices = authQuery.query(async ({ ctx }) => {
+    const internalCustomer = await ctx.db.query.stripeCustomers.findFirst({
+        where: {
+            clerkUserId: ctx.clerkAuth.userId,
+        },
+    });
 
-        return invoices.data;
+    if (!internalCustomer) {
+        throw new Error("Internal customer not found.");
     }
-);
+
+    const invoices = await client.invoices.list({
+        customer: internalCustomer.externalId,
+    });
+
+    return invoices.data;
+});

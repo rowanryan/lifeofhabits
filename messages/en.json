@@ -163,7 +163,13 @@
         "Billing": {
             "Plan": {
                 "Title": "Plan",
-                "Description": "Manage your plan."
+                "Description": "Manage your plan.",
+                "Manage": {
+                    "Label": "Manage",
+                    "Toast": {
+                        "Error": "Failed to create portal session. Please try again."
+                    }
+                }
             },
             "PaymentMethods": {
                 "Title": "Payment methods",
