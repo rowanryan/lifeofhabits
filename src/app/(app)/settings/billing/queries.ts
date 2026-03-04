@@ -49,19 +49,6 @@ export const getStripeCustomer = authQuery.query(async ({ ctx }) => {
     return stripeCustomer;
 });
 
-export const getPaymentMethods = authQuery.query(
-    z.object({
-        stripeCustomerId: z.string(),
-    }),
-    async ({ input }) => {
-        const paymentMethods = await client.paymentMethods.list({
-            customer: input.stripeCustomerId,
-        });
-
-        return paymentMethods.data;
-    }
-);
-
 export const getInvoices = authQuery.query(
     z.object({
         stripeCustomerId: z.string(),
