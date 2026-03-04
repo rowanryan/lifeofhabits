@@ -46,8 +46,9 @@ export const adminQuery = authQuery.use(async ctx => {
 });
 
 // Utility types to infer input and output from any query
-export type QueryInput<T extends (...args: unknown[]) => unknown> =
-    Parameters<T>[0];
-export type QueryOutput<T extends (...args: unknown[]) => unknown> = Awaited<
+// biome-ignore lint/suspicious/noExplicitAny: Required for generic function inference
+export type QueryInput<T extends (...args: any[]) => any> = Parameters<T>[0];
+// biome-ignore lint/suspicious/noExplicitAny: Required for generic function inference
+export type QueryOutput<T extends (...args: any[]) => any> = Awaited<
     ReturnType<T>
 >;
