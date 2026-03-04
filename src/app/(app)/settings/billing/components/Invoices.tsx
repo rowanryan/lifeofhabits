@@ -54,16 +54,16 @@ export function Invoices({ queryPromise }: InvoicesProps) {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Description</TableHead>
+                                <TableHead>{t("Table.Date")}</TableHead>
+                                <TableHead>{t("Table.Description")}</TableHead>
                                 <TableHead className="text-right">
-                                    Amount
+                                    {t("Table.Amount")}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    Status
+                                    {t("Table.Status")}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    Actions
+                                    {t("Table.Actions")}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -126,11 +126,12 @@ export function Invoices({ queryPromise }: InvoicesProps) {
                                                     <ReceiptTextIcon className="size-5" />
                                                 </EmptyMedia>
                                                 <EmptyTitle>
-                                                    No invoices.
+                                                    {t("Table.Empty.Title")}
                                                 </EmptyTitle>
                                                 <EmptyDescription>
-                                                    You don&apos;t have any
-                                                    invoices yet.
+                                                    {t(
+                                                        "Table.Empty.Description",
+                                                    )}
                                                 </EmptyDescription>
                                             </EmptyHeader>
                                         </Empty>

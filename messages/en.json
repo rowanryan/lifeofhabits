@@ -171,13 +171,20 @@
                     }
                 }
             },
-            "PaymentMethods": {
-                "Title": "Payment methods",
-                "Description": "Manage your payment methods."
-            },
             "Invoices": {
                 "Title": "Invoices",
-                "Description": "View your invoices."
+                "Description": "View your invoices.",
+                "Table": {
+                    "Date": "Date",
+                    "Description": "Description",
+                    "Amount": "Amount",
+                    "Status": "Status",
+                    "Actions": "Actions",
+                    "Empty": {
+                        "Title": "No invoices",
+                        "Description": "You don't have any invoices yet."
+                    }
+                }
             }
         }
     }
