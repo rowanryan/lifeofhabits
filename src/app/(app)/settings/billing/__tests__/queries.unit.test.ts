@@ -30,10 +30,9 @@ describe("getStripeCustomer", () => {
         mockContext.clerkAuth.userId = "user_123";
     });
 
-    it("should return the stripe customer if id is found in clerk metadata", async () => {
-        mockContext.clerkClient.users.getUser.mockResolvedValue({
-            id: "user_123",
-            privateMetadata: { stripeCustomerId: "cus_existing" },
+    it("should return the stripe customer if found in the database", async () => {
+        mockContext.db.query.stripeCustomers.findFirst.mockResolvedValue({
+            externalId: "cus_existing",
         } as never);
 
         mockStripe.customers.retrieve.mockResolvedValue({
@@ -52,25 +51,37 @@ describe("getStripeCustomer", () => {
         });
     });
 
-    it("should create a new stripe customer if id is not found in clerk metadata", async () => {
+    it("should create a new stripe customer if not found in the database", async () => {
+        mockContext.db.query.stripeCustomers.findFirst.mockResolvedValue(
+            undefined
+        );
+
         mockContext.clerkClient.users.getUser.mockResolvedValue({
-            id: "user_123",
             primaryEmailAddress: { emailAddress: "new@example.com" },
             fullName: "New User",
-            privateMetadata: {},
         } as never);
-
-        mockContext.clerkClient.users.updateUserMetadata.mockResolvedValue(
-            {} as never
-        );
 
         mockStripe.customers.create.mockResolvedValue({
             id: "cus_new",
             email: "new@example.com",
         } as never);
 
+        const mockReturning = vi.fn().mockResolvedValue([
+            { id: "internal_123", clerkUserId: "user_123", externalId: "cus_new" },
+        ]);
+        const mockValues = vi.fn().mockReturnValue({ returning: mockReturning });
+        const mockInsert = vi.fn().mockReturnValue({ values: mockValues });
+        mockContext.db.insert.mockImplementation(mockInsert);
+
+        mockContext.clerkClient.users.updateUserMetadata.mockResolvedValue(
+            {} as never
+        );
+
         const result = await getStripeCustomer();
 
+        expect(mockContext.clerkClient.users.getUser).toHaveBeenCalledWith(
+            "user_123"
+        );
         expect(mockStripe.customers.create).toHaveBeenCalledWith({
             email: "new@example.com",
             name: "New User",
@@ -78,7 +89,10 @@ describe("getStripeCustomer", () => {
         expect(
             mockContext.clerkClient.users.updateUserMetadata
         ).toHaveBeenCalledWith("user_123", {
-            privateMetadata: { stripeCustomerId: "cus_new" },
+            privateMetadata: {
+                internalCustomerId: "internal_123",
+                stripeCustomerId: "cus_new",
+            },
         });
         expect(result).toEqual({ id: "cus_new", email: "new@example.com" });
     });

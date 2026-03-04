@@ -18,6 +18,7 @@ declare global {
     interface UserPublicMetadata extends UserData {}
 
     interface UserPrivateMetadata {
+        internalCustomerId?: string;
         stripeCustomerId?: string;
     }
 }
