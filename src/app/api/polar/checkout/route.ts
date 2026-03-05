@@ -5,4 +5,6 @@ import { getBaseUrl } from "@/lib/utils";
 export const GET = Checkout({
     accessToken: env.POLAR_ACCESS_TOKEN,
     successUrl: `${getBaseUrl()}${env.POLAR_SUCCESS_URL}`,
+    returnUrl: getBaseUrl(),
+    server: env.APP_ENV === "development" ? "sandbox" : "production",
 });

@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { CustomerPortal } from "@polar-sh/nextjs";
+import { notFound } from "next/navigation";
 import { env } from "@/env";
 import { getBaseUrl } from "@/lib/utils";
 import { db } from "@/server/db";
@@ -10,7 +11,7 @@ export const GET = CustomerPortal({
         const clerkAuth = await auth();
 
         if (!clerkAuth.userId) {
-            throw new Error("Unauthorized");
+            throw notFound();
         }
 
         const internalCustomer = await db.query.polarCustomers.findFirst({
@@ -20,7 +21,7 @@ export const GET = CustomerPortal({
         });
 
         if (!internalCustomer) {
-            throw new Error("Internal customer not found.");
+            throw notFound();
         }
 
         return internalCustomer.externalId;
