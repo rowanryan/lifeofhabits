@@ -1,9 +1,9 @@
-import { client } from "@/lib/stripe";
-import { stripeCustomers } from "@/server/db/schema";
+import { api } from "@/lib/polar";
+import { polarCustomers } from "@/server/db/schema";
 import { authQuery } from "@/server/queries";
 
-export const getStripeCustomer = authQuery.query(async ({ ctx }) => {
-    const internalCustomer = await ctx.db.query.stripeCustomers.findFirst({
+export const getInternalCustomer = authQuery.query(async ({ ctx }) => {
+    const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
         where: {
             clerkUserId: ctx.clerkAuth.userId,
         },
@@ -13,55 +13,42 @@ export const getStripeCustomer = authQuery.query(async ({ ctx }) => {
         const clerkUser = await ctx.clerkClient.users.getUser(
             ctx.clerkAuth.userId
         );
+        const primaryEmailAddress = clerkUser.primaryEmailAddress?.emailAddress;
 
-        const newStripeCustomer = await client.customers.create({
-            email: clerkUser.primaryEmailAddress?.emailAddress,
-            name: clerkUser.fullName ?? undefined,
+        if (!primaryEmailAddress) {
+            throw new Error("Primary email address not found.");
+        }
+
+        const newPolarCustomer = await api.customers.create({
+            type: "individual",
+            email: primaryEmailAddress,
+            name: clerkUser.fullName,
+            metadata: {
+                clerkUserId: ctx.clerkAuth.userId,
+            },
         });
 
         const [newInternalCustomer] = await ctx.db
-            .insert(stripeCustomers)
+            .insert(polarCustomers)
             .values({
                 clerkUserId: ctx.clerkAuth.userId,
-                externalId: newStripeCustomer.id,
+                externalId: newPolarCustomer.id,
             })
             .returning();
 
         if (!newInternalCustomer) {
-            throw new Error("Failed to create internal customer.");
+            throw new Error("Failed to create new internal customer.");
         }
 
         await ctx.clerkClient.users.updateUserMetadata(ctx.clerkAuth.userId, {
             privateMetadata: {
                 internalCustomerId: newInternalCustomer.id,
-                stripeCustomerId: newStripeCustomer.id,
+                polarCustomerId: newPolarCustomer.id,
             },
         });
 
-        return newStripeCustomer;
+        return newInternalCustomer;
     }
 
-    const stripeCustomer = await client.customers.retrieve(
-        internalCustomer.externalId
-    );
-
-    return stripeCustomer;
-});
-
-export const getInvoices = authQuery.query(async ({ ctx }) => {
-    const internalCustomer = await ctx.db.query.stripeCustomers.findFirst({
-        where: {
-            clerkUserId: ctx.clerkAuth.userId,
-        },
-    });
-
-    if (!internalCustomer) {
-        throw new Error("Internal customer not found.");
-    }
-
-    const invoices = await client.invoices.list({
-        customer: internalCustomer.externalId,
-    });
-
-    return invoices.data;
+    return internalCustomer;
 });

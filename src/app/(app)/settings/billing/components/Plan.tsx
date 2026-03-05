@@ -1,9 +1,8 @@
 "use client";
 
 import { ExternalLinkIcon } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -12,20 +11,9 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { createPortalSession } from "../actions";
 
 export function Plan() {
     const t = useTranslations("Settings.Billing.Plan");
-
-    const manage = useAction(createPortalSession, {
-        onSuccess({ data }) {
-            window.open(data.url, "_blank", "noopener,noreferrer");
-        },
-        onError() {
-            toast.error(t("Manage.Toast.Error"));
-        },
-    });
 
     return (
         <Card className="@container/card">
@@ -33,18 +21,11 @@ export function Plan() {
                 <CardTitle>{t("Title")}</CardTitle>
                 <CardDescription>{t("Description")}</CardDescription>
                 <CardAction>
-                    <Button
-                        disabled={manage.isExecuting}
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => manage.execute()}
-                    >
-                        {t("Manage.Label")}{" "}
-                        {manage.isExecuting ? (
-                            <Spinner />
-                        ) : (
+                    <Button asChild variant="secondary" size="sm">
+                        <Link href="/api/polar/portal">
+                            {t("Manage.Label")}{" "}
                             <ExternalLinkIcon className="size-4" />
-                        )}
+                        </Link>
                     </Button>
                 </CardAction>
             </CardHeader>

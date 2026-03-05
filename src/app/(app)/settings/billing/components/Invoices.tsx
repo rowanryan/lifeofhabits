@@ -1,11 +1,7 @@
 "use client";
 
-import { CalendarIcon, EyeIcon, ReceiptTextIcon } from "lucide-react";
-import Link from "next/link";
-import { useFormatter, useTranslations } from "next-intl";
-import { use } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ReceiptTextIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
     Card,
     CardContent,
@@ -29,17 +25,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import type { QueryOutput } from "@/server/queries";
-import type { getInvoices } from "../queries";
 
-export type InvoicesProps = {
-    queryPromise: Promise<QueryOutput<typeof getInvoices>>;
-};
-
-export function Invoices({ queryPromise }: InvoicesProps) {
-    const invoices = use(queryPromise);
-    const format = useFormatter();
-
+export function Invoices() {
     const t = useTranslations("Settings.Billing.Invoices");
 
     return (
@@ -69,75 +56,23 @@ export function Invoices({ queryPromise }: InvoicesProps) {
                         </TableHeader>
 
                         <TableBody>
-                            {invoices.length > 0 ? (
-                                invoices.map((invoice) => (
-                                    <TableRow key={invoice.id}>
-                                        <TableCell className="text-muted-foreground">
-                                            <CalendarIcon className="size-3 mr-2" />{" "}
-                                            {invoice.created}
-                                        </TableCell>
-                                        <TableCell>
-                                            {invoice.description}
-                                        </TableCell>
-                                        <TableCell>
-                                            {format.number(invoice.amount_due, {
-                                                style: "currency",
-                                            })}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                variant={
-                                                    invoice.status === "paid"
-                                                        ? "default"
-                                                        : "outline"
-                                                }
-                                            >
-                                                {invoice.status}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                asChild
-                                                disabled={
-                                                    !invoice.hosted_invoice_url
-                                                }
-                                                variant="outline"
-                                                size="sm"
-                                            >
-                                                <Link
-                                                    href={
-                                                        invoice.hosted_invoice_url ??
-                                                        ""
-                                                    }
-                                                >
-                                                    <EyeIcon className="size-4" />{" "}
-                                                    View
-                                                </Link>
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={5}>
-                                        <Empty>
-                                            <EmptyHeader>
-                                                <EmptyMedia variant="icon">
-                                                    <ReceiptTextIcon className="size-5" />
-                                                </EmptyMedia>
-                                                <EmptyTitle>
-                                                    {t("Table.Empty.Title")}
-                                                </EmptyTitle>
-                                                <EmptyDescription>
-                                                    {t(
-                                                        "Table.Empty.Description",
-                                                    )}
-                                                </EmptyDescription>
-                                            </EmptyHeader>
-                                        </Empty>
-                                    </TableCell>
-                                </TableRow>
-                            )}
+                            <TableRow>
+                                <TableCell colSpan={5}>
+                                    <Empty>
+                                        <EmptyHeader>
+                                            <EmptyMedia variant="icon">
+                                                <ReceiptTextIcon className="size-5" />
+                                            </EmptyMedia>
+                                            <EmptyTitle>
+                                                {t("Table.Empty.Title")}
+                                            </EmptyTitle>
+                                            <EmptyDescription>
+                                                {t("Table.Empty.Description")}
+                                            </EmptyDescription>
+                                        </EmptyHeader>
+                                    </Empty>
+                                </TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
 

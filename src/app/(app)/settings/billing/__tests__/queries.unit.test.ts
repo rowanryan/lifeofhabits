@@ -1,28 +1,28 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockReset } from "vitest-mock-extended";
-import type { client } from "@/lib/stripe";
+import type { api } from "@/lib/polar";
 import type { Context } from "@/server/shared";
-import { getStripeCustomer } from "../queries";
+import { getInternalCustomer } from "../queries";
 import "@/env";
 
 const mockContext = await vi.hoisted(async () => {
     const { mockDeep } = await import("vitest-mock-extended");
     return mockDeep<Context>();
 });
-const mockStripe = await vi.hoisted(async () => {
+const mockPolar = await vi.hoisted(async () => {
     const { mockDeep } = await import("vitest-mock-extended");
-    return mockDeep<typeof client>();
+    return mockDeep<typeof api>();
 });
 
 vi.mock("@/server/shared", () => ({
     createContext: vi.fn(() => Promise.resolve(mockContext)),
 }));
 
-vi.mock("@/lib/stripe", () => ({
-    client: mockStripe,
+vi.mock("@/lib/polar", () => ({
+    api: mockPolar,
 }));
 
-describe("getStripeCustomer", () => {
+describe("getInternalCustomer", () => {
     beforeEach(() => {
         mockReset(mockContext);
         vi.clearAllMocks();
@@ -30,29 +30,27 @@ describe("getStripeCustomer", () => {
         mockContext.clerkAuth.userId = "user_123";
     });
 
-    it("should return the stripe customer if found in the database", async () => {
-        mockContext.db.query.stripeCustomers.findFirst.mockResolvedValue({
-            externalId: "cus_existing",
-        } as never);
+    it("should return the internal customer if found in the database", async () => {
+        const existingCustomer = {
+            id: "internal_123",
+            clerkUserId: "user_123",
+            externalId: "polar_cus_existing",
+        };
 
-        mockStripe.customers.retrieve.mockResolvedValue({
-            id: "cus_existing",
-            email: "test@example.com",
-        } as never);
-
-        const result = await getStripeCustomer();
-
-        expect(mockStripe.customers.retrieve).toHaveBeenCalledWith(
-            "cus_existing"
+        mockContext.db.query.polarCustomers.findFirst.mockResolvedValue(
+            existingCustomer as never
         );
-        expect(result).toEqual({
-            id: "cus_existing",
-            email: "test@example.com",
-        });
+
+        const result = await getInternalCustomer();
+
+        expect(
+            mockContext.db.query.polarCustomers.findFirst
+        ).toHaveBeenCalled();
+        expect(result).toEqual(existingCustomer);
     });
 
-    it("should create a new stripe customer if not found in the database", async () => {
-        mockContext.db.query.stripeCustomers.findFirst.mockResolvedValue(
+    it("should create a new polar customer if not found in the database", async () => {
+        mockContext.db.query.polarCustomers.findFirst.mockResolvedValue(
             undefined
         );
 
@@ -61,15 +59,21 @@ describe("getStripeCustomer", () => {
             fullName: "New User",
         } as never);
 
-        mockStripe.customers.create.mockResolvedValue({
-            id: "cus_new",
+        mockPolar.customers.create.mockResolvedValue({
+            id: "polar_cus_new",
             email: "new@example.com",
         } as never);
 
-        const mockReturning = vi.fn().mockResolvedValue([
-            { id: "internal_123", clerkUserId: "user_123", externalId: "cus_new" },
-        ]);
-        const mockValues = vi.fn().mockReturnValue({ returning: mockReturning });
+        const newInternalCustomer = {
+            id: "internal_123",
+            clerkUserId: "user_123",
+            externalId: "polar_cus_new",
+        };
+
+        const mockReturning = vi.fn().mockResolvedValue([newInternalCustomer]);
+        const mockValues = vi
+            .fn()
+            .mockReturnValue({ returning: mockReturning });
         const mockInsert = vi.fn().mockReturnValue({ values: mockValues });
         mockContext.db.insert.mockImplementation(mockInsert);
 
@@ -77,23 +81,41 @@ describe("getStripeCustomer", () => {
             {} as never
         );
 
-        const result = await getStripeCustomer();
+        const result = await getInternalCustomer();
 
         expect(mockContext.clerkClient.users.getUser).toHaveBeenCalledWith(
             "user_123"
         );
-        expect(mockStripe.customers.create).toHaveBeenCalledWith({
+        expect(mockPolar.customers.create).toHaveBeenCalledWith({
+            type: "individual",
             email: "new@example.com",
             name: "New User",
+            metadata: {
+                clerkUserId: "user_123",
+            },
         });
         expect(
             mockContext.clerkClient.users.updateUserMetadata
         ).toHaveBeenCalledWith("user_123", {
             privateMetadata: {
                 internalCustomerId: "internal_123",
-                stripeCustomerId: "cus_new",
+                polarCustomerId: "polar_cus_new",
             },
         });
-        expect(result).toEqual({ id: "cus_new", email: "new@example.com" });
+        expect(result).toEqual(newInternalCustomer);
+    });
+
+    it("should throw an error if primary email address is not found", async () => {
+        mockContext.db.query.polarCustomers.findFirst.mockResolvedValue(
+            undefined
+        );
+
+        mockContext.clerkClient.users.getUser.mockResolvedValue({
+            primaryEmailAddress: undefined,
+        } as never);
+
+        await expect(getInternalCustomer()).rejects.toThrow(
+            "Primary email address not found."
+        );
     });
 });

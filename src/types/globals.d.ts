@@ -19,6 +19,6 @@ declare global {
 
     interface UserPrivateMetadata {
         internalCustomerId?: string;
-        stripeCustomerId?: string;
+        polarCustomerId?: string;
     }
 }
