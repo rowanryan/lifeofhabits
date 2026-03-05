@@ -144,6 +144,8 @@ type PageSideMenuProps = {
         label: string;
         href: string;
         isActive: boolean;
+        target?: "_blank" | "_self" | "_parent" | "_top";
+        suffix?: React.ReactNode;
     }[];
 };
 
@@ -175,7 +177,17 @@ function PageSideMenu({
                     value={activeLinkHref}
                     onValueChange={(value) => {
                         setIsSelectOpen(false);
-                        router.push(value);
+                        const link = sideMenuLinks.find(
+                            (link) => link.href === value,
+                        );
+
+                        if (link) {
+                            if (link.target === "_blank") {
+                                window.open(link.href, "_blank");
+                            } else {
+                                router.push(link.href);
+                            }
+                        }
                     }}
                 >
                     <SelectTrigger className="w-full">
@@ -204,11 +216,15 @@ function PageSideMenu({
                     >
                         <Link
                             href={link.href}
+                            target={link.target}
                             className={cn(
                                 !link.isActive && "text-muted-foreground",
                             )}
                         >
-                            {link.label}
+                            <span>{link.label}</span>
+                            {link.suffix && (
+                                <span className="ml-auto">{link.suffix}</span>
+                            )}
                         </Link>
                     </Button>
                 ))}
