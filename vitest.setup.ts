@@ -11,7 +11,7 @@ import ws from "ws";
 // an extra safety layer in case tests are run in an unusual way or environment
 if (process.env.NODE_ENV !== "test") {
     throw new Error(
-        `❌ NODE_ENV must be 'test' for tests. Current value: ${process.env.NODE_ENV}`
+        `❌ NODE_ENV must be 'test' for tests. Current value: ${process.env.NODE_ENV}`,
     );
 }
 

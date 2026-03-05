@@ -30,9 +30,8 @@ export function AddConnectedAccount({ children }: AddConnectedAccountProps) {
     const [showReverification, setShowReverification] = useState(false);
     const [reverificationHandlers, setReverificationHandlers] =
         useState<ReverificationHandlers | null>(null);
-    const [pendingStrategy, setPendingStrategy] = useState<OAuthStrategy | null>(
-        null,
-    );
+    const [pendingStrategy, setPendingStrategy] =
+        useState<OAuthStrategy | null>(null);
 
     const createExternalAccount = useReverification(
         async (strategy: OAuthStrategy) => {
@@ -41,7 +40,9 @@ export function AddConnectedAccount({ children }: AddConnectedAccountProps) {
                 redirectUrl: "/settings/account",
             });
 
-            if (externalAccount?.verification?.externalVerificationRedirectURL) {
+            if (
+                externalAccount?.verification?.externalVerificationRedirectURL
+            ) {
                 window.location.href =
                     externalAccount.verification.externalVerificationRedirectURL.toString();
             }
@@ -103,7 +104,9 @@ export function AddConnectedAccount({ children }: AddConnectedAccountProps) {
                         return (
                             <DropdownMenuItem
                                 key={provider.id}
-                                onClick={() => handleProviderSelect(provider.strategy)}
+                                onClick={() =>
+                                    handleProviderSelect(provider.strategy)
+                                }
                                 disabled={pendingStrategy === provider.strategy}
                             >
                                 <Icon className="size-4" />

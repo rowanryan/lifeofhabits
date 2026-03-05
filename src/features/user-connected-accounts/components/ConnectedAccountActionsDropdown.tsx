@@ -170,7 +170,9 @@ export function ConnectedAccountActionsDropdown({
                             {t("RemoveConfirmTitle")}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("RemoveConfirmDescription", { provider: providerName })}
+                            {t("RemoveConfirmDescription", {
+                                provider: providerName,
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

@@ -124,7 +124,9 @@ export function VerifyEmailDialog({
                     </InputOTP>
 
                     {error && (
-                        <p className="text-destructive text-sm text-center">{error}</p>
+                        <p className="text-destructive text-sm text-center">
+                            {error}
+                        </p>
                     )}
 
                     <button

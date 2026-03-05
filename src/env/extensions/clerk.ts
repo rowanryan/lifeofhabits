@@ -8,7 +8,7 @@ export const env = createEnv({
         CLERK_BYPASS_PROTECTION: z
             .string()
             .optional()
-            .transform(val => val === "true"),
+            .transform((val) => val === "true"),
     },
 
     client: {

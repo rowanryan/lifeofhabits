@@ -90,11 +90,13 @@ export function ReverificationDialog({
 
                 if (response.status === "needs_first_factor") {
                     const emailFactors = response.supportedFirstFactors?.filter(
-                        (f): f is EmailCodeFactor => f.strategy === "email_code",
+                        (f): f is EmailCodeFactor =>
+                            f.strategy === "email_code",
                     );
 
                     const factor =
-                        emailFactors?.find((f) => f.primary) ?? emailFactors?.[0];
+                        emailFactors?.find((f) => f.primary) ??
+                        emailFactors?.[0];
 
                     if (factor) {
                         setEmailFactor(factor);
@@ -156,7 +158,9 @@ export function ReverificationDialog({
                     </InputOTP>
 
                     {error && (
-                        <p className="text-destructive text-sm text-center">{error}</p>
+                        <p className="text-destructive text-sm text-center">
+                            {error}
+                        </p>
                     )}
                 </FieldSet>
 

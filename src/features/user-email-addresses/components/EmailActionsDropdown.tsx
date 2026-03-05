@@ -1,8 +1,16 @@
 "use client";
 
 import { useReverification, useUser } from "@clerk/nextjs";
-import type { EmailAddressResource, SessionVerificationLevel } from "@clerk/types";
-import { EllipsisIcon, ShieldCheckIcon, StarIcon, TrashIcon } from "lucide-react";
+import type {
+    EmailAddressResource,
+    SessionVerificationLevel,
+} from "@clerk/types";
+import {
+    EllipsisIcon,
+    ShieldCheckIcon,
+    StarIcon,
+    TrashIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -115,7 +123,9 @@ export function EmailActionsDropdown({
                 (ea) => ea.id === emailId,
             );
             if (emailResource) {
-                await emailResource.prepareVerification({ strategy: "email_code" });
+                await emailResource.prepareVerification({
+                    strategy: "email_code",
+                });
                 setEmailResourceToVerify(emailResource);
                 setShowVerifyDialog(true);
             }
@@ -203,7 +213,9 @@ export function EmailActionsDropdown({
                             {t("RemoveConfirmTitle")}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("RemoveConfirmDescription", { email: emailAddress })}
+                            {t("RemoveConfirmDescription", {
+                                email: emailAddress,
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

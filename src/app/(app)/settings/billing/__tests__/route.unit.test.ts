@@ -1,8 +1,8 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import type { auth, clerkClient } from "@clerk/nextjs/server";
+import type { NextResponse } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { api } from "@/lib/polar";
-import { db } from "@/server/db";
+import type { api } from "@/lib/polar";
+import type { db } from "@/server/db";
 import { GET } from "../route";
 
 const mockDb = await vi.hoisted(async () => {
@@ -89,7 +89,7 @@ describe("GET", () => {
         expect(mockPolar.checkouts.create).toHaveBeenCalled();
 
         expect(mockNextResponse.redirect).toHaveBeenCalledWith(
-            "https://checkout.polar.sh/123"
+            "https://checkout.polar.sh/123",
         );
     });
 
@@ -110,7 +110,7 @@ describe("GET", () => {
         expect(mockPolar.customerSessions.create).toHaveBeenCalled();
 
         expect(mockNextResponse.redirect).toHaveBeenCalledWith(
-            "https://portal.polar.sh/123"
+            "https://portal.polar.sh/123",
         );
     });
 
@@ -148,7 +148,7 @@ describe("GET", () => {
             mockDb.insert.mockImplementation(mockInsert);
 
             await expect(GET()).rejects.toThrow(
-                "Failed to create internal customer"
+                "Failed to create internal customer",
             );
         });
 
@@ -191,7 +191,7 @@ describe("GET", () => {
             await GET();
 
             expect(
-                mockClerkClientInstance.users.updateUserMetadata
+                mockClerkClientInstance.users.updateUserMetadata,
             ).toHaveBeenCalledWith("user_123", {
                 privateMetadata: {
                     polarCustomerId: "customer_123",
@@ -206,7 +206,7 @@ describe("GET", () => {
             expect(mockPolar.checkouts.create).toHaveBeenCalled();
 
             expect(mockNextResponse.redirect).toHaveBeenCalledWith(
-                "https://checkout.polar.sh/123"
+                "https://checkout.polar.sh/123",
             );
         });
     });

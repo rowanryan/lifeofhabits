@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { FormField } from "@/components/FormField";
+import { ReverificationDialog } from "@/components/ReverificationDialog";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -24,7 +25,6 @@ import {
 } from "@/components/ui/dialog";
 import { FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ReverificationDialog } from "@/components/ReverificationDialog";
 import { VerifyEmailDialog } from "./VerifyEmailDialog";
 
 type AddEmailAddressProps = React.PropsWithChildren;

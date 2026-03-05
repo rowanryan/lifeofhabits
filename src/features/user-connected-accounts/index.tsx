@@ -150,7 +150,9 @@ export function UserConnectedAccounts() {
                                     <ItemActions>
                                         <ConnectedAccountActionsDropdown
                                             accountId={account.id}
-                                            providerName={provider?.name ?? "Unknown"}
+                                            providerName={
+                                                provider?.name ?? "Unknown"
+                                            }
                                             isVerified={isVerified}
                                         />
                                     </ItemActions>
