@@ -9,7 +9,7 @@ A modern, production-ready Next.js boilerplate with authentication, payments, da
 -   **Framework:** [Next.js 16](https://nextjs.org/) with App Router
 -   **Runtime & Package Manager:** [Bun](https://bun.sh/)
 -   **Authentication:** [Clerk](https://clerk.com/)
--   **Payments:** [Stripe](https://stripe.com/)
+-   **Payments:** [Polar](https://polar.sh/)
 -   **Database:** [Drizzle ORM](https://orm.drizzle.team/) with [Neon](https://neon.tech/) (PostgreSQL)
 -   **Styling:** [Tailwind CSS 4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
 -   **Internationalization:** [next-intl](https://next-intl-docs.vercel.app/)
@@ -21,7 +21,7 @@ A modern, production-ready Next.js boilerplate with authentication, payments, da
 
 -   [Bun](https://bun.sh/) (latest version recommended)
 -   A [Clerk](https://clerk.com/) account for authentication
--   A [Stripe](https://stripe.com/) account for payments
+-   A [Polar](https://polar.sh/) account for payments
 -   A [Neon](https://neon.tech/) database (or any PostgreSQL database)
 
 ## Getting Started
@@ -55,10 +55,14 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/
 NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/
 
-# Stripe
-STRIPE_SECRET_KEY=your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+# Polar
+POLAR_ACCESS_TOKEN=your_polar_access_token
+POLAR_WEBHOOK_SECRET=your_polar_webhook_secret
+POLAR_SUCCESS_URL=/settings/billing
+POLAR_PRODUCT_ID=your_polar_product_id
+
+# App
+APP_ENV=development
 ```
 
 ### 4. Run the development server
@@ -71,17 +75,17 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Available Scripts
 
-| Command               | Description                       |
-| --------------------- | --------------------------------- |
-| `bun dev`             | Start the development server      |
-| `bun build`           | Build for production              |
-| `bun start`           | Start the production server       |
-| `bun lint`            | Run Biome linter                  |
-| `bun format`          | Format code with Biome            |
-| `bun check`           | Run Biome linter and formatter    |
-| `bun test:unit`       | Run unit tests                    |
-| `bun test:unit:watch` | Run unit tests in watch mode      |
-| `bun i18n:check`      | Check for missing translations    |
+| Command               | Description                    |
+| --------------------- | ------------------------------ |
+| `bun dev`             | Start the development server   |
+| `bun build`           | Build for production           |
+| `bun start`           | Start the production server    |
+| `bun lint`            | Run Biome linter               |
+| `bun format`          | Format code with Biome         |
+| `bun check`           | Run Biome linter and formatter |
+| `bun test:unit`       | Run unit tests                 |
+| `bun test:unit:watch` | Run unit tests in watch mode   |
+| `bun i18n:check`      | Check for missing translations |
 
 ## Project Structure
 
@@ -99,7 +103,3 @@ src/
 └── types/            # TypeScript type definitions
 messages/             # Translation files
 ```
-
-## License
-
-MIT
