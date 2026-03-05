@@ -62,6 +62,7 @@ POLAR_SUCCESS_URL=/settings/billing
 POLAR_PRODUCT_ID=your_polar_product_id
 
 # App
+APP_NAME="Next Boiler"
 APP_ENV=development
 ```
 
