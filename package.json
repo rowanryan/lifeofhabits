@@ -10,7 +10,7 @@
         "vercel-build": "bunx drizzle-kit migrate && next build",
         "format": "biome format --write .",
         "check": "biome check --write .",
-        "i18n:check": "bunx @lingual/i18n-check@latest --source en --locales messages",
+        "i18n:check": "i18n-check --source en --locales messages",
         "test:unit": "vitest run unit --config ./vitest.config.mts",
         "test:unit:watch": "vitest unit --config ./vitest.config.mts",
         "db:generate": "bunx drizzle-kit generate",
@@ -60,6 +60,7 @@
     },
     "devDependencies": {
         "@biomejs/biome": "2.4.4",
+        "@lingual/i18n-check": "^0.8.19",
         "@tailwindcss/postcss": "^4",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/react": "^16.3.2",

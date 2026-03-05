@@ -6,6 +6,7 @@ export const env = createEnv({
         POLAR_ACCESS_TOKEN: z.string(),
         POLAR_SUCCESS_URL: z.string(),
         POLAR_WEBHOOK_SECRET: z.string(),
+        POLAR_PRODUCT_ID: z.string(),
     },
 
     client: {},

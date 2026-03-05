@@ -25,7 +25,7 @@ export default function SettingsLayout({ children }: React.PropsWithChildren) {
                 },
                 {
                     label: t("SideMenu.Billing"),
-                    href: "/api/polar/portal",
+                    href: "/settings/billing",
                     target: "_blank",
                     isActive: false,
                     suffix: <ExternalLinkIcon className="size-4" />,
