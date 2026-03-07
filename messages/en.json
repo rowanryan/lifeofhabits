@@ -202,8 +202,13 @@
                     "Price": "{price} per month",
                     "RenewalDate": "Renews on {date}"
                 },
+                "Credits": {
+                    "Title": "Credit usage",
+                    "Description": "How many credits you have used this billing cycle.",
+                    "Usage": "{consumedUnits} / {creditedUnits} credits"
+                },
                 "SpendLimit": {
-                    "Title": "You currently do not have a spend limit.",
+                    "Title": "You currently do not have a spend limit",
                     "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
                     "ButtonLabel": "Set limit"
                 },

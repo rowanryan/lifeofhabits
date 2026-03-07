@@ -18,7 +18,10 @@ export default async function Page() {
         <div className="space-y-4">
             <Subscription
                 subscription={subscription}
-                internalCustomerId={internalCustomer.id}
+                internalCustomer={{
+                    id: internalCustomer.id,
+                    spendLimit: internalCustomer.spendLimit,
+                }}
             />
         </div>
     );

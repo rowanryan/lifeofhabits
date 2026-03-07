@@ -14,6 +14,7 @@ export const polarCustomers = p.pgTable(
         clerkUserId: p.text().notNull(),
         externalId: p.text().notNull(),
         subscriptionId: p.text(),
+        spendLimit: p.doublePrecision(),
         ...timestamps,
     },
     columns => [p.unique().on(columns.clerkUserId)]

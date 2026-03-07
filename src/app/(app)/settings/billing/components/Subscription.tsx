@@ -36,7 +36,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { createCheckout } from "../actions";
 
 export type SubscriptionProps = {
-    internalCustomerId: string;
+    internalCustomer: {
+        id: string;
+        spendLimit: number | null;
+    };
     subscription: {
         id: string;
         plan: {
@@ -56,7 +59,7 @@ export type SubscriptionProps = {
 
 export function Subscription({
     subscription,
-    internalCustomerId,
+    internalCustomer,
 }: SubscriptionProps) {
     const t = useTranslations("Settings.Billing.Subscription");
     const format = useFormatter();
@@ -119,18 +122,12 @@ export function Subscription({
                                     <Fragment key={meter.id}>
                                         <Item>
                                             <ItemContent>
-                                                <ItemTitle className="flex w-full items-end justify-between gap-2">
-                                                    <span>Credits</span>
-                                                    <span className="text-muted-foreground">
-                                                        {format.number(
-                                                            meter.consumedUnits /
-                                                                meter.creditedUnits,
-                                                            {
-                                                                style: "percent",
-                                                            },
-                                                        )}
-                                                    </span>
+                                                <ItemTitle>
+                                                    {t("Credits.Title")}
                                                 </ItemTitle>
+                                                <ItemDescription className="text-xs">
+                                                    {t("Credits.Description")}
+                                                </ItemDescription>
 
                                                 <Progress
                                                     value={
@@ -141,15 +138,29 @@ export function Subscription({
                                                     className="my-1 h-4"
                                                 />
 
-                                                <ItemDescription className="text-xs">
-                                                    {format.number(
-                                                        meter.consumedUnits,
-                                                        {
-                                                            maximumFractionDigits: 2,
-                                                        },
-                                                    )}{" "}
-                                                    / {meter.creditedUnits}{" "}
-                                                    credits
+                                                <ItemDescription className="text-xs flex w-full items-end justify-between gap-2">
+                                                    <span>
+                                                        {t("Credits.Usage", {
+                                                            consumedUnits:
+                                                                format.number(
+                                                                    meter.consumedUnits,
+                                                                    {
+                                                                        maximumFractionDigits: 2,
+                                                                    },
+                                                                ),
+                                                            creditedUnits:
+                                                                meter.creditedUnits,
+                                                        })}
+                                                    </span>
+                                                    <span className="text-muted-foreground">
+                                                        {format.number(
+                                                            meter.consumedUnits /
+                                                                meter.creditedUnits,
+                                                            {
+                                                                style: "percent",
+                                                            },
+                                                        )}
+                                                    </span>
                                                 </ItemDescription>
                                             </ItemContent>
                                         </Item>
@@ -176,7 +187,7 @@ export function Subscription({
                                 disabled={createCheckoutAction.isExecuting}
                                 onClick={() =>
                                     createCheckoutAction.execute({
-                                        internalCustomerId,
+                                        internalCustomerId: internalCustomer.id,
                                     })
                                 }
                             >
@@ -191,7 +202,9 @@ export function Subscription({
             </CardContent>
 
             <CardFooter className="flex items-start gap-2 mt-3">
-                <AlertCircleIcon className="size-4 shrink-0 mt-0.5" />
+                {!internalCustomer.spendLimit && (
+                    <AlertCircleIcon className="size-4 shrink-0 mt-0.5" />
+                )}
 
                 <div className="flex flex-col @xl/card:flex-row gap-3 @xl/card:items-center @xl/card:justify-between @xl/card:grow">
                     <div>
