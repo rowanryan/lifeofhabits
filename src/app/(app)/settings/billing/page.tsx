@@ -1,5 +1,5 @@
 import { ZapIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
 import {
     Empty,
     EmptyContent,
@@ -8,11 +8,13 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty";
+import { CheckoutButton } from "./components/CheckoutButton";
 import { Subscription } from "./components/Subscription";
 import { getInternalCustomer } from "./queries";
 
 export default async function Page() {
     const internalCustomer = await getInternalCustomer();
+    const t = await getTranslations("Settings.Billing.Checkout");
 
     if (!internalCustomer.subscriptionId) {
         return (
@@ -21,15 +23,11 @@ export default async function Page() {
                     <ZapIcon className="size-5" />
                 </EmptyMedia>
                 <EmptyHeader>
-                    <EmptyTitle>
-                        You don&apos;t have a subscription yet
-                    </EmptyTitle>
-                    <EmptyDescription>
-                        Subscribe to get access to our features and tools.
-                    </EmptyDescription>
+                    <EmptyTitle>{t("Title")}</EmptyTitle>
+                    <EmptyDescription>{t("Description")}</EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
-                    <Button>Subscribe</Button>
+                    <CheckoutButton internalCustomerId={internalCustomer.id} />
                 </EmptyContent>
             </Empty>
         );

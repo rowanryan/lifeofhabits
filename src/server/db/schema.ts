@@ -7,10 +7,14 @@ const timestamps = {
     updatedAt: p.timestamp().notNull().defaultNow(),
 };
 
-export const polarCustomers = p.pgTable("polar_customers", {
-    id,
-    clerkUserId: p.text().notNull(),
-    externalId: p.text().notNull(),
-    subscriptionId: p.text(),
-    ...timestamps,
-});
+export const polarCustomers = p.pgTable(
+    "polar_customers",
+    {
+        id,
+        clerkUserId: p.text().notNull(),
+        externalId: p.text().notNull(),
+        subscriptionId: p.text(),
+        ...timestamps,
+    },
+    columns => [p.unique().on(columns.clerkUserId)]
+);

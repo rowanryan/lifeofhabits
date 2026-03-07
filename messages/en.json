@@ -161,29 +161,22 @@
             }
         },
         "Billing": {
-            "Plan": {
-                "Title": "Plan",
-                "Description": "Manage your plan.",
-                "Manage": {
-                    "Label": "Manage",
-                    "Toast": {
-                        "Error": "Failed to create portal session. Please try again."
-                    }
-                }
+            "Checkout": {
+                "Title": "You don't have a subscription yet",
+                "Description": "Subscribe to get access to our features and tools.",
+                "ButtonLabel": "Subscribe",
+                "Error": "Something went wrong while creating the checkout session. Please try again."
             },
-            "Invoices": {
-                "Title": "Invoices",
-                "Description": "View your invoices.",
-                "Table": {
-                    "Date": "Date",
-                    "Description": "Description",
-                    "Amount": "Amount",
-                    "Status": "Status",
-                    "Actions": "Actions",
-                    "Empty": {
-                        "Title": "No invoices",
-                        "Description": "You don't have any invoices yet."
-                    }
+            "Subscription": {
+                "Title": "Subscription",
+                "Description": "View and manage your subscription details.",
+                "ManageButton": {
+                    "Label": "Manage"
+                },
+                "SpendLimit": {
+                    "Title": "You currently do not have a spend limit.",
+                    "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
+                    "ButtonLabel": "Set limit"
                 }
             }
         }

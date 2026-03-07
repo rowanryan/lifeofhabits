@@ -1,5 +1,6 @@
 import { AlertCircleIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -12,17 +13,17 @@ import {
 } from "@/components/ui/card";
 
 export function Subscription() {
+    const t = useTranslations("Settings.Billing.Subscription");
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Subscription</CardTitle>
-                <CardDescription>
-                    View and manage your subscription details.
-                </CardDescription>
+                <CardTitle>{t("Title")}</CardTitle>
+                <CardDescription>{t("Description")}</CardDescription>
                 <CardAction>
                     <Button asChild size="sm" variant="outline">
                         <Link href="/api/polar/portal">
-                            Manage <ExternalLinkIcon />
+                            {t("ManageButton.Label")} <ExternalLinkIcon />
                         </Link>
                     </Button>
                 </CardAction>
@@ -35,17 +36,14 @@ export function Subscription() {
                     <AlertCircleIcon className="size-4 shrink-0 mt-0.5" />
 
                     <div>
-                        <p className="font-medium">
-                            You currently do not have a spend limit.
-                        </p>
+                        <p className="font-medium">{t("SpendLimit.Title")}</p>
                         <p className="text-sm text-muted-foreground">
-                            A spend limit helps you control your spending and
-                            avoid unexpected charges.
+                            {t("SpendLimit.Description")}
                         </p>
                     </div>
                 </div>
 
-                <Button size="sm">Set limit</Button>
+                <Button size="sm">{t("SpendLimit.ButtonLabel")}</Button>
             </CardFooter>
         </Card>
     );
