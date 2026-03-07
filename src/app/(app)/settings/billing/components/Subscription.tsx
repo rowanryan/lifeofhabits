@@ -36,6 +36,11 @@ export type SubscriptionProps = {
             currentPeriodEnd: Date;
             status: string;
         };
+        meters: {
+            id: string;
+            consumedUnits: number;
+            creditedUnits: number;
+        }[];
     } | null;
 };
 

@@ -9,13 +9,8 @@ export default async function Page() {
         customerState && internalCustomer.subscriptionId
             ? {
                   id: internalCustomer.subscriptionId,
-                  plan: {
-                      name: customerState.plan.name,
-                      price: customerState.plan.price,
-                      currency: customerState.plan.currency,
-                      currentPeriodEnd: customerState.plan.currentPeriodEnd,
-                      status: customerState.plan.status,
-                  },
+                  meters: customerState.meters,
+                  plan: customerState.plan,
               }
             : null;
 

@@ -79,7 +79,11 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
     });
 
     return {
-        meters: activeSubscription.meters,
+        meters: activeSubscription.meters.map(meter => ({
+            id: meter.id,
+            consumedUnits: meter.consumedUnits,
+            creditedUnits: meter.creditedUnits,
+        })),
         plan: {
             name: product.name,
             price: activeSubscription.amount,
