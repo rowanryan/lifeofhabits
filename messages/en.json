@@ -162,12 +162,6 @@
             }
         },
         "Billing": {
-            "Checkout": {
-                "Title": "You don't have a subscription yet",
-                "Description": "Subscribe to get access to our features and tools.",
-                "ButtonLabel": "Subscribe",
-                "Error": "Something went wrong while creating the checkout session. Please try again."
-            },
             "Subscription": {
                 "Title": "Subscription",
                 "Description": "View and manage your subscription details.",
@@ -178,6 +172,12 @@
                     "Title": "You currently do not have a spend limit.",
                     "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
                     "ButtonLabel": "Set limit"
+                },
+                "Checkout": {
+                    "Title": "You don't have a subscription yet",
+                    "Description": "Subscribe to get access to our features and tools.",
+                    "ButtonLabel": "Subscribe",
+                    "Error": "Something went wrong while creating the checkout session. Please try again."
                 }
             }
         }
