@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { getInternalCustomer } from "../settings/billing/queries";
 import { CheckoutVerification } from "./components/CheckoutVerification";
+import { getInternalCustomer } from "./queries";
 
 type CheckoutPageProps = {
     searchParams: Promise<{
