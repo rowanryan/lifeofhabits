@@ -2,13 +2,9 @@
 
 branch_name=$(git symbolic-ref --short HEAD)
 
-# Allow main/master branches
-if [ "$branch_name" = "main" ] || [ "$branch_name" = "master" ]; then
-  exit 0
-fi
-
-# Check if branch name starts with one of the allowed prefixes
-if ! echo "$branch_name" | grep -qE "^(feat|fix|refactor|docs|test|chore|cursor)/"; then
+# Check if branch name starts with one of the allowed prefixes,
+# unless this is main/master.
+if [ "$branch_name" != "main" ] && [ "$branch_name" != "master" ] && ! echo "$branch_name" | grep -qE "^(feat|fix|refactor|docs|test|chore|cursor)/"; then
   echo "❌ Invalid branch name format!"
   echo ""
   echo "Branch name must start with one of:"
@@ -25,3 +21,6 @@ if ! echo "$branch_name" | grep -qE "^(feat|fix|refactor|docs|test|chore|cursor)
   echo "Your branch is: $branch_name"
   exit 1
 fi
+
+echo "Running unit tests before push..."
+bun run test:unit
