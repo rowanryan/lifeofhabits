@@ -205,12 +205,12 @@
                 "Credits": {
                     "Title": "Credit usage",
                     "Description": "How many credits you have used this billing cycle.",
-                    "Usage": "{consumedUnits} / {creditedUnits} credits",
+                    "Usage": "{consumedUnits} / {creditedUnits} included credits",
                     "CurrentSpend": "Currently spent on credits:"
                 },
                 "SpendLimit": {
-                    "Description": "A credit limit helps you control your spending and avoid unexpected charges. Keep in mind that this is on top of your included usage.",
-                    "Warning": "Your limit is lower than your included usage. You can't use more credits than your credit limit, even if your included usage is higher.",
+                    "Description": "A credit limit helps you control your spending and avoid unexpected charges.",
+                    "Warning": "Your limit is lower than your included usage.",
                     "NotSet": {
                         "Title": "You currently do not have a credit limit",
                         "ButtonLabel": "Set limit"
@@ -218,6 +218,19 @@
                     "IsSet": {
                         "Title": "You currently have a credit limit of {limit}",
                         "ButtonLabel": "Change limit"
+                    },
+                    "Update": {
+                        "Title": "Update your credit limit",
+                        "Description": "Update your credit limit to control your spending and avoid unexpected charges.",
+                        "Confirm": "Update",
+                        "Cancel": "Cancel",
+                        "Form": {
+                            "SpendLimit": "Credit limit"
+                        },
+                        "Toast": {
+                            "Success": "Your credit limit has been updated.",
+                            "Error": "Something went wrong while updating your credit limit. Please try again."
+                        }
                     }
                 },
                 "Checkout": {

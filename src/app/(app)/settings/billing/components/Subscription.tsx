@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircleIcon, ExternalLinkIcon } from "lucide-react";
+import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
@@ -35,6 +35,7 @@ import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { createCheckout } from "../actions";
+import { UpdateLimit } from "./UpdateLimit";
 
 export type SubscriptionProps = {
     internalCustomer: {
@@ -235,11 +236,7 @@ export function Subscription({
             </CardContent>
 
             {!!subscription && (
-                <CardFooter className="flex items-start gap-2">
-                    {!internalCustomer.spendLimit && (
-                        <AlertCircleIcon className="size-4 shrink-0 mt-0.5" />
-                    )}
-
+                <CardFooter>
                     <div className="flex flex-col @xl/card:flex-row gap-3 @xl/card:items-center @xl/card:justify-between @xl/card:grow">
                         <div>
                             <p className="font-medium">
@@ -269,11 +266,17 @@ export function Subscription({
                             </p>
                         </div>
 
-                        <Button size="sm" variant="secondary" className="w-fit">
-                            {internalCustomer.spendLimit
-                                ? t("SpendLimit.IsSet.ButtonLabel")
-                                : t("SpendLimit.NotSet.ButtonLabel")}
-                        </Button>
+                        <UpdateLimit spendLimit={internalCustomer.spendLimit}>
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                className="w-fit"
+                            >
+                                {internalCustomer.spendLimit
+                                    ? t("SpendLimit.IsSet.ButtonLabel")
+                                    : t("SpendLimit.NotSet.ButtonLabel")}
+                            </Button>
+                        </UpdateLimit>
                     </div>
                 </CardFooter>
             )}

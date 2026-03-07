@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getFullName(
     firstName: string | null | undefined,
-    lastName: string | null | undefined,
+    lastName: string | null | undefined
 ) {
     if (firstName && lastName) {
         return `${firstName} ${lastName}`;
@@ -22,7 +22,7 @@ export function getFullName(
 
 export function getInitials(
     firstName: string | null | undefined,
-    lastName: string | null | undefined,
+    lastName: string | null | undefined
 ) {
     if (firstName && lastName) {
         return `${firstName[0]}${lastName[0]}`;
@@ -74,4 +74,10 @@ export function getBaseUrl(options?: {
 
     // Default fallback for server-side
     return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
+export function parseNumberOrNull(value: string): number | null {
+    if (value === "") return null;
+    const parsed = parseFloat(value);
+    return Number.isNaN(parsed) ? null : parsed;
 }

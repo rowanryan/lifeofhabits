@@ -34,7 +34,7 @@ export default function RootLayout({
                 <Providers>
                     <NextTopLoader showSpinner />
                     {children}
-                    <Toaster closeButton />
+                    <Toaster closeButton richColors />
                 </Providers>
             </body>
         </html>
