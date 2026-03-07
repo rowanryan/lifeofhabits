@@ -1,5 +1,4 @@
 import { api } from "@/lib/polar";
-import { db } from "@/server/db";
 import { polarCustomers } from "@/server/db/schema";
 import { authQuery } from "@/server/queries";
 
@@ -28,7 +27,7 @@ export const getInternalCustomer = authQuery.query(async ({ ctx }) => {
             },
         });
 
-        const [newInternalCustomer] = await db
+        const [newInternalCustomer] = await ctx.db
             .insert(polarCustomers)
             .values({
                 clerkUserId: ctx.clerkAuth.userId,
