@@ -62,15 +62,15 @@ export async function GET() {
         const checkout = await api.checkouts.create({
             customerId: internalCustomer.externalId,
             products: [env.POLAR_PRODUCT_ID],
-            successUrl: `${getBaseUrl()}${env.POLAR_SUCCESS_URL}`,
-            returnUrl: getBaseUrl(),
+            successUrl: `${getBaseUrl()}/settings/billing?checkout_id={CHECKOUT_ID}`,
+            returnUrl: `${getBaseUrl()}/settings/billing`,
         });
 
         return NextResponse.redirect(checkout.url);
     } else {
         const portal = await api.customerSessions.create({
             customerId: internalCustomer.externalId,
-            returnUrl: `${getBaseUrl()}/settings`,
+            returnUrl: `${getBaseUrl()}/settings/billing`,
         });
 
         return NextResponse.redirect(portal.customerPortalUrl);

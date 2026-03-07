@@ -1,6 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { PageLayout } from "@/components/PageLayout";
@@ -26,9 +25,7 @@ export default function SettingsLayout({ children }: React.PropsWithChildren) {
                 {
                     label: t("SideMenu.Billing"),
                     href: "/settings/billing",
-                    target: "_blank",
-                    isActive: false,
-                    suffix: <ExternalLinkIcon className="size-4" />,
+                    isActive: segment === "billing",
                 },
             ]}
         >
