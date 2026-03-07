@@ -97,7 +97,12 @@ export function Subscription({ id, internalCustomerId }: SubscriptionProps) {
                         </p>
                     </div>
 
-                    <Button disabled={!id} size="sm" className="w-fit">
+                    <Button
+                        disabled={!id}
+                        size="sm"
+                        variant="secondary"
+                        className="w-fit"
+                    >
                         {t("SpendLimit.ButtonLabel")}
                     </Button>
                 </div>

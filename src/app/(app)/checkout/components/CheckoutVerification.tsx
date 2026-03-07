@@ -49,7 +49,7 @@ export function CheckoutVerification({
         const poll = async () => {
             try {
                 const response = await fetch(
-                    `/checkout/poll?checkout_id=${encodeURIComponent(checkoutId)}`,
+                    `/checkout/poll?checkoutId=${encodeURIComponent(checkoutId)}`,
                     {
                         cache: "no-store",
                     },

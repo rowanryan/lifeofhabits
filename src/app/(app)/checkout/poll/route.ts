@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
         if (!parseResult.success) {
             return NextResponse.json(
-                { message: "Missing or invalid checkout_id" },
+                { message: "Missing or invalid checkoutId" },
                 { status: 400 }
             );
         }

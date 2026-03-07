@@ -27,7 +27,7 @@ export const createCheckout = authAction
         const checkout = await api.checkouts.create({
             customerId: internalCustomer.externalId,
             products: [env.POLAR_PRODUCT_ID],
-            successUrl: `${getBaseUrl()}/settings/billing?checkout_id={CHECKOUT_ID}`,
+            successUrl: `${getBaseUrl()}/checkout?checkoutId={CHECKOUT_ID}`,
             returnUrl: `${getBaseUrl()}/settings/billing`,
         });
 
