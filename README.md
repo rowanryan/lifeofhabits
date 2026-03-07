@@ -2,7 +2,7 @@
 
 [![Checks](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml/badge.svg)](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml)
 
-A production-ready [Next.js 16](https://nextjs.org/) starter built with the App Router, Bun, Clerk, Polar, Drizzle, and Sentry. It includes authentication, billing, typed environment validation, a PostgreSQL data layer, internationalization, testing, and a prebuilt UI foundation with Tailwind CSS and shadcn/ui.
+A production-ready [Next.js 16](https://nextjs.org/) starter built with the App Router, Bun, Clerk, Polar, Drizzle, and Sentry. It includes authentication, subscription billing, usage-based credit tracking, typed environment validation, a PostgreSQL data layer, internationalization, testing, and a prebuilt UI foundation with Tailwind CSS and shadcn/ui.
 
 ## Features
 
@@ -12,6 +12,7 @@ A production-ready [Next.js 16](https://nextjs.org/) starter built with the App 
 -   [Polar](https://polar.sh/) subscription billing with checkout, portal, and webhook handling
 -   [Drizzle ORM](https://orm.drizzle.team/) with PostgreSQL/[Neon](https://neon.tech/)
 -   [Sentry](https://sentry.io/) for client, server, and edge error monitoring
+-   [Vercel AI SDK](https://sdk.vercel.ai/) helper for subscription-gated, metered AI usage
 -   [next-intl](https://next-intl.dev/) for internationalization
 -   [Tailwind CSS 4](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/) for UI
 -   [Biome](https://biomejs.dev/) for linting and formatting
@@ -22,7 +23,7 @@ A production-ready [Next.js 16](https://nextjs.org/) starter built with the App 
 -   [Bun](https://bun.sh/)
 -   A PostgreSQL database such as [Neon](https://neon.tech/)
 -   A [Clerk](https://clerk.com/) application
--   A [Polar](https://polar.sh/) organization and product
+-   A [Polar](https://polar.sh/) organization, product, and credit meter
 -   A [Sentry](https://sentry.io/) project
 
 ## Getting Started
@@ -67,6 +68,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/"
 POLAR_ACCESS_TOKEN="..."
 POLAR_WEBHOOK_SECRET="..."
 POLAR_PRODUCT_ID="..."
+POLAR_CREDITS_METER_ID="..."
 NEXT_PUBLIC_POLAR_PRODUCT_ID="..."
 
 # Sentry
@@ -75,6 +77,9 @@ SENTRY_AUTH_TOKEN="..."
 SENTRY_ORG="..."
 SENTRY_PROJECT="..."
 NEXT_PUBLIC_SENTRY_DSN="..."
+
+# Optional AI Gateway
+VERCEL_AI_GATEWAY_API_KEY="..."
 ```
 
 Notes:
@@ -82,7 +87,9 @@ Notes:
 -   `APP_ENV` and `NEXT_PUBLIC_APP_ENV` should be `development` or `production`.
 -   `CLERK_BYPASS_PROTECTION` is optional and is mainly useful for local development or preview environments.
 -   `POLAR_PRODUCT_ID` and `NEXT_PUBLIC_POLAR_PRODUCT_ID` should point to the same product.
+-   `POLAR_CREDITS_METER_ID` should reference the Polar meter used to track included credits and usage.
 -   The current app expects Sentry to be configured because it is wired into `next.config.ts`, `src/instrumentation.ts`, and `src/instrumentation-client.ts`.
+-   `VERCEL_AI_GATEWAY_API_KEY` is only needed if you use the AI helper in `src/lib/ai.ts`.
 
 ### 4. Initialize the database
 
@@ -117,8 +124,18 @@ The boilerplate includes:
 -   Polar customer portal at `/api/polar/portal`
 -   Polar webhook handling at `/api/webhooks/polar`
 -   Billing UI under `/settings/billing`
+-   Subscription credit usage display based on the configured Polar meter
+-   Spend-limit controls stored against the local customer record
 
 When testing Polar locally, make sure your webhook endpoint is reachable and uses the same `POLAR_WEBHOOK_SECRET` configured in `.env`.
+
+The billing page expects `POLAR_CREDITS_METER_ID` to match the meter attached to the active subscription product so it can display usage correctly.
+
+### AI usage metering
+
+The project includes an `AI` helper in `src/lib/ai.ts` that can sit in front of Vercel AI SDK calls. It checks whether a Polar customer still has available credited usage, runs the model call, and records usage back to Polar through a `credit_usage` event when the call finishes.
+
+This is useful if you want AI features to consume subscription credits instead of being completely unmetered. If you adopt it, configure `VERCEL_AI_GATEWAY_API_KEY` and pass a fallback `defaultMarketCost` for cases where gateway pricing metadata is unavailable.
 
 ### Error monitoring
 
@@ -133,22 +150,22 @@ If you change or remove Sentry, update both the environment schema in `src/env/e
 
 ## Available Scripts
 
-| Command               | Description                               |
-| --------------------- | ----------------------------------------- |
-| `bun dev`             | Start the development server              |
-| `bun build`           | Build for production                      |
-| `bun start`           | Start the production server               |
-| `bun lint`            | Run Biome linting                         |
-| `bun format`          | Format the codebase with Biome            |
-| `bun check`           | Run Biome checks and apply safe fixes     |
-| `bun test:unit`       | Run unit tests once                       |
-| `bun test:unit:watch` | Run unit tests in watch mode              |
-| `bun i18n:check`      | Validate translation files                |
-| `bun db:generate`     | Generate Drizzle migrations               |
-| `bun db:migrate`      | Apply Drizzle migrations                  |
-| `bun db:push`         | Push the schema directly to the database  |
-| `bun db:studio`       | Open Drizzle Studio                       |
-| `bun vercel-build`    | Run database migrations and build for CI  |
+| Command               | Description                              |
+| --------------------- | ---------------------------------------- |
+| `bun dev`             | Start the development server             |
+| `bun build`           | Build for production                     |
+| `bun start`           | Start the production server              |
+| `bun lint`            | Run Biome linting                        |
+| `bun format`          | Format the codebase with Biome           |
+| `bun check`           | Run Biome checks and apply safe fixes    |
+| `bun test:unit`       | Run unit tests once                      |
+| `bun test:unit:watch` | Run unit tests in watch mode             |
+| `bun i18n:check`      | Validate translation files               |
+| `bun db:generate`     | Generate Drizzle migrations              |
+| `bun db:migrate`      | Apply Drizzle migrations                 |
+| `bun db:push`         | Push the schema directly to the database |
+| `bun db:studio`       | Open Drizzle Studio                      |
+| `bun vercel-build`    | Run database migrations and build for CI |
 
 ## Project Structure
 

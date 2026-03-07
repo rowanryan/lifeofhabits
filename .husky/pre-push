@@ -22,5 +22,8 @@ if [ "$branch_name" != "main" ] && [ "$branch_name" != "master" ] && ! echo "$br
   exit 1
 fi
 
+echo "Running linter before push..."
+bun run lint
+
 echo "Running unit tests before push..."
 bun run test:unit
