@@ -138,29 +138,27 @@ export function Subscription({
                                                     className="my-1 h-4"
                                                 />
 
-                                                <ItemDescription className="text-xs flex w-full items-end justify-between gap-2">
-                                                    <span>
-                                                        {t("Credits.Usage", {
-                                                            consumedUnits:
-                                                                format.number(
-                                                                    meter.consumedUnits,
-                                                                    {
-                                                                        maximumFractionDigits: 2,
-                                                                    },
-                                                                ),
-                                                            creditedUnits:
-                                                                meter.creditedUnits,
-                                                        })}
-                                                    </span>
-                                                    <span className="text-muted-foreground">
-                                                        {format.number(
-                                                            meter.consumedUnits /
-                                                                meter.creditedUnits,
-                                                            {
-                                                                style: "percent",
-                                                            },
-                                                        )}
-                                                    </span>
+                                                <ItemDescription className="text-xs">
+                                                    {t("Credits.Usage", {
+                                                        consumedUnits:
+                                                            format.number(
+                                                                meter.consumedUnits,
+                                                                {
+                                                                    maximumFractionDigits: 2,
+                                                                },
+                                                            ),
+                                                        creditedUnits:
+                                                            meter.creditedUnits,
+                                                    })}{" "}
+                                                    &bull; (
+                                                    {format.number(
+                                                        meter.consumedUnits /
+                                                            meter.creditedUnits,
+                                                        {
+                                                            style: "percent",
+                                                        },
+                                                    )}
+                                                    )
                                                 </ItemDescription>
                                             </ItemContent>
                                         </Item>
