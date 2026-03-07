@@ -198,6 +198,10 @@
                 "ManageButton": {
                     "Label": "Manage"
                 },
+                "Plan": {
+                    "Price": "{price} per month",
+                    "RenewalDate": "Renews on {date}"
+                },
                 "SpendLimit": {
                     "Title": "You currently do not have a spend limit.",
                     "Description": "A spend limit helps you control your spending and avoid unexpected charges.",

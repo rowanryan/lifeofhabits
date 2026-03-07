@@ -46,8 +46,6 @@ export function Subscription({
     const t = useTranslations("Settings.Billing.Subscription");
     const format = useFormatter();
 
-    console.log(subscription);
-
     const createCheckoutAction = useAction(createCheckout, {
         onSuccess({ data }) {
             window.location.href = data.url;
@@ -80,17 +78,24 @@ export function Subscription({
                             {subscription.plan.name}
                         </p>
                         <p className="text-sm font-medium text-muted-foreground">
-                            {format.number(subscription.plan.price / 100, {
-                                style: "currency",
-                                currency: subscription.plan.currency,
+                            {t("Plan.Price", {
+                                price: format.number(
+                                    subscription.plan.price / 100,
+                                    {
+                                        style: "currency",
+                                        currency: subscription.plan.currency,
+                                    },
+                                ),
                             })}{" "}
-                            per month &bull; Renews on{" "}
-                            {format.dateTime(
-                                subscription.plan.currentPeriodEnd,
-                                {
-                                    dateStyle: "medium",
-                                },
-                            )}
+                            &bull;{" "}
+                            {t("Plan.RenewalDate", {
+                                date: format.dateTime(
+                                    subscription.plan.currentPeriodEnd,
+                                    {
+                                        dateStyle: "medium",
+                                    },
+                                ),
+                            })}
                         </p>
                     </div>
                 ) : (
