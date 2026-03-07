@@ -11,7 +11,7 @@ export const getInternalCustomer = authQuery.query(async ({ ctx }) => {
 
     if (!internalCustomer) {
         const clerkUser = await ctx.clerkClient.users.getUser(
-            ctx.clerkAuth.userId
+            ctx.clerkAuth.userId,
         );
 
         if (!clerkUser.primaryEmailAddress?.emailAddress) {

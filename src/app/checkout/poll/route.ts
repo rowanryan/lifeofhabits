@@ -12,18 +12,18 @@ export async function GET(request: Request) {
         if (!ctx.clerkAuth.userId) {
             return NextResponse.json(
                 { message: "Unauthorized" },
-                { status: 401 }
+                { status: 401 },
             );
         }
 
         const parseResult = checkoutIdSchema.safeParse(
-            new URL(request.url).searchParams.get("checkoutId")
+            new URL(request.url).searchParams.get("checkoutId"),
         );
 
         if (!parseResult.success) {
             return NextResponse.json(
                 { message: "Missing or invalid checkoutId" },
-                { status: 400 }
+                { status: 400 },
             );
         }
 
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
             {
                 message: "Something went wrong while confirming the checkout.",
             },
-            { status: 500 }
+            { status: 500 },
         );
     }
 }

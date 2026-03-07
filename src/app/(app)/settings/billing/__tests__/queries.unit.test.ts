@@ -42,7 +42,7 @@ describe("Queries", () => {
 
         it("should create a new internal customer if it doesn't exist", async () => {
             mockContext.db.query.polarCustomers.findFirst.mockResolvedValueOnce(
-                undefined
+                undefined,
             );
 
             mockContext.clerkClient.users.getUser.mockResolvedValueOnce({
@@ -73,7 +73,7 @@ describe("Queries", () => {
             expect(mockPolar.customers.create).toHaveBeenCalled();
             expect(mockContext.db.insert).toHaveBeenCalled();
             expect(
-                mockContext.clerkClient.users.updateUserMetadata
+                mockContext.clerkClient.users.updateUserMetadata,
             ).toHaveBeenCalled();
 
             expect(result).toBeDefined();

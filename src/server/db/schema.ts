@@ -17,5 +17,5 @@ export const polarCustomers = p.pgTable(
         spendLimit: p.doublePrecision(),
         ...timestamps,
     },
-    columns => [p.unique().on(columns.clerkUserId)]
+    (columns) => [p.unique().on(columns.clerkUserId)],
 );

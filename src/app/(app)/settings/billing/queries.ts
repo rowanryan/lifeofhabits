@@ -11,7 +11,7 @@ export const getInternalCustomer = authQuery.query(async ({ ctx }) => {
 
     if (!internalCustomer) {
         const clerkUser = await ctx.clerkClient.users.getUser(
-            ctx.clerkAuth.userId
+            ctx.clerkAuth.userId,
         );
 
         if (!clerkUser.primaryEmailAddress?.emailAddress) {
@@ -68,7 +68,7 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
     });
 
     const activeSubscription = customerState.activeSubscriptions.find(
-        subscription => subscription.id === internalCustomer.subscriptionId
+        (subscription) => subscription.id === internalCustomer.subscriptionId,
     );
     if (!activeSubscription) {
         return null;
@@ -79,7 +79,7 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
     });
 
     return {
-        meters: activeSubscription.meters.map(meter => ({
+        meters: activeSubscription.meters.map((meter) => ({
             id: meter.id,
             consumedUnits: meter.consumedUnits,
             creditedUnits: meter.creditedUnits,

@@ -11,7 +11,7 @@ export { QueryClient } from "@/lib/query-client";
 export const queryClient = new QueryClient();
 
 // Auth query client - checks if user is signed in
-export const authQuery = queryClient.use(async ctx => {
+export const authQuery = queryClient.use(async (ctx) => {
     if (!ctx.clerkAuth.userId) {
         throw new Error("Unauthorized");
     }
@@ -22,7 +22,7 @@ export const authQuery = queryClient.use(async ctx => {
     };
 });
 
-export const paidQuery = authQuery.use(async ctx => {
+export const paidQuery = authQuery.use(async (ctx) => {
     const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
         where: {
             clerkUserId: ctx.clerkAuth.userId,
@@ -38,7 +38,7 @@ export const paidQuery = authQuery.use(async ctx => {
     };
 });
 
-export const orgQuery = authQuery.use(async ctx => {
+export const orgQuery = authQuery.use(async (ctx) => {
     if (!ctx.clerkAuth.orgId) {
         throw new Error("Forbidden");
     }
@@ -50,7 +50,7 @@ export const orgQuery = authQuery.use(async ctx => {
     };
 });
 
-export const adminQuery = authQuery.use(async ctx => {
+export const adminQuery = authQuery.use(async (ctx) => {
     if (ctx.clerkAuth.sessionClaims?.role !== "admin") {
         throw new Error("Forbidden");
     }
