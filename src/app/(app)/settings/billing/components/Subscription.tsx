@@ -2,7 +2,7 @@
 
 import { AlertCircleIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -26,12 +26,27 @@ import { Spinner } from "@/components/ui/spinner";
 import { createCheckout } from "../actions";
 
 export type SubscriptionProps = {
-    id: string | null;
     internalCustomerId: string;
+    subscription: {
+        id: string;
+        plan: {
+            name: string;
+            price: number;
+            currency: string;
+            currentPeriodEnd: Date;
+            status: string;
+        };
+    } | null;
 };
 
-export function Subscription({ id, internalCustomerId }: SubscriptionProps) {
+export function Subscription({
+    subscription,
+    internalCustomerId,
+}: SubscriptionProps) {
     const t = useTranslations("Settings.Billing.Subscription");
+    const format = useFormatter();
+
+    console.log(subscription);
 
     const createCheckoutAction = useAction(createCheckout, {
         onSuccess({ data }) {
@@ -47,7 +62,7 @@ export function Subscription({ id, internalCustomerId }: SubscriptionProps) {
             <CardHeader>
                 <CardTitle>{t("Title")}</CardTitle>
                 <CardDescription>{t("Description")}</CardDescription>
-                {!!id && (
+                {!!subscription && (
                     <CardAction>
                         <Button asChild size="sm" variant="outline">
                             <Link href="/api/polar/portal">
@@ -59,7 +74,26 @@ export function Subscription({ id, internalCustomerId }: SubscriptionProps) {
             </CardHeader>
 
             <CardContent>
-                {id ? null : (
+                {subscription ? (
+                    <div>
+                        <p className="text-lg font-semibold">
+                            {subscription.plan.name}
+                        </p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                            {format.number(subscription.plan.price / 100, {
+                                style: "currency",
+                                currency: subscription.plan.currency,
+                            })}{" "}
+                            per month &bull; Renews on{" "}
+                            {format.dateTime(
+                                subscription.plan.currentPeriodEnd,
+                                {
+                                    dateStyle: "medium",
+                                },
+                            )}
+                        </p>
+                    </div>
+                ) : (
                     <Empty>
                         <EmptyHeader>
                             <EmptyTitle>{t("Checkout.Title")}</EmptyTitle>
@@ -98,7 +132,7 @@ export function Subscription({ id, internalCustomerId }: SubscriptionProps) {
                     </div>
 
                     <Button
-                        disabled={!id}
+                        disabled={!subscription}
                         size="sm"
                         variant="secondary"
                         className="w-fit"
