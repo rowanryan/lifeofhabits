@@ -208,9 +208,16 @@
                     "Usage": "{consumedUnits} / {creditedUnits} credits"
                 },
                 "SpendLimit": {
-                    "Title": "You currently do not have a spend limit",
-                    "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
-                    "ButtonLabel": "Set limit"
+                    "NotSet": {
+                        "Title": "You currently do not have a spend limit",
+                        "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
+                        "ButtonLabel": "Set limit"
+                    },
+                    "IsSet": {
+                        "Title": "You currently have a spend limit of {limit}",
+                        "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
+                        "ButtonLabel": "Change limit"
+                    }
                 },
                 "Checkout": {
                     "Title": "You don't have a subscription yet",
