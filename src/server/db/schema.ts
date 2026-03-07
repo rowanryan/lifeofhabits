@@ -12,5 +12,6 @@ export const polarCustomers = p.pgTable("polar_customers", {
     clerkUserId: p.text().notNull(),
     externalId: p.text().notNull(),
     subscriptionId: p.text(),
+    meterId: p.text(),
     ...timestamps,
 });
