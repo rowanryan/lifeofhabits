@@ -205,17 +205,18 @@
                 "Credits": {
                     "Title": "Credit usage",
                     "Description": "How many credits you have used this billing cycle.",
-                    "Usage": "{consumedUnits} / {creditedUnits} credits"
+                    "Usage": "{consumedUnits} / {creditedUnits} credits",
+                    "CurrentSpend": "Currently spent on credits:"
                 },
                 "SpendLimit": {
+                    "Description": "A credit limit helps you control your spending and avoid unexpected charges. Keep in mind that this is on top of your included usage.",
+                    "Warning": "Your limit is lower than your included usage. You can't use more credits than your credit limit, even if your included usage is higher.",
                     "NotSet": {
-                        "Title": "You currently do not have a spend limit",
-                        "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
+                        "Title": "You currently do not have a credit limit",
                         "ButtonLabel": "Set limit"
                     },
                     "IsSet": {
-                        "Title": "You currently have a spend limit of {limit}",
-                        "Description": "A spend limit helps you control your spending and avoid unexpected charges.",
+                        "Title": "You currently have a credit limit of {limit}",
                         "ButtonLabel": "Change limit"
                     }
                 },

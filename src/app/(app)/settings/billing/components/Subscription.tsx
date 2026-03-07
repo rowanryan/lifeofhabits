@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/item";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 import { createCheckout } from "../actions";
 
 export type SubscriptionProps = {
@@ -72,6 +73,15 @@ export function Subscription({
             toast.error(t("Checkout.Error"));
         },
     });
+
+    const isSpendLimitLowerThanIncludedUsage =
+        subscription !== null &&
+        internalCustomer.spendLimit !== null &&
+        internalCustomer.spendLimit <
+            subscription.meters.reduce(
+                (acc, meter) => acc + meter.creditedUnits,
+                0,
+            );
 
     return (
         <Card className="@container/card">
@@ -175,8 +185,8 @@ export function Subscription({
                                     ))}
                                 </ItemGroup>
 
-                                <p className="mt-4 text-base font-medium">
-                                    Current spend:{" "}
+                                <p className="mt-5 text-sm font-medium">
+                                    {t("Credits.CurrentSpend")}{" "}
                                     <span className="text-muted-foreground">
                                         {format.number(
                                             subscription.meters.reduce(
@@ -247,8 +257,15 @@ export function Subscription({
                                       })
                                     : t("SpendLimit.NotSet.Title")}
                             </p>
-                            <p className="text-sm text-muted-foreground">
-                                {t("SpendLimit.NotSet.Description")}
+                            <p
+                                className={cn("text-sm text-muted-foreground", {
+                                    "dark:text-orange-300 text-orange-400":
+                                        isSpendLimitLowerThanIncludedUsage,
+                                })}
+                            >
+                                {isSpendLimitLowerThanIncludedUsage
+                                    ? t("SpendLimit.Warning")
+                                    : t("SpendLimit.Description")}
                             </p>
                         </div>
 

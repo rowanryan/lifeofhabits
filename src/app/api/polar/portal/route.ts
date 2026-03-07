@@ -26,6 +26,6 @@ export const GET = CustomerPortal({
 
         return internalCustomer.externalId;
     },
-    returnUrl: `${getBaseUrl()}/settings`,
+    returnUrl: `${getBaseUrl()}/settings/billing`,
     server: env.APP_ENV === "development" ? "sandbox" : "production",
 });
