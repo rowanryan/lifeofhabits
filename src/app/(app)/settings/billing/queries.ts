@@ -78,9 +78,6 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
     const product = await api.products.get({
         id: activeSubscription.productId,
     });
-    if (!product) {
-        return null;
-    }
 
     return {
         meters: activeSubscription.meters,
