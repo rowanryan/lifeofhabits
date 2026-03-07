@@ -8,9 +8,13 @@ export const env = createEnv({
         POLAR_PRODUCT_ID: z.string(),
     },
 
-    client: {},
+    client: {
+        NEXT_PUBLIC_POLAR_PRODUCT_ID: z.string(),
+    },
 
-    experimental__runtimeEnv: {},
+    experimental__runtimeEnv: {
+        NEXT_PUBLIC_POLAR_PRODUCT_ID: process.env.NEXT_PUBLIC_POLAR_PRODUCT_ID,
+    },
 
     skipValidation: process.env.NODE_ENV === "test",
 });

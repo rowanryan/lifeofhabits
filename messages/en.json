@@ -39,6 +39,36 @@
             "Title": "Menu"
         }
     },
+    "Checkout": {
+        "Confirmation": {
+            "Pending": {
+                "Title": "Confirming your subscription",
+                "Description": "We're verifying your checkout and waiting for your subscription to activate.",
+                "CheckoutId": "Checkout reference: {checkoutId}"
+            },
+            "Success": {
+                "Title": "Your subscription is active",
+                "Description": "Everything is ready. Redirecting you to the home page in {seconds} seconds."
+            },
+            "Invalid": {
+                "Title": "We couldn't confirm this checkout",
+                "Description": "This checkout is invalid or doesn't belong to your account."
+            },
+            "Timeout": {
+                "Title": "Still activating your subscription",
+                "Description": "Your payment may have succeeded, but activation is taking longer than expected."
+            },
+            "Error": {
+                "Title": "We couldn't finish the confirmation",
+                "Description": "Something went wrong while checking your subscription. Please try again."
+            },
+            "Actions": {
+                "BackToBilling": "Back to billing",
+                "Retry": "Try again",
+                "GoToHome": "Go to home"
+            }
+        }
+    },
     "Settings": {
         "Title": "Settings",
         "SideMenu": {
