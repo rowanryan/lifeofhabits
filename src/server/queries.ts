@@ -23,7 +23,13 @@ export const authQuery = queryClient.use(async ctx => {
 });
 
 export const paidQuery = authQuery.use(async ctx => {
-    if (!ctx.clerkAuth.sessionClaims?.subscriptionId) {
+    const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
+        where: {
+            clerkUserId: ctx.clerkAuth.userId,
+        },
+    });
+
+    if (!internalCustomer?.subscriptionId) {
         throw new Error("Subscription not found");
     }
 

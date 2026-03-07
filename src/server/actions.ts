@@ -38,7 +38,13 @@ export const authAction = actionClient.use(async ({ next, ctx }) => {
 });
 
 export const paidAction = authAction.use(async ({ next, ctx }) => {
-    if (!ctx.clerkAuth.sessionClaims?.subscriptionId) {
+    const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
+        where: {
+            clerkUserId: ctx.clerkAuth.userId,
+        },
+    });
+
+    if (!internalCustomer?.subscriptionId) {
         const t = await getTranslations("Common.Errors.ServerAction");
 
         throw new ActionError(t("SubscriptionNotFound"));
@@ -47,7 +53,6 @@ export const paidAction = authAction.use(async ({ next, ctx }) => {
     return await next({
         ctx: {
             ...ctx,
-            clerkAuth: ctx.clerkAuth,
         },
     });
 });
