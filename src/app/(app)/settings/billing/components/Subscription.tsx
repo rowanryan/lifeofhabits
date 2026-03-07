@@ -4,6 +4,7 @@ import { AlertCircleIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
+import { Fragment } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +23,15 @@ import {
     EmptyHeader,
     EmptyTitle,
 } from "@/components/ui/empty";
+import {
+    Item,
+    ItemContent,
+    ItemDescription,
+    ItemGroup,
+    ItemSeparator,
+    ItemTitle,
+} from "@/components/ui/item";
+import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { createCheckout } from "../actions";
 
@@ -102,6 +112,56 @@ export function Subscription({
                                 ),
                             })}
                         </p>
+
+                        {subscription.meters.length > 0 && (
+                            <ItemGroup className="gap-0 rounded-2xl border mt-3">
+                                {subscription.meters.map((meter, idx) => (
+                                    <Fragment key={meter.id}>
+                                        <Item>
+                                            <ItemContent>
+                                                <ItemTitle className="flex w-full items-end justify-between gap-2">
+                                                    <span>Credits</span>
+                                                    <span className="text-muted-foreground">
+                                                        {format.number(
+                                                            meter.consumedUnits /
+                                                                meter.creditedUnits,
+                                                            {
+                                                                style: "percent",
+                                                            },
+                                                        )}
+                                                    </span>
+                                                </ItemTitle>
+
+                                                <Progress
+                                                    value={
+                                                        (meter.consumedUnits /
+                                                            meter.creditedUnits) *
+                                                        100
+                                                    }
+                                                    className="my-1 h-4"
+                                                />
+
+                                                <ItemDescription className="text-xs">
+                                                    {format.number(
+                                                        meter.consumedUnits,
+                                                        {
+                                                            maximumFractionDigits: 2,
+                                                        },
+                                                    )}{" "}
+                                                    / {meter.creditedUnits}{" "}
+                                                    credits
+                                                </ItemDescription>
+                                            </ItemContent>
+                                        </Item>
+
+                                        {idx !==
+                                            subscription.meters.length - 1 && (
+                                            <ItemSeparator className="my-0" />
+                                        )}
+                                    </Fragment>
+                                ))}
+                            </ItemGroup>
+                        )}
                     </div>
                 ) : (
                     <Empty>
@@ -130,7 +190,7 @@ export function Subscription({
                 )}
             </CardContent>
 
-            <CardFooter className="flex items-start gap-2">
+            <CardFooter className="flex items-start gap-2 mt-3">
                 <AlertCircleIcon className="size-4 shrink-0 mt-0.5" />
 
                 <div className="flex flex-col @xl/card:flex-row gap-3 @xl/card:items-center @xl/card:justify-between @xl/card:grow">
