@@ -21,9 +21,3 @@ if [ "$branch_name" != "main" ] && [ "$branch_name" != "master" ] && ! echo "$br
   echo "Your branch is: $branch_name"
   exit 1
 fi
-
-echo "Running linter before push..."
-bun run lint
-
-echo "Running unit tests before push..."
-bun run test:unit

@@ -1,4 +1,4 @@
-import { generateText, type OnFinishEvent, streamText, type ToolSet } from "ai";
+import { generateText, streamText } from "ai";
 import { env } from "@/env";
 import { api } from "./polar";
 
