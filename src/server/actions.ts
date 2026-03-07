@@ -5,7 +5,7 @@ import { createContext } from "./shared";
 export class ActionError extends Error {}
 
 export const actionClient = createSafeActionClient({
-    handleServerError: async (error) => {
+    handleServerError: async error => {
         if (error instanceof ActionError) {
             return error.message;
         }
@@ -27,6 +27,21 @@ export const authAction = actionClient.use(async ({ next, ctx }) => {
         const t = await getTranslations("Common.Errors.ServerAction");
 
         throw new ActionError(t("Unauthorized"));
+    }
+
+    return await next({
+        ctx: {
+            ...ctx,
+            clerkAuth: ctx.clerkAuth,
+        },
+    });
+});
+
+export const paidAction = authAction.use(async ({ next, ctx }) => {
+    if (!ctx.clerkAuth.sessionClaims?.subscriptionId) {
+        const t = await getTranslations("Common.Errors.ServerAction");
+
+        throw new ActionError(t("SubscriptionNotFound"));
     }
 
     return await next({

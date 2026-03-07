@@ -4,7 +4,8 @@
             "ServerAction": {
                 "Unknown": "Oops! Something went wrong.",
                 "Unauthorized": "You have to be signed in to perform this action.",
-                "Forbidden": "You are not allowed to perform this action."
+                "Forbidden": "You are not allowed to perform this action.",
+                "SubscriptionNotFound": "You need to have an active subscription to perform this action."
             }
         },
         "ThemeSelector": {
