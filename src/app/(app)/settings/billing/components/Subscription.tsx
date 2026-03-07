@@ -4,7 +4,6 @@ import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
-import { Fragment } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +27,6 @@ import {
     ItemContent,
     ItemDescription,
     ItemGroup,
-    ItemSeparator,
     ItemTitle,
 } from "@/components/ui/item";
 import { Progress } from "@/components/ui/progress";
@@ -51,11 +49,11 @@ export type SubscriptionProps = {
             currentPeriodEnd: Date;
             status: string;
         };
-        meters: {
+        meter: {
             id: string;
             consumedUnits: number;
             creditedUnits: number;
-        }[];
+        };
     } | null;
 };
 
@@ -78,11 +76,7 @@ export function Subscription({
     const isSpendLimitLowerThanIncludedUsage =
         subscription !== null &&
         internalCustomer.spendLimit !== null &&
-        internalCustomer.spendLimit <
-            subscription.meters.reduce(
-                (acc, meter) => acc + meter.creditedUnits,
-                0,
-            );
+        internalCustomer.spendLimit < subscription.meter.creditedUnits;
 
     return (
         <Card className="@container/card">
@@ -127,74 +121,64 @@ export function Subscription({
                             })}
                         </p>
 
-                        {subscription.meters.length > 0 && (
+                        {subscription.meter && (
                             <div className="mt-3">
                                 <ItemGroup className="gap-0 rounded-2xl border">
-                                    {subscription.meters.map((meter, idx) => (
-                                        <Fragment key={meter.id}>
-                                            <Item>
-                                                <ItemContent>
-                                                    <ItemTitle>
-                                                        {t("Credits.Title")}
-                                                    </ItemTitle>
-                                                    <ItemDescription className="text-xs">
-                                                        {t(
-                                                            "Credits.Description",
-                                                        )}
-                                                    </ItemDescription>
+                                    <Item>
+                                        <ItemContent>
+                                            <ItemTitle>
+                                                {t("Credits.Title")}
+                                            </ItemTitle>
+                                            <ItemDescription className="text-xs">
+                                                {t("Credits.Description")}
+                                            </ItemDescription>
 
-                                                    <Progress
-                                                        value={
-                                                            (meter.consumedUnits /
-                                                                meter.creditedUnits) *
-                                                            100
-                                                        }
-                                                        className="my-1 h-4"
-                                                    />
+                                            <Progress
+                                                value={
+                                                    (subscription.meter
+                                                        .consumedUnits /
+                                                        subscription.meter
+                                                            .creditedUnits) *
+                                                    100
+                                                }
+                                                className="my-1 h-4"
+                                            />
 
-                                                    <ItemDescription className="text-xs">
-                                                        {t("Credits.Usage", {
-                                                            consumedUnits:
-                                                                format.number(
-                                                                    meter.consumedUnits,
-                                                                    {
-                                                                        maximumFractionDigits: 2,
-                                                                    },
-                                                                ),
-                                                            creditedUnits:
-                                                                meter.creditedUnits,
-                                                        })}{" "}
-                                                        &bull; (
-                                                        {format.number(
-                                                            meter.consumedUnits /
-                                                                meter.creditedUnits,
+                                            <ItemDescription className="text-xs">
+                                                {t("Credits.Usage", {
+                                                    consumedUnits:
+                                                        format.number(
+                                                            subscription.meter
+                                                                .consumedUnits,
                                                             {
-                                                                style: "percent",
+                                                                maximumFractionDigits: 2,
                                                             },
-                                                        )}
-                                                        )
-                                                    </ItemDescription>
-                                                </ItemContent>
-                                            </Item>
-
-                                            {idx !==
-                                                subscription.meters.length -
-                                                    1 && (
-                                                <ItemSeparator className="my-0" />
-                                            )}
-                                        </Fragment>
-                                    ))}
+                                                        ),
+                                                    creditedUnits:
+                                                        subscription.meter
+                                                            .creditedUnits,
+                                                })}{" "}
+                                                &bull; (
+                                                {format.number(
+                                                    subscription.meter
+                                                        .consumedUnits /
+                                                        subscription.meter
+                                                            .creditedUnits,
+                                                    {
+                                                        style: "percent",
+                                                    },
+                                                )}
+                                                )
+                                            </ItemDescription>
+                                        </ItemContent>
+                                    </Item>
                                 </ItemGroup>
 
                                 <p className="mt-5 text-sm font-medium">
                                     {t("Credits.CurrentSpend")}{" "}
                                     <span className="text-muted-foreground">
                                         {format.number(
-                                            subscription.meters.reduce(
-                                                (acc, meter) =>
-                                                    acc + meter.consumedUnits,
-                                                0,
-                                            ),
+                                            subscription.meter.consumedUnits,
                                             {
                                                 style: "currency",
                                                 currency:

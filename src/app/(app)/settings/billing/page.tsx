@@ -9,7 +9,7 @@ export default async function Page() {
         customerState && internalCustomer.subscriptionId
             ? {
                   id: internalCustomer.subscriptionId,
-                  meters: customerState.meters,
+                  meter: customerState.meter,
                   plan: customerState.plan,
               }
             : null;

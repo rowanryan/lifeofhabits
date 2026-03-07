@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { api } from "@/lib/polar";
 import { polarCustomers } from "@/server/db/schema";
 import { authQuery } from "@/server/queries";
@@ -11,7 +12,7 @@ export const getInternalCustomer = authQuery.query(async ({ ctx }) => {
 
     if (!internalCustomer) {
         const clerkUser = await ctx.clerkClient.users.getUser(
-            ctx.clerkAuth.userId,
+            ctx.clerkAuth.userId
         );
 
         if (!clerkUser.primaryEmailAddress?.emailAddress) {
@@ -68,9 +69,16 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
     });
 
     const activeSubscription = customerState.activeSubscriptions.find(
-        (subscription) => subscription.id === internalCustomer.subscriptionId,
+        subscription => subscription.id === internalCustomer.subscriptionId
     );
     if (!activeSubscription) {
+        return null;
+    }
+
+    const meter = activeSubscription.meters.find(
+        meter => meter.id === env.POLAR_CREDITS_METER_ID
+    );
+    if (!meter) {
         return null;
     }
 
@@ -79,11 +87,11 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
     });
 
     return {
-        meters: activeSubscription.meters.map((meter) => ({
+        meter: {
             id: meter.id,
             consumedUnits: meter.consumedUnits,
             creditedUnits: meter.creditedUnits,
-        })),
+        },
         plan: {
             name: product.name,
             price: activeSubscription.amount,
