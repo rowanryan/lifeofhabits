@@ -11,17 +11,17 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export function Plan() {
+export function Subscription() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Plan</CardTitle>
+                <CardTitle>Subscription</CardTitle>
                 <CardDescription>
-                    View and manage your plan details.
+                    View and manage your subscription details.
                 </CardDescription>
                 <CardAction>
                     <Button asChild size="sm" variant="outline">
-                        <Link href="/settings/billing/portal">
+                        <Link href="/api/polar/portal">
                             Manage <ExternalLinkIcon />
                         </Link>
                     </Button>

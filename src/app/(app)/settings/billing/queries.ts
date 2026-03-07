@@ -1,6 +1,57 @@
-import { redirect } from "next/navigation";
 import { api } from "@/lib/polar";
+import { db } from "@/server/db";
+import { polarCustomers } from "@/server/db/schema";
 import { authQuery } from "@/server/queries";
+
+export const getInternalCustomer = authQuery.query(async ({ ctx }) => {
+    let internalCustomer = await ctx.db.query.polarCustomers.findFirst({
+        where: {
+            clerkUserId: ctx.clerkAuth.userId,
+        },
+    });
+
+    if (!internalCustomer) {
+        const clerkUser = await ctx.clerkClient.users.getUser(
+            ctx.clerkAuth.userId
+        );
+
+        if (!clerkUser.primaryEmailAddress?.emailAddress) {
+            throw new Error("Email not found");
+        }
+
+        const newPolarCustomer = await api.customers.create({
+            type: "individual",
+            email: clerkUser.primaryEmailAddress.emailAddress,
+            name: clerkUser.fullName,
+            metadata: {
+                clerkUserId: ctx.clerkAuth.userId,
+            },
+        });
+
+        const [newInternalCustomer] = await db
+            .insert(polarCustomers)
+            .values({
+                clerkUserId: ctx.clerkAuth.userId,
+                externalId: newPolarCustomer.id,
+            })
+            .returning();
+
+        if (!newInternalCustomer) {
+            throw new Error("Failed to create internal customer");
+        }
+
+        internalCustomer = newInternalCustomer;
+
+        await ctx.clerkClient.users.updateUserMetadata(ctx.clerkAuth.userId, {
+            privateMetadata: {
+                polarCustomerId: newPolarCustomer.id,
+                internalCustomerId: internalCustomer.id,
+            },
+        });
+    }
+
+    return internalCustomer;
+});
 
 export const getCustomerState = authQuery.query(async ({ ctx }) => {
     const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
@@ -9,8 +60,8 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
         },
     });
 
-    if (!internalCustomer?.subscriptionId || !internalCustomer?.meterId) {
-        redirect("/settings/billing/portal");
+    if (!internalCustomer?.subscriptionId) {
+        return null;
     }
 
     const customerState = await api.customers.getState({
@@ -21,32 +72,24 @@ export const getCustomerState = authQuery.query(async ({ ctx }) => {
         subscription => subscription.id === internalCustomer.subscriptionId
     );
     if (!activeSubscription) {
-        redirect("/settings/billing/portal");
-    }
-
-    const meter = activeSubscription.meters.find(
-        meter => meter.id === internalCustomer.meterId
-    );
-    if (!meter) {
-        redirect("/settings/billing/portal");
+        return null;
     }
 
     const product = await api.products.get({
         id: activeSubscription.productId,
     });
     if (!product) {
-        throw new Error("Product not found.");
+        return null;
     }
 
     return {
+        meters: activeSubscription.meters,
         plan: {
             name: product.name,
             price: activeSubscription.amount,
             currency: activeSubscription.currency,
-        },
-        meter: {
-            consumedUnits: meter.consumedUnits,
-            creditedUnits: meter.creditedUnits,
+            currentPeriodEnd: activeSubscription.currentPeriodEnd,
+            status: activeSubscription.status,
         },
     };
 });

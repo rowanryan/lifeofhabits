@@ -8,17 +8,14 @@ declare module "next-intl" {
     }
 }
 
-interface UserData {
-    role?: "admin" | "user";
+interface PrivateMetadata {
+    internalCustomerId?: string;
+    polarCustomerId?: string;
+    subscriptionId?: string;
 }
 
 declare global {
-    interface CustomJwtSessionClaims extends UserData {}
+    interface CustomJwtSessionClaims extends PrivateMetadata {}
 
-    interface UserPublicMetadata extends UserData {}
-
-    interface UserPrivateMetadata {
-        internalCustomerId?: string;
-        polarCustomerId?: string;
-    }
+    interface UserPrivateMetadata extends PrivateMetadata {}
 }
