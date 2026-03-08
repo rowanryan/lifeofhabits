@@ -15,6 +15,7 @@ import {
     EmptyContent,
     EmptyDescription,
     EmptyHeader,
+    EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty";
 import { useRelativeDate } from "@/hooks/use-relative-date";
@@ -77,16 +78,21 @@ export default function Page() {
             </ButtonGroup>
 
             <Empty>
+                <EmptyMedia variant="icon">
+                    <CalendarDaysIcon className="size-5" />
+                </EmptyMedia>
+
                 <EmptyHeader>
                     <EmptyTitle>
-                        Nothing {isInTheFuture ? "planned" : "logged"}
+                        No events {isInTheFuture ? "planned" : "logged"}
                     </EmptyTitle>
                     <EmptyDescription>
                         You haven&apos;t {isInTheFuture ? "planned" : "logged"}{" "}
-                        anything yet. Get started by{" "}
+                        any events yet. Get started by{" "}
                         {isInTheFuture ? "planning" : "logging"} something.
                     </EmptyDescription>
                 </EmptyHeader>
+
                 <EmptyContent>
                     <Button>
                         <PlusIcon /> Add event

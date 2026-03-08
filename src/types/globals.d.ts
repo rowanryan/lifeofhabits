@@ -1,4 +1,4 @@
-import type { AVAILABLE_LOCALES } from "@/i18n/utils/locale";
+import type { AVAILABLE_LOCALES } from "@/i18n/request";
 import type messages from "../../messages/en.json";
 
 declare module "next-intl" {
