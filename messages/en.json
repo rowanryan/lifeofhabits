@@ -24,6 +24,11 @@
             "Verify": "Verify",
             "InvalidCode": "Invalid verification code. Please try again.",
             "Error": "Something went wrong. Please try again."
+        },
+        "RelativeDate": {
+            "Today": "Today",
+            "Yesterday": "Yesterday",
+            "Tomorrow": "Tomorrow"
         }
     },
     "AppShell": {

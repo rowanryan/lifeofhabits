@@ -33,20 +33,29 @@ import {
 
 type PageTitleProps = {
     title: string;
+    prefix?: string;
     description?: string;
 };
 
 function PageTitle({
     title,
+    prefix,
     description,
     className,
     ...props
 }: PageTitleProps & React.ComponentProps<"div">) {
     return (
         <div className={cn("flex flex-col", className)} {...props}>
+            {prefix && (
+                <p className="text-muted-foreground font-semibold text-sm mb-1">
+                    {prefix}
+                </p>
+            )}
+
             <h2 className="text-2xl @xl/layout:text-3xl font-semibold tracking-tight">
                 {title}
             </h2>
+
             {description && (
                 <p className="text-muted-foreground text-pretty">
                     {description}
@@ -246,6 +255,7 @@ function PageLayout({
     children,
     className,
     title,
+    prefix,
     description,
     breadcrumbs,
     sideMenuLinks,
@@ -266,6 +276,7 @@ function PageLayout({
             {title && (
                 <PageTitle
                     title={title}
+                    prefix={prefix}
                     description={description}
                     className="mb-4 @xl/layout:mt-2"
                 />
