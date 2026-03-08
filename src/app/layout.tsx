@@ -4,6 +4,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { Providers } from "./providers";
+import { env } from "@/env";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -18,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Next Boiler",
+    title: env.APP_NAME,
 };
 
 export default function RootLayout({
