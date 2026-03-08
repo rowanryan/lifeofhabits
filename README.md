@@ -1,29 +1,36 @@
-# Next Boiler
+# Life of Habits
 
-[![Checks](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml/badge.svg)](https://github.com/rowanryan/next-boiler/actions/workflows/push.yaml)
+[![Checks](https://github.com/rowanryan/lifeofhabits/actions/workflows/push.yaml/badge.svg)](https://github.com/rowanryan/lifeofhabits/actions/workflows/push.yaml)
 
-A production-ready [Next.js 16](https://nextjs.org/) starter built with the App Router, Bun, Clerk, Polar, Drizzle, and Sentry. It includes authentication, subscription billing, usage-based credit tracking, typed environment validation, a PostgreSQL data layer, internationalization, testing, and a prebuilt UI foundation with Tailwind CSS and shadcn/ui.
+A habit and event tracking web app that helps you log daily activities and plan future events. Built with Next.js, featuring a clean calendar-based interface for navigating between days.
 
 ## Features
 
+-   **Event Logging** - Track and log daily events and habits
+-   **Future Planning** - Plan events for upcoming days
+-   **Date Navigation** - Browse through past and future dates with an intuitive interface
+-   **User Authentication** - Secure sign-in with Clerk
+-   **Subscription Billing** - Premium features via Polar integration
+-   **Modern UI** - Clean, responsive design with Tailwind CSS and shadcn/ui
+
+## Tech Stack
+
 -   [Next.js 16](https://nextjs.org/) with App Router and React 19
--   [Bun](https://bun.sh/) for package management and local scripts
--   [Clerk](https://clerk.com/) authentication with sign-in, sign-up, profile, and connected accounts flows
--   [Polar](https://polar.sh/) subscription billing with checkout, portal, and webhook handling
+-   [Bun](https://bun.sh/) for package management
+-   [Clerk](https://clerk.com/) for authentication
+-   [Polar](https://polar.sh/) for subscription billing
 -   [Drizzle ORM](https://orm.drizzle.team/) with PostgreSQL/[Neon](https://neon.tech/)
--   [Sentry](https://sentry.io/) for client, server, and edge error monitoring
--   [Vercel AI SDK](https://sdk.vercel.ai/) helper for subscription-gated, metered AI usage
+-   [Zustand](https://zustand.docs.pmnd.rs/) for state management
+-   [Tailwind CSS 4](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/)
+-   [Sentry](https://sentry.io/) for error monitoring
 -   [next-intl](https://next-intl.dev/) for internationalization
--   [Tailwind CSS 4](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/) for UI
--   [Biome](https://biomejs.dev/) for linting and formatting
--   [Vitest](https://vitest.dev/) and Testing Library for unit tests
 
 ## Prerequisites
 
 -   [Bun](https://bun.sh/)
 -   A PostgreSQL database such as [Neon](https://neon.tech/)
 -   A [Clerk](https://clerk.com/) application
--   A [Polar](https://polar.sh/) organization, product, and credit meter
+-   A [Polar](https://polar.sh/) organization and product
 -   A [Sentry](https://sentry.io/) project
 
 ## Getting Started
@@ -31,8 +38,8 @@ A production-ready [Next.js 16](https://nextjs.org/) starter built with the App 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/rowanryan/next-boiler.git
-cd next-boiler
+git clone https://github.com/rowanryan/lifeofhabits.git
+cd lifeofhabits
 ```
 
 ### 2. Install dependencies
@@ -43,13 +50,13 @@ bun install
 
 ### 3. Create your environment file
 
-Create a `.env` file in the project root and add the values required by the current app configuration:
+Create a `.env` file in the project root:
 
 ```bash
 # App
-APP_NAME="Next Boiler"
+APP_NAME="Life of Habits"
 APP_ENV=development
-NEXT_PUBLIC_APP_NAME="Next Boiler"
+NEXT_PUBLIC_APP_NAME="Life of Habits"
 NEXT_PUBLIC_APP_ENV=development
 
 # Database
@@ -77,29 +84,15 @@ SENTRY_AUTH_TOKEN="..."
 SENTRY_ORG="..."
 SENTRY_PROJECT="..."
 NEXT_PUBLIC_SENTRY_DSN="..."
-
-# Optional AI Gateway
-VERCEL_AI_GATEWAY_API_KEY="..."
 ```
 
-Notes:
-
--   `APP_ENV` and `NEXT_PUBLIC_APP_ENV` should be `development` or `production`.
--   `CLERK_BYPASS_PROTECTION` is optional and is mainly useful for local development or preview environments.
--   `POLAR_PRODUCT_ID` and `NEXT_PUBLIC_POLAR_PRODUCT_ID` should point to the same product.
--   `POLAR_CREDITS_METER_ID` should reference the Polar meter used to track included credits and usage.
--   The current app expects Sentry to be configured because it is wired into `next.config.ts`, `src/instrumentation.ts`, and `src/instrumentation-client.ts`.
--   `VERCEL_AI_GATEWAY_API_KEY` is only needed if you use the AI helper in `src/lib/ai.ts`.
-
 ### 4. Initialize the database
-
-For a fresh local database, sync the schema:
 
 ```bash
 bun db:push
 ```
 
-If you prefer working with generated migrations instead, use:
+Or use migrations:
 
 ```bash
 bun db:generate
@@ -113,40 +106,6 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
-
-## Common Workflows
-
-### Billing and webhooks
-
-The boilerplate includes:
-
--   Polar checkout at `/api/polar/checkout`
--   Polar customer portal at `/api/polar/portal`
--   Polar webhook handling at `/api/webhooks/polar`
--   Billing UI under `/settings/billing`
--   Subscription credit usage display based on the configured Polar meter
--   Spend-limit controls stored against the local customer record
-
-When testing Polar locally, make sure your webhook endpoint is reachable and uses the same `POLAR_WEBHOOK_SECRET` configured in `.env`.
-
-The billing page expects `POLAR_CREDITS_METER_ID` to match the meter attached to the active subscription product so it can display usage correctly.
-
-### AI usage metering
-
-The project includes an `AI` helper in `src/lib/ai.ts` that can sit in front of Vercel AI SDK calls. It checks whether a Polar customer still has available credited usage, runs the model call, and records usage back to Polar through a `credit_usage` event when the call finishes.
-
-This is useful if you want AI features to consume subscription credits instead of being completely unmetered. If you adopt it, configure `VERCEL_AI_GATEWAY_API_KEY` and pass a fallback `defaultMarketCost` for cases where gateway pricing metadata is unavailable.
-
-### Error monitoring
-
-Sentry is configured for:
-
--   client-side monitoring
--   server-side monitoring
--   edge runtime monitoring
--   request error capture through Next.js instrumentation
-
-If you change or remove Sentry, update both the environment schema in `src/env/extensions/sentry.ts` and the integration points in `next.config.ts`, `src/instrumentation.ts`, and `src/instrumentation-client.ts`.
 
 ## Available Scripts
 
@@ -171,16 +130,14 @@ If you change or remove Sentry, update both the environment schema in `src/env/e
 
 ```text
 src/
-├── app/           # App Router routes, pages, and API handlers
+├── app/           # App Router routes and pages
 ├── components/    # Shared UI components
-├── config/        # Project-level configuration
-├── env/           # Typed environment validation
-├── features/      # Feature-focused UI and logic
-├── hooks/         # Shared React hooks
-├── i18n/          # next-intl setup
+├── features/      # Feature modules (app-shell, user accounts, etc.)
+├── hooks/         # Custom React hooks
+├── stores/        # Zustand state stores
+├── server/        # Database schema, actions, and queries
 ├── lib/           # Utilities and integrations
-├── server/        # Database, server actions, and queries
-└── types/         # Shared TypeScript definitions
-messages/          # Translation message files
-public/            # Static assets
+├── env/           # Typed environment validation
+├── i18n/          # Internationalization setup
+└── types/         # TypeScript definitions
 ```
