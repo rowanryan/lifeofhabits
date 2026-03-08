@@ -15,7 +15,9 @@ interface PrivateMetadata {
 }
 
 declare global {
-    interface CustomJwtSessionClaims extends PrivateMetadata {}
+    interface CustomJwtSessionClaims {
+        role?: "admin" | "user";
+    }
 
     interface UserPrivateMetadata extends PrivateMetadata {}
 }
