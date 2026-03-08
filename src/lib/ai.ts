@@ -23,6 +23,7 @@ export class AIError extends Error {
 export class AI {
     constructor(private readonly params: AIParams) {}
 
+    // Helpers
     private async _canConsume() {
         const customerState = await api.customers.getState({
             id: this.params.polarCustomerId,
@@ -62,6 +63,7 @@ export class AI {
         });
     }
 
+    // Methods
     public async streamText({
         defaultMarketCost,
         ...params
