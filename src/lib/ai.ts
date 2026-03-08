@@ -4,6 +4,7 @@ import { api } from "./polar";
 
 export type AIParams = {
     polarCustomerId: string;
+    spendLimit: number | null;
 };
 
 export class AIError extends Error {
@@ -40,7 +41,11 @@ export class AI {
             throw new AIError("Credits meter not found");
         }
 
-        return meter.consumedUnits < meter.creditedUnits;
+        if (!this.params.spendLimit) {
+            return true;
+        }
+
+        return meter.consumedUnits < this.params.spendLimit;
     }
 
     private async _consumeCredits({ amount }: { amount: number }) {
