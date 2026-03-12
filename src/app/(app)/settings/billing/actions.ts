@@ -12,7 +12,7 @@ export const createCheckout = authAction
     .inputSchema(
         z.object({
             internalCustomerId: z.string(),
-        }),
+        })
     )
     .action(async ({ ctx, parsedInput }) => {
         const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
@@ -40,7 +40,7 @@ export const updateSpendLimit = authAction
     .inputSchema(
         z.object({
             spendLimit: z.number().min(0).max(1_000_000).nullable(),
-        }),
+        })
     )
     .action(async ({ ctx, parsedInput }) => {
         const internalCustomer = await ctx.db.query.polarCustomers.findFirst({
@@ -56,7 +56,10 @@ export const updateSpendLimit = authAction
         const [updatedInternalCustomer] = await ctx.db
             .update(polarCustomers)
             .set({
-                spendLimit: parsedInput.spendLimit,
+                spendLimit: parsedInput.spendLimit
+                    ? parseFloat(parsedInput.spendLimit.toString())
+                    : null,
+                updatedAt: new Date(),
             })
             .where(eq(polarCustomers.id, internalCustomer.id))
             .returning();
