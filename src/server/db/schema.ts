@@ -7,6 +7,16 @@ const timestamps = {
     updatedAt: p.timestamp().notNull().defaultNow(),
 };
 
+export const eventTypeEnum = p.pgEnum("event_type", [
+    "custom",
+    "habit",
+    "meal",
+]);
+export const eventScheduleTypeEnum = p.pgEnum("event_schedule_type", [
+    "once",
+    "recurring",
+]);
+
 export const polarCustomers = p.pgTable(
     "polar_customers",
     {
@@ -17,5 +27,17 @@ export const polarCustomers = p.pgTable(
         spendLimit: p.doublePrecision(),
         ...timestamps,
     },
-    (columns) => [p.unique().on(columns.clerkUserId)],
+    columns => [p.unique().on(columns.clerkUserId)]
 );
+
+export const events = p.pgTable("events", {
+    id,
+    clerkUserId: p.text().notNull(),
+    type: eventTypeEnum().notNull(),
+    scheduleType: eventScheduleTypeEnum().notNull(),
+    name: p.text().notNull(),
+    description: p.text(),
+    startDate: p.date().notNull(),
+    rrule: p.text(),
+    ...timestamps,
+});
