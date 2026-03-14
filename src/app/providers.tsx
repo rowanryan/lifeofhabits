@@ -3,8 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
 import { type Locale, NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { QueryProvider } from "@/components/QueryProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { QueryProvider } from "./query-provider";
 
 const LOCALIZATIONS: Record<Locale, typeof enUS> = {
     en: enUS,
@@ -51,9 +51,7 @@ async function LocalizedProviders({ children }: { children: React.ReactNode }) {
                 attribute="class"
                 defaultTheme="system"
             >
-                <QueryProvider>
-                    {children}
-                </QueryProvider>
+                <QueryProvider>{children}</QueryProvider>
             </ThemeProvider>
         </ClerkProvider>
     );

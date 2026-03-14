@@ -3,5 +3,5 @@ import * as schema from "./schema";
 
 export const relations = defineRelations(schema, () => ({
     polarCustomers: {},
-    events: {},
+    habits: {},
 }));

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { addDays, format, isAfter, subDays } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -10,7 +10,6 @@ import {
     PlusIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
 import { DataLoader } from "@/components/DataLoader";
 import { PageLayout } from "@/components/PageLayout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -26,18 +25,16 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useRelativeDate } from "@/hooks/use-relative-date";
-import { getPartOfDay } from "@/lib/date";
 import { useLogStore } from "@/stores/useLogStore";
-import { getEvents } from "./actions";
+import { getHabits } from "./actions";
 import { Calendar } from "./components/Calendar";
-import { EventGroup } from "./components/EventGroup";
 
 export default function Page() {
     const t = useTranslations("Events");
     const formatRelativeDate = useRelativeDate();
     const currentDate = useLogStore((state) => state.currentDate);
     const setCurrentDate = useLogStore((state) => state.setCurrentDate);
-    const isInTheFuture = isAfter(currentDate, new Date());
+    //const isInTheFuture = isAfter(currentDate, new Date());
     const currentYear = currentDate.getFullYear();
     const previousDate = subDays(currentDate, 1);
     const nextDate = addDays(currentDate, 1);
@@ -50,35 +47,14 @@ export default function Page() {
         month: "long",
     });
 
-    const dateString = format(currentDate, "yyyy-MM-dd");
-
     const {
-        data: events,
+        data: habits,
         isLoading,
         error,
     } = useQuery({
-        queryKey: ["events", { dateString }],
-        queryFn: async () => (await getEvents({ dateString })).data,
+        queryKey: ["habits"],
+        queryFn: async () => (await getHabits()).data,
     });
-
-    const groups = useMemo(() => {
-        if (!events) return null;
-        if (events.length === 0) return null;
-
-        return {
-            morning: events.filter(
-                (e) => getPartOfDay(e.startTime) === "morning",
-            ),
-            afternoon: events.filter(
-                (e) => getPartOfDay(e.startTime) === "afternoon",
-            ),
-            evening: events.filter(
-                (e) => getPartOfDay(e.startTime) === "evening",
-            ),
-            night: events.filter((e) => getPartOfDay(e.startTime) === "night"),
-            anytime: events.filter((e) => getPartOfDay(e.startTime) === null),
-        };
-    }, [events]);
 
     return (
         <PageLayout
@@ -125,7 +101,7 @@ export default function Page() {
             </ButtonGroup>
 
             <DataLoader
-                data={groups}
+                data={habits}
                 isLoading={isLoading}
                 error={error}
                 loader={
@@ -151,22 +127,9 @@ export default function Page() {
                             </EmptyMedia>
 
                             <EmptyHeader>
-                                <EmptyTitle>
-                                    {t("Empty.Title", {
-                                        plannedOrLogged: isInTheFuture
-                                            ? "planned"
-                                            : "logged",
-                                    })}
-                                </EmptyTitle>
+                                <EmptyTitle>{t("Empty.Title")}</EmptyTitle>
                                 <EmptyDescription>
-                                    {t("Empty.Description", {
-                                        plannedOrLogged: isInTheFuture
-                                            ? "planned"
-                                            : "logged",
-                                        planningOrLogging: isInTheFuture
-                                            ? "planning"
-                                            : "logging",
-                                    })}
+                                    {t("Empty.Description")}
                                 </EmptyDescription>
                             </EmptyHeader>
 
@@ -177,42 +140,7 @@ export default function Page() {
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="space-y-4 min-h-[200px] bg-red-500">
-                            {data.morning.length > 0 && (
-                                <EventGroup
-                                    label={t("TimeOfDay.Morning")}
-                                    events={data.morning}
-                                />
-                            )}
-
-                            {data.afternoon.length > 0 && (
-                                <EventGroup
-                                    label={t("TimeOfDay.Afternoon")}
-                                    events={data.afternoon}
-                                />
-                            )}
-
-                            {data.evening.length > 0 && (
-                                <EventGroup
-                                    label={t("TimeOfDay.Evening")}
-                                    events={data.evening}
-                                />
-                            )}
-
-                            {data.night.length > 0 && (
-                                <EventGroup
-                                    label={t("TimeOfDay.Night")}
-                                    events={data.night}
-                                />
-                            )}
-
-                            {data.anytime.length > 0 && (
-                                <EventGroup
-                                    label={t("TimeOfDay.Anytime")}
-                                    events={data.anytime}
-                                />
-                            )}
-                        </div>
+                        <div className="space-y-4"></div>
                     )
                 }
             </DataLoader>
