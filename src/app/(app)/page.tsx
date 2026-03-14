@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { addDays, format, isSameDay, subDays } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -41,16 +41,6 @@ export default function Page() {
     const previousDate = subDays(currentDate, 1);
     const nextDate = addDays(currentDate, 1);
     const dateString = format(currentDate, "yyyy-MM-dd");
-
-    const previousDateLabel = formatRelativeDate(previousDate, {
-        day: "numeric",
-        month: "long",
-    });
-
-    const nextDateLabel = formatRelativeDate(nextDate, {
-        day: "numeric",
-        month: "long",
-    });
 
     const {
         data: habits,
