@@ -59,7 +59,7 @@ export default function Page() {
                 month: "long",
             })}
         >
-            <ButtonGroup className="flex mb-8 flex-wrap items-center">
+            <ButtonGroup className="flex mb-4 flex-wrap items-center">
                 <ButtonGroup>
                     <Button size="sm">
                         <PlusIcon /> {t("Habits.Actions.Add")}
