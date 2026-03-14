@@ -39,7 +39,7 @@ export function Calendar({ children }: CalendarProps) {
             <DialogContent className="w-fit">
                 <DialogHeader>
                     <DialogTitle>
-                        {t("Events.Actions.Calendar.Title")}
+                        {t("Habits.Actions.Calendar.Title")}
                     </DialogTitle>
                 </DialogHeader>
 

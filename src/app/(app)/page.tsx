@@ -28,6 +28,7 @@ import { useRelativeDate } from "@/hooks/use-relative-date";
 import { useLogStore } from "@/stores/useLogStore";
 import { getHabits } from "./actions";
 import { Calendar } from "./components/Calendar";
+import { HabitGroup } from "./components/HabitGroup";
 
 export default function Page() {
     const t = useTranslations("Habits");
@@ -144,7 +145,9 @@ export default function Page() {
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="space-y-4"></div>
+                        <div className="space-y-4">
+                            <HabitGroup habits={data} />
+                        </div>
                     )
                 }
             </DataLoader>
