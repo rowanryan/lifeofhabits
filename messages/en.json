@@ -262,6 +262,60 @@
         "Error": {
             "Title": "Oops!",
             "Description": "Your habits could not be loaded. Please try again by refreshing the page."
+        },
+        "Schedule": {
+            "Every": {
+                "minute": "Every {count, plural, =1 {minute} other {# minutes}}",
+                "hour": "Every {count, plural, =1 {hour} other {# hours}} starting at {startTime}",
+                "day": "Every {count, plural, =1 {day} other {# days}} starting on {startDay}",
+                "month": "Every {count, plural, =1 {month} other {# months}} starting in {startMonth}"
+            },
+            "StartDay": {
+                "monday": "Monday",
+                "tuesday": "Tuesday",
+                "wednesday": "Wednesday",
+                "thursday": "Thursday",
+                "friday": "Friday",
+                "saturday": "Saturday",
+                "sunday": "Sunday"
+            },
+            "StartMonth": {
+                "january": "January",
+                "february": "February",
+                "march": "March",
+                "april": "April",
+                "may": "May",
+                "june": "June",
+                "july": "July",
+                "august": "August",
+                "september": "September",
+                "october": "October",
+                "november": "November",
+                "december": "December"
+            },
+            "Weekday": {
+                "monday": "Every Monday",
+                "tuesday": "Every Tuesday",
+                "wednesday": "Every Wednesday",
+                "thursday": "Every Thursday",
+                "friday": "Every Friday",
+                "saturday": "Every Saturday",
+                "sunday": "Every Sunday"
+            },
+            "Yearly": {
+                "january": "Every January",
+                "february": "Every February",
+                "march": "Every March",
+                "april": "Every April",
+                "may": "Every May",
+                "june": "Every June",
+                "july": "Every July",
+                "august": "Every August",
+                "september": "Every September",
+                "october": "Every October",
+                "november": "Every November",
+                "december": "Every December"
+            }
         }
     }
 }

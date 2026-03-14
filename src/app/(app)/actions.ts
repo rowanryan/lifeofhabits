@@ -25,12 +25,19 @@ export const getHabits = authAction
         const start = startOfDay(targetDate);
         const end = endOfDay(targetDate);
 
-        const filteredHabits = habits.filter(habit => {
-            const rule = rrulestr(habit.rrule);
-            const occurrences = rule.between(start, end, true);
+        const filteredHabits: typeof habits = [];
+        for (const habit of habits) {
+            try {
+                const rule = rrulestr(habit.rrule);
+                const occurrences = rule.between(start, end, true);
 
-            return occurrences.length > 0;
-        });
+                if (occurrences.length > 0) {
+                    filteredHabits.push(habit);
+                }
+            } catch {
+                // Skip habits with invalid rrule
+            }
+        }
 
         return filteredHabits;
     });
