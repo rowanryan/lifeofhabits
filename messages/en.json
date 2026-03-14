@@ -257,7 +257,7 @@
         },
         "Empty": {
             "Title": "No habits",
-            "Description": "You haven't created any habits yet. Get started by create a habit."
+            "Description": "You don't have any habits on this day. You can add a habit or change the day with the buttons above."
         },
         "Error": {
             "Title": "Oops!",

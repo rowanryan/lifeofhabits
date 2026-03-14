@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { addDays, format, subDays } from "date-fns";
+import { addDays, format, isSameDay, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
     Empty,
-    EmptyContent,
     EmptyDescription,
     EmptyHeader,
     EmptyMedia,
@@ -32,7 +31,7 @@ import { Calendar } from "./components/Calendar";
 import { HabitGroup } from "./components/HabitGroup";
 
 export default function Page() {
-    const t = useTranslations("Habits");
+    const t = useTranslations();
 
     const formatRelativeDate = useRelativeDate();
     const currentDate = useLogStore((state) => state.currentDate);
@@ -73,17 +72,8 @@ export default function Page() {
             <ButtonGroup className="flex mb-8 flex-wrap items-center">
                 <ButtonGroup>
                     <Button size="sm">
-                        <PlusIcon /> {t("Actions.Add")}
+                        <PlusIcon /> {t("Habits.Actions.Add")}
                     </Button>
-                </ButtonGroup>
-
-                <ButtonGroup>
-                    <Calendar>
-                        <Button size="sm" variant="secondary">
-                            <CalendarDaysIcon />{" "}
-                            {t("Actions.Calendar.ButtonLabel")}
-                        </Button>
-                    </Calendar>
                 </ButtonGroup>
 
                 <ButtonGroup>
@@ -91,17 +81,32 @@ export default function Page() {
                         size="sm"
                         variant="secondary"
                         onClick={() => setCurrentDate(previousDate)}
-                        className="min-w-32"
+                        className="min-w-12"
                     >
-                        <ArrowLeftIcon /> {previousDateLabel}
+                        <ArrowLeftIcon />
                     </Button>
+
+                    <Calendar>
+                        <Button
+                            size="sm"
+                            variant="secondary"
+                            className="min-w-32"
+                        >
+                            <CalendarDaysIcon />{" "}
+                            {formatRelativeDate(currentDate, {
+                                day: "numeric",
+                                month: "long",
+                            })}
+                        </Button>
+                    </Calendar>
+
                     <Button
                         size="sm"
                         variant="secondary"
                         onClick={() => setCurrentDate(nextDate)}
-                        className="min-w-32"
+                        className="min-w-12"
                     >
-                        {nextDateLabel} <ArrowRightIcon />
+                        <ArrowRightIcon />
                     </Button>
                 </ButtonGroup>
             </ButtonGroup>
@@ -118,39 +123,35 @@ export default function Page() {
                 renderError={() => (
                     <Alert variant="destructive">
                         <AlertCircleIcon />
-                        <AlertTitle>{t("Error.Title")}</AlertTitle>
+                        <AlertTitle>{t("Habits.Error.Title")}</AlertTitle>
                         <AlertDescription>
-                            {t("Error.Description")}
+                            {t("Habits.Error.Description")}
                         </AlertDescription>
                     </Alert>
                 )}
             >
-                {(data) =>
-                    !data ? (
-                        <Empty>
-                            <EmptyMedia variant="icon">
-                                <CalendarDaysIcon className="size-5" />
-                            </EmptyMedia>
-
-                            <EmptyHeader>
-                                <EmptyTitle>{t("Empty.Title")}</EmptyTitle>
-                                <EmptyDescription>
-                                    {t("Empty.Description")}
-                                </EmptyDescription>
-                            </EmptyHeader>
-
-                            <EmptyContent>
-                                <Button>
-                                    <PlusIcon /> {t("Actions.Add")}
-                                </Button>
-                            </EmptyContent>
-                        </Empty>
-                    ) : (
-                        <PageSection title="To do">
+                {(data) => (
+                    <PageSection>
+                        {data.length > 0 ? (
                             <HabitGroup habits={data} />
-                        </PageSection>
-                    )
-                }
+                        ) : (
+                            <Empty>
+                                <EmptyMedia variant="icon">
+                                    <CalendarDaysIcon className="size-5" />
+                                </EmptyMedia>
+
+                                <EmptyHeader>
+                                    <EmptyTitle>
+                                        {t("Habits.Empty.Title")}
+                                    </EmptyTitle>
+                                    <EmptyDescription>
+                                        {t("Habits.Empty.Description")}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        )}
+                    </PageSection>
+                )}
             </DataLoader>
         </PageLayout>
     );
