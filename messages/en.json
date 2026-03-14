@@ -250,7 +250,10 @@
     "Events": {
         "Actions": {
             "Add": "Add event",
-            "Calendar": "Calendar"
+            "Calendar": {
+                "ButtonLabel": "Calendar",
+                "Title": "Choose a date"
+            }
         },
         "Empty": {
             "Title": "No events {plannedOrLogged, select, planned {planned} logged {logged} other {logged}}",

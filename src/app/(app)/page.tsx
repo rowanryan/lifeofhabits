@@ -29,6 +29,7 @@ import { useRelativeDate } from "@/hooks/use-relative-date";
 import { getPartOfDay } from "@/lib/date";
 import { useLogStore } from "@/stores/useLogStore";
 import { getEvents } from "./actions";
+import { Calendar } from "./components/Calendar";
 import { EventGroup } from "./components/EventGroup";
 
 export default function Page() {
@@ -95,9 +96,12 @@ export default function Page() {
                 </ButtonGroup>
 
                 <ButtonGroup>
-                    <Button size="sm" variant="secondary">
-                        <CalendarDaysIcon /> {t("Actions.Calendar")}
-                    </Button>
+                    <Calendar>
+                        <Button size="sm" variant="secondary">
+                            <CalendarDaysIcon />{" "}
+                            {t("Actions.Calendar.ButtonLabel")}
+                        </Button>
+                    </Calendar>
                 </ButtonGroup>
 
                 <ButtonGroup>
