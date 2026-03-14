@@ -87,7 +87,7 @@ export default function Page() {
                 month: "long",
             })}
         >
-            <ButtonGroup className="flex mb-4 flex-wrap gap-2 items-center">
+            <ButtonGroup className="flex mb-4 flex-wrap items-center">
                 <ButtonGroup>
                     <Button size="sm">
                         <PlusIcon /> {t("Actions.Add")}
@@ -105,6 +105,7 @@ export default function Page() {
                         size="sm"
                         variant="secondary"
                         onClick={() => setCurrentDate(previousDate)}
+                        className="min-w-32"
                     >
                         <ArrowLeftIcon /> {previousDateLabel}
                     </Button>
@@ -112,6 +113,7 @@ export default function Page() {
                         size="sm"
                         variant="secondary"
                         onClick={() => setCurrentDate(nextDate)}
+                        className="min-w-32"
                     >
                         {nextDateLabel} <ArrowRightIcon />
                     </Button>
