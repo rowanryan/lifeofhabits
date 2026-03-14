@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { addDays, isAfter, subDays } from "date-fns";
+import { addDays, format, isAfter, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -47,37 +47,33 @@ export default function Page() {
         month: "long",
     });
 
+    const dateString = format(currentDate, "yyyy-MM-dd");
+
     const {
         data: events,
         isLoading,
         error,
     } = useQuery({
-        queryKey: ["events", { date: currentDate }],
-        queryFn: async () => (await getEvents({ date: currentDate })).data,
+        queryKey: ["events", { dateString }],
+        queryFn: async () => (await getEvents({ dateString })).data,
     });
 
     const groups = useMemo(() => {
         if (!events) return null;
         if (events.length === 0) return null;
 
-        const morningEvents = events.filter(
-            (event) => getPartOfDay(event.startDate) === "morning",
-        );
-        const afternoonEvents = events.filter(
-            (event) => getPartOfDay(event.startDate) === "afternoon",
-        );
-        const eveningEvents = events.filter(
-            (event) => getPartOfDay(event.startDate) === "evening",
-        );
-        const nightEvents = events.filter(
-            (event) => getPartOfDay(event.startDate) === "night",
-        );
-
         return {
-            morning: morningEvents,
-            afternoon: afternoonEvents,
-            evening: eveningEvents,
-            night: nightEvents,
+            morning: events.filter(
+                (e) => getPartOfDay(e.startTime) === "morning",
+            ),
+            afternoon: events.filter(
+                (e) => getPartOfDay(e.startTime) === "afternoon",
+            ),
+            evening: events.filter(
+                (e) => getPartOfDay(e.startTime) === "evening",
+            ),
+            night: events.filter((e) => getPartOfDay(e.startTime) === "night"),
+            anytime: events.filter((e) => getPartOfDay(e.startTime) === null),
         };
     }, [events]);
 
@@ -169,16 +165,37 @@ export default function Page() {
                         </Empty>
                     ) : (
                         <div className="space-y-4">
-                            <EventGroup label="Morning" events={data.morning} />
+                            {data.morning.length > 0 && (
+                                <EventGroup
+                                    label="Morning"
+                                    events={data.morning}
+                                />
+                            )}
 
-                            <EventGroup
-                                label="Afternoon"
-                                events={data.afternoon}
-                            />
+                            {data.afternoon.length > 0 && (
+                                <EventGroup
+                                    label="Afternoon"
+                                    events={data.afternoon}
+                                />
+                            )}
 
-                            <EventGroup label="Evening" events={data.evening} />
+                            {data.evening.length > 0 && (
+                                <EventGroup
+                                    label="Evening"
+                                    events={data.evening}
+                                />
+                            )}
 
-                            <EventGroup label="Night" events={data.night} />
+                            {data.night.length > 0 && (
+                                <EventGroup label="Night" events={data.night} />
+                            )}
+
+                            {data.anytime.length > 0 && (
+                                <EventGroup
+                                    label="Anytime"
+                                    events={data.anytime}
+                                />
+                            )}
                         </div>
                     )
                 }

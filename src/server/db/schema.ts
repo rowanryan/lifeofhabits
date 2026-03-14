@@ -38,6 +38,7 @@ export const events = p.pgTable("events", {
     name: p.text().notNull(),
     description: p.text(),
     startDate: p.date().notNull(),
+    startTime: p.time(),
     rrule: p.text(),
     ...timestamps,
 });

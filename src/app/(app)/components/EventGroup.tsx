@@ -18,6 +18,7 @@ export type EventGroupProps = {
         name: string;
         description: string | null;
         startDate: string;
+        startTime: string | null;
         rrule: string | null;
     }>;
 };
