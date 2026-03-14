@@ -316,6 +316,30 @@
                 "november": "Every November",
                 "december": "Every December"
             }
+        },
+        "Details": {
+            "NoDescription": "No description",
+            "Close": "Close",
+            "MarkAsDone": {
+                "ButtonLabel": "Mark as done",
+                "Title": "Notes",
+                "Description": "Add any notes about this habit for this day. You can use this to track your progress or add any other information you want to remember.",
+                "Cancel": "Cancel",
+                "Save": "Save"
+            },
+            "Edit": {
+                "ButtonLabel": "Edit",
+                "Title": "Edit habit",
+                "Cancel": "Cancel",
+                "Save": "Save"
+            },
+            "Delete": {
+                "ButtonLabel": "Delete",
+                "Title": "Delete habit",
+                "Description": "Are you sure you want to delete this habit? This action cannot be undone.",
+                "Cancel": "Cancel",
+                "Delete": "Delete"
+            }
         }
     }
 }

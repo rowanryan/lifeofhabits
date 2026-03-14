@@ -3,8 +3,8 @@ import { Figtree, Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { Providers } from "./providers";
 import { env } from "@/env";
+import { Providers } from "./providers";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,7 +35,7 @@ export default function RootLayout({
                 <Providers>
                     <NextTopLoader showSpinner />
                     {children}
-                    <Toaster closeButton richColors />
+                    <Toaster closeButton richColors position="top-center" />
                 </Providers>
             </body>
         </html>

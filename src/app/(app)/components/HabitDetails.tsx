@@ -16,6 +16,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
 import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import { DeleteHabit } from "./DeleteHabit";
 
 export type HabitDetailsProps = React.PropsWithChildren<{
     id: string;
@@ -34,7 +35,7 @@ export function HabitDetails({
     ...props
 }: HabitDetailsProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const t = useTranslations("Habits.Schedule");
+    const t = useTranslations("Habits");
     const getKey = useScheduleTranslation();
     const isMobile = useIsMobile();
 
@@ -59,7 +60,7 @@ export function HabitDetails({
                     {key && (
                         <DrawerDescription>
                             {/* biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type */}
-                            {t(key.key as any, key.params as any)}
+                            {t(`Schedule.${key.key}` as any, key.params as any)}
                         </DrawerDescription>
                     )}
                 </DrawerHeader>
@@ -71,23 +72,30 @@ export function HabitDetails({
                             !description && "italic",
                         )}
                     >
-                        {description ?? "No description"}
+                        {description ?? t("Details.NoDescription")}
                     </p>
                 </div>
 
                 <DrawerFooter>
                     <Button variant="secondary">
-                        <CheckCircleIcon className="text-success" /> Mark as
-                        done
+                        <CheckCircleIcon className="text-success" />{" "}
+                        {t("Details.MarkAsDone.ButtonLabel")}
                     </Button>
+
                     <Button variant="secondary">
-                        <PencilIcon /> Edit
+                        <PencilIcon /> {t("Details.Edit.ButtonLabel")}
                     </Button>
-                    <Button variant="destructive">
-                        <TrashIcon /> Delete
-                    </Button>
+
+                    <DeleteHabit id={id} onDelete={() => {}}>
+                        <Button variant="destructive">
+                            <TrashIcon /> {t("Details.Delete.ButtonLabel")}
+                        </Button>
+                    </DeleteHabit>
+
                     <DrawerClose asChild>
-                        <Button variant="secondary">Close</Button>
+                        <Button variant="secondary">
+                            {t("Details.Close")}
+                        </Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
