@@ -247,28 +247,21 @@
             }
         }
     },
-    "Events": {
+    "Habits": {
         "Actions": {
-            "Add": "Add event",
+            "Add": "New habit",
             "Calendar": {
                 "ButtonLabel": "Calendar",
                 "Title": "Choose a date"
             }
         },
         "Empty": {
-            "Title": "No events {plannedOrLogged, select, planned {planned} logged {logged} other {logged}}",
-            "Description": "You haven't {plannedOrLogged, select, planned {planned} logged {logged} other {logged}} any events yet. Get started by {planningOrLogging, select, planning {planning} logging {logging} other {logging}} something."
+            "Title": "No habits",
+            "Description": "You haven't created any habits yet. Get started by create a habit."
         },
         "Error": {
             "Title": "Oops!",
-            "Description": "Your events could not be loaded. Please try again by refreshing the page."
-        },
-        "TimeOfDay": {
-            "Morning": "Morning",
-            "Afternoon": "Afternoon",
-            "Evening": "Evening",
-            "Night": "Night",
-            "Anytime": "Anytime"
+            "Description": "Your habits could not be loaded. Please try again by refreshing the page."
         }
     }
 }

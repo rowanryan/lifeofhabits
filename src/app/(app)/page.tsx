@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { addDays, subDays } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -30,18 +30,22 @@ import { getHabits } from "./actions";
 import { Calendar } from "./components/Calendar";
 
 export default function Page() {
-    const t = useTranslations("Events");
+    const t = useTranslations("Habits");
+
     const formatRelativeDate = useRelativeDate();
     const currentDate = useLogStore((state) => state.currentDate);
     const setCurrentDate = useLogStore((state) => state.setCurrentDate);
-    //const isInTheFuture = isAfter(currentDate, new Date());
+
     const currentYear = currentDate.getFullYear();
     const previousDate = subDays(currentDate, 1);
     const nextDate = addDays(currentDate, 1);
+    const dateString = format(currentDate, "yyyy-MM-dd");
+
     const previousDateLabel = formatRelativeDate(previousDate, {
         day: "numeric",
         month: "long",
     });
+
     const nextDateLabel = formatRelativeDate(nextDate, {
         day: "numeric",
         month: "long",
@@ -52,8 +56,8 @@ export default function Page() {
         isLoading,
         error,
     } = useQuery({
-        queryKey: ["habits"],
-        queryFn: async () => (await getHabits()).data,
+        queryKey: ["habits", { date: dateString }],
+        queryFn: async () => (await getHabits({ date: dateString })).data,
     });
 
     return (
