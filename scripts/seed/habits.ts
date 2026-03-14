@@ -15,8 +15,6 @@ if (!databaseUrl) {
 const sql = neon(databaseUrl);
 const db = drizzle({ client: sql });
 
-const habitTypes = ["habit", "meal"] as const;
-
 const days = [
     "monday",
     "tuesday",
@@ -87,7 +85,9 @@ const yearlyHabits = [
 function generateRandomTime(): string {
     const hour = faker.number.int({ min: 0, max: 23 });
     const minute = faker.helpers.arrayElement([0, 15, 30, 45]);
-    return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+    return `${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}`;
 }
 
 function generateSchedule(): Schedule {
@@ -204,7 +204,6 @@ async function main() {
 
         habitsToInsert.push({
             clerkUserId,
-            type: faker.helpers.arrayElement(habitTypes),
             name: habit.name,
             description: habit.description,
             rrule: scheduleToRRule(schedule),

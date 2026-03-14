@@ -7,8 +7,6 @@ const timestamps = {
     updatedAt: p.timestamp().notNull().defaultNow(),
 };
 
-export const habitTypeEnum = p.pgEnum("habit_type", ["habit", "meal"]);
-
 export const polarCustomers = p.pgTable(
     "polar_customers",
     {
@@ -25,7 +23,6 @@ export const polarCustomers = p.pgTable(
 export const habits = p.pgTable("habits", {
     id,
     clerkUserId: p.text().notNull(),
-    type: habitTypeEnum().notNull(),
     name: p.text().notNull(),
     description: p.text(),
     rrule: p.text().notNull(),
