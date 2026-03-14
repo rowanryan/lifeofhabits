@@ -11,8 +11,10 @@ import {
     ItemGroup,
     ItemTitle,
 } from "@/components/ui/item";
-import { rRuleToSchedule, type Schedule } from "@/lib/schedule";
+import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
+import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import { HabitDetails } from "./HabitDetails";
 
 export type HabitGroupProps = {
     label?: string;
@@ -24,63 +26,6 @@ export type HabitGroupProps = {
     }>;
 } & React.ComponentProps<typeof ItemGroup>;
 
-function getScheduleTranslationKey(
-    schedule: Schedule,
-    t: ReturnType<typeof useTranslations<"Habits.Schedule">>,
-): {
-    key: string;
-    params?: Record<string, unknown>;
-} {
-    if (schedule.interval === "minute") {
-        return {
-            key: "Every.minute",
-            params: { count: schedule.count },
-        };
-    }
-
-    if (schedule.interval === "hour") {
-        return {
-            key: "Every.hour",
-            params: {
-                count: schedule.count,
-                startTime: schedule.startTime,
-            },
-        };
-    }
-
-    if (schedule.interval === "day") {
-        return {
-            key: "Every.day",
-            params: {
-                count: schedule.count,
-                // biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type
-                startDay: t(`StartDay.${schedule.startDay}` as any),
-            },
-        };
-    }
-
-    if (schedule.interval === "month") {
-        return {
-            key: "Every.month",
-            params: {
-                count: schedule.count,
-                // biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type
-                startMonth: t(`StartMonth.${schedule.startMonth}` as any),
-            },
-        };
-    }
-
-    if (schedule.interval === "weekday") {
-        return { key: `Weekday.${schedule.day}` };
-    }
-
-    if (schedule.interval === "year") {
-        return { key: `Yearly.${schedule.month}` };
-    }
-
-    return { key: "Every.minute", params: { count: 1 } };
-}
-
 export function HabitGroup({
     label,
     habits,
@@ -88,6 +33,7 @@ export function HabitGroup({
     ...props
 }: HabitGroupProps) {
     const t = useTranslations("Habits.Schedule");
+    const getKey = useScheduleTranslation();
 
     return (
         <ItemGroup className={cn("gap-2 rounded-2xl", className)} {...props}>
@@ -102,10 +48,7 @@ export function HabitGroup({
                                 <ItemDescription>
                                     {(() => {
                                         const { key, params } =
-                                            getScheduleTranslationKey(
-                                                schedule,
-                                                t,
-                                            );
+                                            getKey(schedule);
                                         // biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type
                                         return t(key as any, params as any);
                                     })()}
@@ -121,9 +64,17 @@ export function HabitGroup({
                                 <CheckCircleIcon className="text-success" />{" "}
                                 Mark as done
                             </Button>
-                            <Button size="xs" variant="outline">
-                                <EyeIcon /> View details
-                            </Button>
+
+                            <HabitDetails
+                                id={habit.id}
+                                name={habit.name}
+                                description={habit.description}
+                                rrule={habit.rrule}
+                            >
+                                <Button size="xs" variant="outline">
+                                    <EyeIcon /> View details
+                                </Button>
+                            </HabitDetails>
                         </ItemActions>
                     </Item>
                 );

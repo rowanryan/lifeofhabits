@@ -119,7 +119,9 @@ function parseTime(time: string): { hour: number; minute: number } {
 }
 
 function formatTime(hour: number, minute: number): string {
-    return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+    return `${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}`;
 }
 
 export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
