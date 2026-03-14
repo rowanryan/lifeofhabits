@@ -35,7 +35,7 @@ export const getEvents = authAction
                 )
             );
 
-        const filteredEvents = candidates.filter((event) => {
+        const filteredEvents = candidates.filter(event => {
             if (event.scheduleType === "once") return true;
             if (!event.rrule) return false;
 

@@ -1,16 +1,14 @@
 import { enUS } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type Locale, NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { QueryProvider } from "./query-provider";
 
 const LOCALIZATIONS: Record<Locale, typeof enUS> = {
     en: enUS,
 };
-
-const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (
@@ -53,9 +51,9 @@ async function LocalizedProviders({ children }: { children: React.ReactNode }) {
                 attribute="class"
                 defaultTheme="system"
             >
-                <QueryClientProvider client={queryClient}>
+                <QueryProvider>
                     {children}
-                </QueryClientProvider>
+                </QueryProvider>
             </ThemeProvider>
         </ClerkProvider>
     );
