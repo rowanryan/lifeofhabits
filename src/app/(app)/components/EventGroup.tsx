@@ -28,7 +28,7 @@ export function EventGroup({ label, events }: EventGroupProps) {
         <div className="space-y-2">
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
 
-            <ItemGroup className="gap-0 rounded-2xl border">
+            <ItemGroup className="gap-0 rounded-2xl bg-muted/50">
                 {events.map((event, idx) => (
                     <Fragment key={event.id}>
                         <Item>
