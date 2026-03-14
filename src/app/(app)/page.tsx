@@ -90,13 +90,13 @@ export default function Page() {
             <ButtonGroup className="flex mb-4 flex-wrap gap-2 items-center">
                 <ButtonGroup>
                     <Button size="sm">
-                        <PlusIcon /> Add event
+                        <PlusIcon /> {t("Actions.Add")}
                     </Button>
                 </ButtonGroup>
 
                 <ButtonGroup>
                     <Button size="sm" variant="secondary">
-                        <CalendarDaysIcon /> Calendar
+                        <CalendarDaysIcon /> {t("Actions.Calendar")}
                     </Button>
                 </ButtonGroup>
 
