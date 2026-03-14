@@ -246,5 +246,26 @@
                 }
             }
         }
+    },
+    "Events": {
+        "Actions": {
+            "Add": "Add event",
+            "Calendar": "Calendar"
+        },
+        "Empty": {
+            "Title": "No events {plannedOrLogged, select, planned {planned} logged {logged} other {logged}}",
+            "Description": "You haven't {plannedOrLogged, select, planned {planned} logged {logged} other {logged}} any events yet. Get started by {planningOrLogging, select, planning {planning} logging {logging} other {logging}} something."
+        },
+        "Error": {
+            "Title": "Oops!",
+            "Description": "Your events could not be loaded. Please try again by refreshing the page."
+        },
+        "TimeOfDay": {
+            "Morning": "Morning",
+            "Afternoon": "Afternoon",
+            "Evening": "Evening",
+            "Night": "Night",
+            "Anytime": "Anytime"
+        }
     }
 }

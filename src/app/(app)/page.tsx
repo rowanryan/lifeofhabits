@@ -9,6 +9,7 @@ import {
     CalendarDaysIcon,
     PlusIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { DataLoader } from "@/components/DataLoader";
 import { PageLayout } from "@/components/PageLayout";
@@ -31,6 +32,7 @@ import { getEvents } from "./actions";
 import { EventGroup } from "./components/EventGroup";
 
 export default function Page() {
+    const t = useTranslations("Events");
     const formatRelativeDate = useRelativeDate();
     const currentDate = useLogStore((state) => state.currentDate);
     const setCurrentDate = useLogStore((state) => state.setCurrentDate);
@@ -128,10 +130,9 @@ export default function Page() {
                 renderError={() => (
                     <Alert variant="destructive">
                         <AlertCircleIcon />
-                        <AlertTitle>Oops!</AlertTitle>
+                        <AlertTitle>{t("Error.Title")}</AlertTitle>
                         <AlertDescription>
-                            Your events could not be loaded. Please try again by
-                            refreshing the page.
+                            {t("Error.Description")}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -145,54 +146,63 @@ export default function Page() {
 
                             <EmptyHeader>
                                 <EmptyTitle>
-                                    No events{" "}
-                                    {isInTheFuture ? "planned" : "logged"}
+                                    {t("Empty.Title", {
+                                        plannedOrLogged: isInTheFuture
+                                            ? "planned"
+                                            : "logged",
+                                    })}
                                 </EmptyTitle>
                                 <EmptyDescription>
-                                    You haven&apos;t{" "}
-                                    {isInTheFuture ? "planned" : "logged"} any
-                                    events yet. Get started by{" "}
-                                    {isInTheFuture ? "planning" : "logging"}{" "}
-                                    something.
+                                    {t("Empty.Description", {
+                                        plannedOrLogged: isInTheFuture
+                                            ? "planned"
+                                            : "logged",
+                                        planningOrLogging: isInTheFuture
+                                            ? "planning"
+                                            : "logging",
+                                    })}
                                 </EmptyDescription>
                             </EmptyHeader>
 
                             <EmptyContent>
                                 <Button>
-                                    <PlusIcon /> Add event
+                                    <PlusIcon /> {t("Actions.Add")}
                                 </Button>
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-4 min-h-[200px] bg-red-500">
                             {data.morning.length > 0 && (
                                 <EventGroup
-                                    label="Morning"
+                                    label={t("TimeOfDay.Morning")}
                                     events={data.morning}
                                 />
                             )}
 
                             {data.afternoon.length > 0 && (
                                 <EventGroup
-                                    label="Afternoon"
+                                    label={t("TimeOfDay.Afternoon")}
                                     events={data.afternoon}
                                 />
                             )}
 
                             {data.evening.length > 0 && (
                                 <EventGroup
-                                    label="Evening"
+                                    label={t("TimeOfDay.Evening")}
                                     events={data.evening}
                                 />
                             )}
 
                             {data.night.length > 0 && (
-                                <EventGroup label="Night" events={data.night} />
+                                <EventGroup
+                                    label={t("TimeOfDay.Night")}
+                                    events={data.night}
+                                />
                             )}
 
                             {data.anytime.length > 0 && (
                                 <EventGroup
-                                    label="Anytime"
+                                    label={t("TimeOfDay.Anytime")}
                                     events={data.anytime}
                                 />
                             )}
