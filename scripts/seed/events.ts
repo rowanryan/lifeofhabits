@@ -23,7 +23,9 @@ function formatDate(date: Date): string {
 }
 
 function formatTime(hours: number, minutes: number): string {
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:00`;
+    return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:00`;
 }
 
 function randomTime(): string {
@@ -32,7 +34,7 @@ function randomTime(): string {
     return formatTime(hour, minute);
 }
 
-const eventTypes = ["custom", "habit", "meal"] as const;
+const eventTypes = ["habit", "meal"] as const;
 
 const oneOffEventNames = [
     "Doctor appointment",
@@ -107,7 +109,7 @@ async function main() {
 
         eventsToInsert.push({
             clerkUserId,
-            type: faker.helpers.arrayElement(["custom", "habit"]),
+            type: faker.helpers.arrayElement(eventTypes),
             scheduleType: "once",
             name: faker.helpers.arrayElement(oneOffEventNames),
             description: faker.helpers.maybe(() => faker.lorem.sentence(), {
@@ -148,7 +150,7 @@ async function main() {
 
         eventsToInsert.push({
             clerkUserId,
-            type: faker.helpers.arrayElement(["custom", "habit"]),
+            type: faker.helpers.arrayElement(eventTypes),
             scheduleType: "recurring",
             name: faker.helpers.arrayElement(recurringEventNames),
             description: faker.helpers.maybe(() => faker.lorem.sentence(), {
@@ -185,16 +187,31 @@ async function main() {
     console.log(`Inserting ${eventsToInsert.length} events...`);
     console.log("\nEvent breakdown:");
     console.log(
-        `  - One-off without time: ${eventsToInsert.filter((e) => e.scheduleType === "once" && !e.startTime).length}`
+        `  - One-off without time: ${
+            eventsToInsert.filter(
+                e => e.scheduleType === "once" && !e.startTime
+            ).length
+        }`
     );
     console.log(
-        `  - One-off with time: ${eventsToInsert.filter((e) => e.scheduleType === "once" && e.startTime).length}`
+        `  - One-off with time: ${
+            eventsToInsert.filter(e => e.scheduleType === "once" && e.startTime)
+                .length
+        }`
     );
     console.log(
-        `  - Recurring without time: ${eventsToInsert.filter((e) => e.scheduleType === "recurring" && !e.startTime).length}`
+        `  - Recurring without time: ${
+            eventsToInsert.filter(
+                e => e.scheduleType === "recurring" && !e.startTime
+            ).length
+        }`
     );
     console.log(
-        `  - Recurring with time: ${eventsToInsert.filter((e) => e.scheduleType === "recurring" && e.startTime).length}`
+        `  - Recurring with time: ${
+            eventsToInsert.filter(
+                e => e.scheduleType === "recurring" && e.startTime
+            ).length
+        }`
     );
 
     await db.insert(events).values(eventsToInsert);
@@ -202,7 +219,7 @@ async function main() {
     console.log("\nDone! Events seeded successfully.");
 }
 
-main().catch((err) => {
+main().catch(err => {
     console.error(err);
     process.exit(1);
 });

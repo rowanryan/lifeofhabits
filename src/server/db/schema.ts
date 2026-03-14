@@ -7,11 +7,7 @@ const timestamps = {
     updatedAt: p.timestamp().notNull().defaultNow(),
 };
 
-export const eventTypeEnum = p.pgEnum("event_type", [
-    "custom",
-    "habit",
-    "meal",
-]);
+export const eventTypeEnum = p.pgEnum("event_type", ["habit", "meal"]);
 export const eventScheduleTypeEnum = p.pgEnum("event_schedule_type", [
     "once",
     "recurring",
