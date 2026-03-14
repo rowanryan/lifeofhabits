@@ -15,6 +15,8 @@ export function DataLoader<TData, TError>({
     renderError,
     loader,
 }: DataLoaderProps<TData, TError>) {
+    console.log("DataLoader", data);
+
     if (isLoading) {
         return loader;
     }
@@ -23,7 +25,7 @@ export function DataLoader<TData, TError>({
         return renderError(error);
     }
 
-    if (!data) {
+    if (data === undefined) {
         return null;
     }
 
