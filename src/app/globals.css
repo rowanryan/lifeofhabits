@@ -55,6 +55,11 @@
     --color-appshell-primary: var(--appshell-primary);
     --color-appshell-foreground: var(--appshell-foreground);
     --color-appshell: var(--appshell);
+
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
 }
 
 :root {
@@ -100,6 +105,11 @@
     --appshell-accent-foreground: oklch(0.97 0.014 254.604);
     --appshell-border: oklch(0.92 0.004 286.32);
     --appshell-ring: oklch(0.705 0.015 286.067);
+
+    --success: oklch(69.6% 0.17 162.48);
+    --success-foreground: oklch(0.985 0 0);
+    --warning: oklch(85.2% 0.199 91.936);
+    --warning-foreground: oklch(0.141 0.005 285.823);
 }
 
 .dark {
@@ -143,6 +153,11 @@
     --appshell-accent-foreground: oklch(0.97 0.014 254.604);
     --appshell-border: oklch(1 0 0 / 10%);
     --appshell-ring: oklch(0.552 0.016 285.938);
+
+    --success: oklch(69.6% 0.17 162.48);
+    --success-foreground: oklch(0.985 0 0);
+    --warning: oklch(68.1% 0.162 75.834);
+    --warning-foreground: oklch(0.985 0 0);
 }
 
 @layer base {

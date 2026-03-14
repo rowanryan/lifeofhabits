@@ -1,8 +1,11 @@
 "use client";
 
+import { CheckCircleIcon, EyeIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import {
     Item,
+    ItemActions,
     ItemContent,
     ItemDescription,
     ItemGroup,
@@ -109,6 +112,19 @@ export function HabitGroup({
                                 </ItemDescription>
                             )}
                         </ItemContent>
+                        <ItemActions className="w-full">
+                            <Button
+                                size="xs"
+                                variant="outline"
+                                className="gap-2"
+                            >
+                                <CheckCircleIcon className="text-success" />{" "}
+                                Mark as done
+                            </Button>
+                            <Button size="xs" variant="outline">
+                                <EyeIcon /> View details
+                            </Button>
+                        </ItemActions>
                     </Item>
                 );
             })}
