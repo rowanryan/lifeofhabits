@@ -146,15 +146,9 @@ export default function Page() {
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="space-y-8">
-                            <PageSection title="To do">
-                                <HabitGroup habits={data} />
-                            </PageSection>
-
-                            <PageSection title="Completed">
-                                <HabitGroup habits={data} />
-                            </PageSection>
-                        </div>
+                        <PageSection title="To do">
+                            <HabitGroup habits={data} />
+                        </PageSection>
                     )
                 }
             </DataLoader>
