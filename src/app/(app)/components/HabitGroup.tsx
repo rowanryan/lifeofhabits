@@ -1,16 +1,15 @@
 "use client";
 
-import { Fragment } from "react";
+import { useTranslations } from "next-intl";
 import {
     Item,
     ItemContent,
     ItemDescription,
     ItemGroup,
-    ItemSeparator,
     ItemTitle,
 } from "@/components/ui/item";
 import { rRuleToSchedule, type Schedule } from "@/lib/schedule";
-import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 export type HabitGroupProps = {
     label?: string;
@@ -20,7 +19,7 @@ export type HabitGroupProps = {
         description: string | null;
         rrule: string;
     }>;
-};
+} & React.ComponentProps<typeof ItemGroup>;
 
 function getScheduleTranslationKey(
     schedule: Schedule,
@@ -79,49 +78,40 @@ function getScheduleTranslationKey(
     return { key: "Every.minute", params: { count: 1 } };
 }
 
-export function HabitGroup({ label, habits }: HabitGroupProps) {
+export function HabitGroup({
+    label,
+    habits,
+    className,
+    ...props
+}: HabitGroupProps) {
     const t = useTranslations("Habits.Schedule");
 
     return (
-        <div className="space-y-2">
-            {label && (
-                <p className="text-sm font-medium text-muted-foreground">
-                    {label}
-                </p>
-            )}
+        <ItemGroup className={cn("gap-2 rounded-2xl", className)} {...props}>
+            {habits.map((habit) => {
+                const schedule = rRuleToSchedule(habit.rrule);
 
-            <ItemGroup className="gap-0 rounded-2xl bg-muted/70">
-                {habits.map((habit, idx) => {
-                    const schedule = rRuleToSchedule(habit.rrule);
-
-                    return (
-                        <Fragment key={habit.id}>
-                            <Item>
-                                <ItemContent>
-                                    <ItemTitle>{habit.name}</ItemTitle>
-                                    {schedule && (
-                                        <ItemDescription>
-                                            {(() => {
-                                                const { key, params } =
-                                                    getScheduleTranslationKey(
-                                                        schedule,
-                                                        t,
-                                                    );
-                                                // biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type
-                                                return t(key as any, params as any);
-                                            })()}
-                                        </ItemDescription>
-                                    )}
-                                </ItemContent>
-                            </Item>
-
-                            {idx !== habits.length - 1 && (
-                                <ItemSeparator className="my-0 bg-background" />
+                return (
+                    <Item key={habit.id} className="bg-muted/70">
+                        <ItemContent>
+                            <ItemTitle>{habit.name}</ItemTitle>
+                            {schedule && (
+                                <ItemDescription>
+                                    {(() => {
+                                        const { key, params } =
+                                            getScheduleTranslationKey(
+                                                schedule,
+                                                t,
+                                            );
+                                        // biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type
+                                        return t(key as any, params as any);
+                                    })()}
+                                </ItemDescription>
                             )}
-                        </Fragment>
-                    );
-                })}
-            </ItemGroup>
-        </div>
+                        </ItemContent>
+                    </Item>
+                );
+            })}
+        </ItemGroup>
     );
 }

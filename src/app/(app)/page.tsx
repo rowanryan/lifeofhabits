@@ -12,6 +12,7 @@ import {
 import { useTranslations } from "next-intl";
 import { DataLoader } from "@/components/DataLoader";
 import { PageLayout } from "@/components/PageLayout";
+import { PageSection } from "@/components/PageSection";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -69,7 +70,7 @@ export default function Page() {
                 month: "long",
             })}
         >
-            <ButtonGroup className="flex mb-4 flex-wrap items-center">
+            <ButtonGroup className="flex mb-6 flex-wrap items-center">
                 <ButtonGroup>
                     <Button size="sm">
                         <PlusIcon /> {t("Actions.Add")}
@@ -145,8 +146,14 @@ export default function Page() {
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="space-y-4">
-                            <HabitGroup habits={data} />
+                        <div className="space-y-8">
+                            <PageSection title="To do">
+                                <HabitGroup habits={data} />
+                            </PageSection>
+
+                            <PageSection title="Completed">
+                                <HabitGroup habits={data} />
+                            </PageSection>
                         </div>
                     )
                 }
