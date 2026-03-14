@@ -30,6 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# cursor
+.cursor/*.log
 
 # Exclude all .env files except .env.example
 .env
