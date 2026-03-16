@@ -98,10 +98,10 @@ export function HabitDetails({
                     )}
                 </DrawerHeader>
 
-                <div className={cn("px-4", isMobile && "px-6")}>
+                <div className={cn("overflow-y-auto px-4", isMobile && "px-6")}>
                     <p
                         className={cn(
-                            "text-sm text-muted-foreground",
+                            "text-sm text-muted-foreground whitespace-pre-line",
                             !description && "italic",
                         )}
                     >

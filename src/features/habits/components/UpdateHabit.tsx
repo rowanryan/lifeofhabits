@@ -161,7 +161,7 @@ export function UpdateHabit({
                     <DrawerDescription>{t("Description")}</DrawerDescription>
                 </DrawerHeader>
 
-                <div className={cn("px-4", isMobile && "px-6")}>
+                <div className={cn("overflow-y-auto px-4", isMobile && "px-6")}>
                     <form
                         id="update-habit-form"
                         onSubmit={form.handleSubmit(onSubmit)}
@@ -284,7 +284,9 @@ export function UpdateHabit({
                                                             fieldState.invalid
                                                         }
                                                         {...field}
-                                                        value={field.value ?? ""}
+                                                        value={
+                                                            field.value ?? ""
+                                                        }
                                                         onChange={(e) => {
                                                             const val =
                                                                 e.target.value;
@@ -327,7 +329,8 @@ export function UpdateHabit({
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? ""
+                                                                field.value ??
+                                                                ""
                                                             }
                                                             onChange={(e) => {
                                                                 const val =
@@ -405,7 +408,8 @@ export function UpdateHabit({
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? ""
+                                                                field.value ??
+                                                                ""
                                                             }
                                                             onChange={(e) => {
                                                                 const val =
@@ -508,7 +512,8 @@ export function UpdateHabit({
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? ""
+                                                                field.value ??
+                                                                ""
                                                             }
                                                             onChange={(e) => {
                                                                 const val =

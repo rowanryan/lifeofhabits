@@ -136,7 +136,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                     <DrawerDescription>{t("Description")}</DrawerDescription>
                 </DrawerHeader>
 
-                <div className={cn("px-4", isMobile && "px-6")}>
+                <div className={cn("overflow-y-auto px-4", isMobile && "px-6")}>
                     <form
                         id="create-habit-form"
                         onSubmit={form.handleSubmit(onSubmit)}
@@ -258,7 +258,9 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             fieldState.invalid
                                                         }
                                                         {...field}
-                                                        value={field.value ?? ""}
+                                                        value={
+                                                            field.value ?? ""
+                                                        }
                                                         onChange={(e) => {
                                                             const val =
                                                                 e.target.value;
@@ -301,7 +303,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? ""
+                                                                field.value ??
+                                                                ""
                                                             }
                                                             onChange={(e) => {
                                                                 const val =
@@ -379,7 +382,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? ""
+                                                                field.value ??
+                                                                ""
                                                             }
                                                             onChange={(e) => {
                                                                 const val =
@@ -482,7 +486,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? ""
+                                                                field.value ??
+                                                                ""
                                                             }
                                                             onChange={(e) => {
                                                                 const val =
