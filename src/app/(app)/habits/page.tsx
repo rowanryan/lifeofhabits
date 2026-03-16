@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { Habits } from "@/features/habits";
+import { CreateHabit } from "@/features/habits/components/CreateHabit";
 import { getHabits } from "./actions";
 
 export default function Page() {
@@ -35,9 +36,11 @@ export default function Page() {
     return (
         <PageLayout title={t("Title")} description={t("Description")}>
             <ButtonGroup className="flex mb-4 flex-wrap items-center">
-                <Button size="sm">
-                    <PlusIcon /> {t("Actions.Add")}
-                </Button>
+                <CreateHabit>
+                    <Button size="sm">
+                        <PlusIcon /> {t("Actions.Add")}
+                    </Button>
+                </CreateHabit>
             </ButtonGroup>
 
             <DataLoader

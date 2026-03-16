@@ -334,6 +334,62 @@
             }
         },
 
+        "Create": {
+            "Title": "Create habit",
+            "Description": "Add a new habit to track.",
+            "Form": {
+                "Name": "Name",
+                "NamePlaceholder": "e.g. Exercise",
+                "Description": "Description",
+                "DescriptionPlaceholder": "e.g. Go for a 30 minute run",
+                "Interval": "Frequency",
+                "IntervalOptions": {
+                    "minute": "Every X minutes",
+                    "hour": "Every X hours",
+                    "day": "Every X days",
+                    "month": "Every X months",
+                    "weekday": "Weekly on a specific day",
+                    "year": "Yearly in a specific month"
+                },
+                "Count": "Repeat every",
+                "StartTime": "Starting at",
+                "StartDay": "Starting on",
+                "StartMonth": "Starting in",
+                "Day": "Day of the week",
+                "Month": "Month of the year",
+                "Days": {
+                    "monday": "Monday",
+                    "tuesday": "Tuesday",
+                    "wednesday": "Wednesday",
+                    "thursday": "Thursday",
+                    "friday": "Friday",
+                    "saturday": "Saturday",
+                    "sunday": "Sunday"
+                },
+                "Months": {
+                    "january": "January",
+                    "february": "February",
+                    "march": "March",
+                    "april": "April",
+                    "may": "May",
+                    "june": "June",
+                    "july": "July",
+                    "august": "August",
+                    "september": "September",
+                    "october": "October",
+                    "november": "November",
+                    "december": "December"
+                },
+                "Submit": "Create habit",
+                "Cancel": "Cancel"
+            },
+            "Toast": {
+                "Loading": "Creating habit...",
+                "Success": "Habit has been created.",
+                "Error": "Something went wrong while creating the habit. Please try again."
+            }
+        },
+
         "Details": {
             "NoDescription": "No description",
             "Close": "Close",
