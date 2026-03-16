@@ -56,7 +56,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
                     <SheetTitle>{tMobileMenu("Title")}</SheetTitle>
                 </SheetHeader>
 
-                <nav className="flex flex-col gap-1 px-3">
+                <nav className="flex flex-1 flex-col gap-1 px-3">
                     {navigationLinks.map((link) => (
                         <Button
                             key={link.href}
@@ -75,7 +75,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
                 <Separator className="my-4" />
 
                 {user && (
-                    <div className="px-4 space-y-4">
+                    <div className="px-4 pb-4 space-y-4">
                         <Link
                             href="/settings/account"
                             className="flex items-center group gap-2 text-left text-sm"
