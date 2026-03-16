@@ -24,11 +24,11 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { Habits } from "@/features/habits";
 import { useRelativeDate } from "@/hooks/use-relative-date";
 import { useLogStore } from "@/stores/useLogStore";
 import { getHabits } from "./actions";
 import { Calendar } from "./components/Calendar";
-import { HabitGroup } from "./components/HabitGroup";
 
 export default function Page() {
     const t = useTranslations();
@@ -123,7 +123,7 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <HabitGroup habits={data} />
+                            <Habits showMarkAsDone habits={data} />
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">

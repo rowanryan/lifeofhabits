@@ -24,7 +24,7 @@ export function DeleteHabit({
     onDelete,
     ...props
 }: DeleteHabitProps) {
-    const t = useTranslations("Habits");
+    const t = useTranslations("Habits.Details.Delete");
 
     return (
         <AlertDialog {...props}>
@@ -32,22 +32,18 @@ export function DeleteHabit({
 
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>
-                        {t("Details.Delete.Title")}
-                    </AlertDialogTitle>
+                    <AlertDialogTitle>{t("Title")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {t("Details.Delete.Description")}
+                        {t("Description")}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
 
                 <AlertDialogFooter>
-                    <AlertDialogCancel>
-                        {t("Details.Delete.Cancel")}
-                    </AlertDialogCancel>
+                    <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
 
                     <AlertDialogAction asChild>
                         <Button variant="destructive" onClick={onDelete}>
-                            {t("Details.Delete.Delete")}
+                            {t("Confirm")}
                         </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>
