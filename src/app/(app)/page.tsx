@@ -59,6 +59,7 @@ export default function Page() {
             title={formatRelativeDate(currentDate, {
                 day: "numeric",
                 month: "long",
+                weekday: "long",
             })}
         >
             <ButtonGroup className="flex mb-4 flex-wrap items-center">
