@@ -21,6 +21,11 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
                     isActive: segments.length === 0,
                 },
                 {
+                    label: t("Habits"),
+                    href: "/habits",
+                    isActive: segments.at(0) === "habits",
+                },
+                {
                     label: t("Settings"),
                     href: "/settings",
                     isActive: segments.at(0) === "settings",

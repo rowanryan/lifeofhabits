@@ -31,19 +31,24 @@
             "Tomorrow": "Tomorrow"
         }
     },
+
     "AppShell": {
         "Navigation": {
             "Home": "Home",
+            "Habits": "Habits",
             "Settings": "Settings"
         },
+
         "Auth": {
             "Account": "Account",
             "SignOut": "Sign out"
         },
+
         "MobileMenu": {
             "Title": "Menu"
         }
     },
+
     "Checkout": {
         "Confirmation": {
             "Pending": {
@@ -74,6 +79,7 @@
             }
         }
     },
+
     "Settings": {
         "Title": "Settings",
         "SideMenu": {
@@ -247,7 +253,11 @@
             }
         }
     },
+
     "Habits": {
+        "Title": "Habits",
+        "Description": "View and manage your habits.",
+
         "Actions": {
             "Add": "New habit",
             "Calendar": {
@@ -255,14 +265,20 @@
                 "Title": "Choose a date"
             }
         },
+
         "Empty": {
             "Title": "No habits",
-            "Description": "You don't have any habits on this day. You can add a habit or change the day with the buttons above."
+            "Description": {
+                "Page": "You don't have any habits yet. You can add a habit by clicking the button above.",
+                "Log": "You don't have any habits on this day. You can add a habit or change the day with the buttons above."
+            }
         },
+
         "Error": {
             "Title": "Oops!",
             "Description": "Your habits could not be loaded. Please try again by refreshing the page."
         },
+
         "Schedule": {
             "Every": {
                 "minute": "Every {count, plural, =1 {minute} other {# minutes}}",
@@ -317,6 +333,7 @@
                 "december": "Every December"
             }
         },
+
         "Details": {
             "NoDescription": "No description",
             "Close": "Close",

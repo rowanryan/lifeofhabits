@@ -7,6 +7,7 @@ import {
     ArrowLeftIcon,
     ArrowRightIcon,
     CalendarDaysIcon,
+    CalendarSyncIcon,
     PlusIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -127,7 +128,7 @@ export default function Page() {
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">
-                                    <CalendarDaysIcon className="size-5" />
+                                    <CalendarSyncIcon className="size-5" />
                                 </EmptyMedia>
 
                                 <EmptyHeader>
@@ -135,7 +136,7 @@ export default function Page() {
                                         {t("Habits.Empty.Title")}
                                     </EmptyTitle>
                                     <EmptyDescription>
-                                        {t("Habits.Empty.Description")}
+                                        {t("Habits.Empty.Description.Log")}
                                     </EmptyDescription>
                                 </EmptyHeader>
                             </Empty>

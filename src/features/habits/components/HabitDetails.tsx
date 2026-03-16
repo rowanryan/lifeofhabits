@@ -62,7 +62,7 @@ export function HabitDetails({
             });
         },
         async onSuccess() {
-            await queryClient.resetQueries({ queryKey: ["habits"] });
+            await queryClient.invalidateQueries({ queryKey: ["habits"] });
 
             toast.success(t("Details.Delete.Toast.Success"), {
                 id: "delete-habit-toast",
