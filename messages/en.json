@@ -390,6 +390,18 @@
             }
         },
 
+        "Edit": {
+            "Title": "Edit habit",
+            "Description": "Update your habit details.",
+            "Submit": "Save changes",
+            "Cancel": "Cancel",
+            "Toast": {
+                "Loading": "Updating habit...",
+                "Success": "Habit has been updated.",
+                "Error": "Something went wrong while updating the habit. Please try again."
+            }
+        },
+
         "Details": {
             "NoDescription": "No description",
             "Close": "Close",

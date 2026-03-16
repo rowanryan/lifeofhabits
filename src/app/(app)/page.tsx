@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { Habits } from "@/features/habits";
+import { CreateHabit } from "@/features/habits/components/CreateHabit";
 import { useRelativeDate } from "@/hooks/use-relative-date";
 import { useLogStore } from "@/stores/useLogStore";
 import { getHabits } from "./actions";
@@ -62,9 +63,11 @@ export default function Page() {
         >
             <ButtonGroup className="flex mb-4 flex-wrap items-center">
                 <ButtonGroup>
-                    <Button size="sm">
-                        <PlusIcon /> {t("Habits.Actions.Add")}
-                    </Button>
+                    <CreateHabit>
+                        <Button size="sm">
+                            <PlusIcon /> {t("Habits.Actions.Add")}
+                        </Button>
+                    </CreateHabit>
                 </ButtonGroup>
 
                 <ButtonGroup>

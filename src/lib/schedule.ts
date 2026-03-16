@@ -1,7 +1,7 @@
 import { Frequency, RRule, type Weekday } from "rrule";
 import z from "zod";
 
-const days = z.enum([
+export const days = [
     "monday",
     "tuesday",
     "wednesday",
@@ -9,9 +9,9 @@ const days = z.enum([
     "friday",
     "saturday",
     "sunday",
-]);
+] as const;
 
-const months = z.enum([
+export const months = [
     "january",
     "february",
     "march",
@@ -24,12 +24,16 @@ const months = z.enum([
     "october",
     "november",
     "december",
-]);
+] as const;
 
-const timeRegex = /^\d{2}:\d{2}$/;
+export const DaysSchema = z.enum(days);
 
-export type Month = z.infer<typeof months>;
-export type Day = z.infer<typeof days>;
+export const MonthsSchema = z.enum(months);
+
+export const timeRegex = /^\d{2}:\d{2}$/;
+
+export type Month = z.infer<typeof MonthsSchema>;
+export type Day = z.infer<typeof DaysSchema>;
 
 export const ScheduleSchema = z.discriminatedUnion("interval", [
     z.object({
@@ -44,20 +48,20 @@ export const ScheduleSchema = z.discriminatedUnion("interval", [
     z.object({
         interval: z.literal("day"),
         count: z.number().int().positive(),
-        startDay: days,
+        startDay: DaysSchema,
     }),
     z.object({
         interval: z.literal("month"),
         count: z.number().int().positive(),
-        startMonth: months,
+        startMonth: MonthsSchema,
     }),
     z.object({
         interval: z.literal("weekday"),
-        day: days,
+        day: DaysSchema,
     }),
     z.object({
         interval: z.literal("year"),
-        month: months,
+        month: MonthsSchema,
     }),
 ]);
 
@@ -149,7 +153,7 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     }
 
     if (schedule.interval === "day") {
-        const dayIndex = days.options.indexOf(schedule.startDay);
+        const dayIndex = DaysSchema.options.indexOf(schedule.startDay);
         const ruleStart = new Date(start);
         const currentDay = ruleStart.getDay();
         const targetDay = (dayIndex + 1) % 7;

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { match } from "ts-pattern";
@@ -33,16 +33,22 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { days, months, type Schedule, ScheduleSchema } from "@/lib/schedule";
+import {
+    days,
+    months,
+    rRuleToSchedule,
+    type Schedule,
+    ScheduleSchema,
+} from "@/lib/schedule";
 import { cn } from "@/lib/utils";
-import { createHabit } from "../actions";
+import { updateHabit } from "../actions";
 
 const formSchema = z.object({
     name: z.string().min(1),
     description: z
         .string()
-        .optional()
-        .transform((val) => (val === "" ? undefined : val)),
+        .nullable()
+        .transform((val) => (val === "" ? null : val)),
     schedule: ScheduleSchema,
 });
 
@@ -66,59 +72,78 @@ const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
     year: { interval: "year", month: "january" },
 };
 
-export type CreateHabitProps = React.PropsWithChildren &
+export type UpdateHabitProps = React.PropsWithChildren<{
+    id: string;
+    name: string;
+    description: string | null;
+    rrule: string;
+}> &
     React.ComponentProps<typeof Drawer>;
 
-export function CreateHabit({ children, ...props }: CreateHabitProps) {
+export function UpdateHabit({
+    id,
+    name,
+    description,
+    rrule,
+    children,
+    ...props
+}: UpdateHabitProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const t = useTranslations("Habits.Create");
+    const t = useTranslations("Habits.Edit");
+    const tForm = useTranslations("Habits.Create.Form");
     const isMobile = useIsMobile();
     const queryClient = useQueryClient();
+
+    const initialSchedule = useMemo(
+        () => rRuleToSchedule(rrule) ?? defaultScheduleValues.weekday,
+        [rrule],
+    );
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            description: "",
-            schedule: defaultScheduleValues.weekday,
+            name,
+            description,
+            schedule: initialSchedule,
         },
     });
 
     const interval = form.watch("schedule.interval");
 
     useEffect(() => {
-        form.setValue("schedule", defaultScheduleValues[interval]);
-    }, [interval, form]);
+        if (interval !== initialSchedule.interval) {
+            form.setValue("schedule", defaultScheduleValues[interval]);
+        }
+    }, [interval, initialSchedule.interval, form]);
 
-    const createAction = useAction(createHabit, {
+    const updateAction = useAction(updateHabit, {
         onExecute() {
             toast.loading(t("Toast.Loading"), {
-                id: "create-habit-toast",
+                id: "update-habit-toast",
             });
         },
         async onSuccess() {
             await queryClient.invalidateQueries({ queryKey: ["habits"] });
 
             toast.success(t("Toast.Success"), {
-                id: "create-habit-toast",
+                id: "update-habit-toast",
             });
 
             setIsOpen(false);
-            form.reset();
-            createAction.reset();
+            updateAction.reset();
         },
         onError() {
             toast.error(t("Toast.Error"), {
-                id: "create-habit-toast",
+                id: "update-habit-toast",
             });
         },
     });
 
     const onSubmit = useCallback(
         (data: FormValues) => {
-            createAction.execute(data);
+            updateAction.execute({ id, ...data });
         },
-        [createAction],
+        [updateAction, id],
     );
 
     return (
@@ -138,7 +163,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
 
                 <div className={cn("px-4", isMobile && "px-6")}>
                     <form
-                        id="create-habit-form"
+                        id="update-habit-form"
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
                         <FieldSet>
@@ -148,7 +173,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                     name="name"
                                     render={({ field, fieldState }) => (
                                         <FormField
-                                            label={t("Form.Name")}
+                                            label={tForm("Name")}
                                             isInvalid={fieldState.invalid}
                                             error={fieldState.error}
                                         >
@@ -156,8 +181,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                 aria-invalid={
                                                     fieldState.invalid
                                                 }
-                                                placeholder={t(
-                                                    "Form.NamePlaceholder",
+                                                placeholder={tForm(
+                                                    "NamePlaceholder",
                                                 )}
                                                 {...field}
                                             />
@@ -172,7 +197,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                     name="description"
                                     render={({ field, fieldState }) => (
                                         <FormField
-                                            label={t("Form.Description")}
+                                            label={tForm("Description")}
                                             isInvalid={fieldState.invalid}
                                             error={fieldState.error}
                                         >
@@ -180,11 +205,12 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                 aria-invalid={
                                                     fieldState.invalid
                                                 }
-                                                placeholder={t(
-                                                    "Form.DescriptionPlaceholder",
+                                                placeholder={tForm(
+                                                    "DescriptionPlaceholder",
                                                 )}
                                                 className="min-h-32"
                                                 {...field}
+                                                value={field.value ?? ""}
                                             />
                                         </FormField>
                                     )}
@@ -197,7 +223,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                     name="schedule.interval"
                                     render={({ field, fieldState }) => (
                                         <FormField
-                                            label={t("Form.Interval")}
+                                            label={tForm("Interval")}
                                             isInvalid={fieldState.invalid}
                                             error={fieldState.error}
                                         >
@@ -224,8 +250,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                                     intervalOption
                                                                 }
                                                             >
-                                                                {t(
-                                                                    `Form.IntervalOptions.${intervalOption}`,
+                                                                {tForm(
+                                                                    `IntervalOptions.${intervalOption}`,
                                                                 )}
                                                             </SelectItem>
                                                         ),
@@ -245,7 +271,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                             name="schedule.count"
                                             render={({ field, fieldState }) => (
                                                 <FormField
-                                                    label={t("Form.Count")}
+                                                    label={tForm("Count")}
                                                     isInvalid={
                                                         fieldState.invalid
                                                     }
@@ -287,7 +313,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     fieldState,
                                                 }) => (
                                                     <FormField
-                                                        label={t("Form.Count")}
+                                                        label={tForm("Count")}
                                                         isInvalid={
                                                             fieldState.invalid
                                                         }
@@ -329,8 +355,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     fieldState,
                                                 }) => (
                                                     <FormField
-                                                        label={t(
-                                                            "Form.StartTime",
+                                                        label={tForm(
+                                                            "StartTime",
                                                         )}
                                                         isInvalid={
                                                             fieldState.invalid
@@ -365,7 +391,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     fieldState,
                                                 }) => (
                                                     <FormField
-                                                        label={t("Form.Count")}
+                                                        label={tForm("Count")}
                                                         isInvalid={
                                                             fieldState.invalid
                                                         }
@@ -407,8 +433,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     fieldState,
                                                 }) => (
                                                     <FormField
-                                                        label={t(
-                                                            "Form.StartDay",
+                                                        label={tForm(
+                                                            "StartDay",
                                                         )}
                                                         isInvalid={
                                                             fieldState.invalid
@@ -443,8 +469,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                                                 day
                                                                             }
                                                                         >
-                                                                            {t(
-                                                                                `Form.Days.${day}`,
+                                                                            {tForm(
+                                                                                `Days.${day}`,
                                                                             )}
                                                                         </SelectItem>
                                                                     ),
@@ -468,7 +494,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     fieldState,
                                                 }) => (
                                                     <FormField
-                                                        label={t("Form.Count")}
+                                                        label={tForm("Count")}
                                                         isInvalid={
                                                             fieldState.invalid
                                                         }
@@ -510,8 +536,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     fieldState,
                                                 }) => (
                                                     <FormField
-                                                        label={t(
-                                                            "Form.StartMonth",
+                                                        label={tForm(
+                                                            "StartMonth",
                                                         )}
                                                         isInvalid={
                                                             fieldState.invalid
@@ -546,8 +572,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                                                 month
                                                                             }
                                                                         >
-                                                                            {t(
-                                                                                `Form.Months.${month}`,
+                                                                            {tForm(
+                                                                                `Months.${month}`,
                                                                             )}
                                                                         </SelectItem>
                                                                     ),
@@ -567,7 +593,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                             name="schedule.day"
                                             render={({ field, fieldState }) => (
                                                 <FormField
-                                                    label={t("Form.Day")}
+                                                    label={tForm("Day")}
                                                     isInvalid={
                                                         fieldState.invalid
                                                     }
@@ -596,8 +622,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                                     key={day}
                                                                     value={day}
                                                                 >
-                                                                    {t(
-                                                                        `Form.Days.${day}`,
+                                                                    {tForm(
+                                                                        `Days.${day}`,
                                                                     )}
                                                                 </SelectItem>
                                                             ))}
@@ -615,7 +641,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                             name="schedule.month"
                                             render={({ field, fieldState }) => (
                                                 <FormField
-                                                    label={t("Form.Month")}
+                                                    label={tForm("Month")}
                                                     isInvalid={
                                                         fieldState.invalid
                                                     }
@@ -649,8 +675,8 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                                             month
                                                                         }
                                                                     >
-                                                                        {t(
-                                                                            `Form.Months.${month}`,
+                                                                        {tForm(
+                                                                            `Months.${month}`,
                                                                         )}
                                                                     </SelectItem>
                                                                 ),
@@ -670,18 +696,18 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                 <DrawerFooter>
                     <Button
                         type="submit"
-                        form="create-habit-form"
-                        disabled={createAction.isExecuting}
+                        form="update-habit-form"
+                        disabled={updateAction.isExecuting}
                     >
-                        {createAction.isExecuting && <Spinner />}
-                        {t("Form.Submit")}
+                        {updateAction.isExecuting && <Spinner />}
+                        {t("Submit")}
                     </Button>
                     <DrawerClose asChild>
                         <Button
                             variant="secondary"
-                            disabled={createAction.isExecuting}
+                            disabled={updateAction.isExecuting}
                         >
-                            {t("Form.Cancel")}
+                            {t("Cancel")}
                         </Button>
                     </DrawerClose>
                 </DrawerFooter>

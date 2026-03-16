@@ -24,6 +24,7 @@ import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
 import { deleteHabit } from "../actions";
 import { DeleteHabit } from "./DeleteHabit";
+import { UpdateHabit } from "./UpdateHabit";
 
 export type HabitDetailsProps = React.PropsWithChildren<{
     id: string;
@@ -114,9 +115,16 @@ export function HabitDetails({
                         {t("Details.MarkAsDone.ButtonLabel")}
                     </Button>
 
-                    <Button variant="secondary">
-                        <PencilIcon /> {t("Details.Edit.ButtonLabel")}
-                    </Button>
+                    <UpdateHabit
+                        id={id}
+                        name={name}
+                        description={description}
+                        rrule={rrule}
+                    >
+                        <Button variant="secondary">
+                            <PencilIcon /> {t("Details.Edit.ButtonLabel")}
+                        </Button>
+                    </UpdateHabit>
 
                     <DeleteHabit
                         id={id}
