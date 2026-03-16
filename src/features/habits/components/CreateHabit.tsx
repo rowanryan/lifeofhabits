@@ -39,11 +39,14 @@ import { createHabit } from "../actions";
 
 const formSchema = z.object({
     name: z.string().min(1),
-    description: z.string().optional(),
+    description: z
+        .string()
+        .optional()
+        .transform((val) => (val === "" ? undefined : val)),
     schedule: ScheduleSchema,
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.input<typeof formSchema>;
 
 const intervals = [
     "minute",
