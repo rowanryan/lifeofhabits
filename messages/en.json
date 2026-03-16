@@ -338,7 +338,12 @@
                 "Title": "Delete habit",
                 "Description": "Are you sure you want to delete this habit? This action cannot be undone.",
                 "Cancel": "Cancel",
-                "Delete": "Delete"
+                "Delete": "Delete",
+                "Toast": {
+                    "Loading": "Deleting habit...",
+                    "Success": "Habit has been deleted.",
+                    "Error": "Something went wrong while deleting the habit. Please try again."
+                }
             }
         }
     }

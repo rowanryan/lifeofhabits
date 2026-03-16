@@ -1,6 +1,11 @@
+"use client";
+
+import { useQueryClient } from "@tanstack/react-query";
 import { CheckCircleIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useAction } from "next-safe-action/hooks";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
     Drawer,
@@ -12,10 +17,12 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Spinner } from "@/components/ui/spinner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
 import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import { deleteHabit } from "../actions";
 import { DeleteHabit } from "./DeleteHabit";
 
 export type HabitDetailsProps = React.PropsWithChildren<{
@@ -38,12 +45,37 @@ export function HabitDetails({
     const t = useTranslations("Habits");
     const getKey = useScheduleTranslation();
     const isMobile = useIsMobile();
+    const queryClient = useQueryClient();
 
     const schedule = useMemo(() => rRuleToSchedule(rrule), [rrule]);
     const key = useMemo(
         () => (schedule ? getKey(schedule) : null),
         [getKey, schedule],
     );
+
+    const deleteAction = useAction(deleteHabit, {
+        onExecute() {
+            setIsOpen(false);
+
+            toast.loading(t("Details.Delete.Toast.Loading"), {
+                id: "delete-habit-toast",
+            });
+        },
+        async onSuccess() {
+            await queryClient.invalidateQueries({ queryKey: ["habits"] });
+
+            toast.success(t("Details.Delete.Toast.Success"), {
+                id: "delete-habit-toast",
+            });
+
+            deleteAction.reset();
+        },
+        onError() {
+            toast.error(t("Details.Delete.Toast.Error"), {
+                id: "delete-habit-toast",
+            });
+        },
+    });
 
     return (
         <Drawer
@@ -86,9 +118,20 @@ export function HabitDetails({
                         <PencilIcon /> {t("Details.Edit.ButtonLabel")}
                     </Button>
 
-                    <DeleteHabit id={id} onDelete={() => {}}>
-                        <Button variant="destructive">
-                            <TrashIcon /> {t("Details.Delete.ButtonLabel")}
+                    <DeleteHabit
+                        id={id}
+                        onDelete={() => deleteAction.execute({ id })}
+                    >
+                        <Button
+                            disabled={deleteAction.isExecuting}
+                            variant="destructive"
+                        >
+                            {deleteAction.isExecuting ? (
+                                <Spinner />
+                            ) : (
+                                <TrashIcon />
+                            )}{" "}
+                            {t("Details.Delete.ButtonLabel")}
                         </Button>
                     </DeleteHabit>
 
