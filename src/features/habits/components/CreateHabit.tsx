@@ -280,15 +280,18 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             fieldState.invalid
                                                         }
                                                         {...field}
-                                                        value={field.value ?? 1}
-                                                        onChange={(e) =>
+                                                        value={field.value ?? ""}
+                                                        onChange={(e) => {
+                                                            const val =
+                                                                e.target.value;
                                                             field.onChange(
-                                                                Number(
-                                                                    e.target
-                                                                        .value,
-                                                                ),
-                                                            )
-                                                        }
+                                                                val === ""
+                                                                    ? undefined
+                                                                    : Number(
+                                                                          val,
+                                                                      ),
+                                                            );
+                                                        }}
                                                     />
                                                 </FormField>
                                             )}
@@ -320,16 +323,20 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? 1
+                                                                field.value ?? ""
                                                             }
-                                                            onChange={(e) =>
+                                                            onChange={(e) => {
+                                                                const val =
+                                                                    e.target
+                                                                        .value;
                                                                 field.onChange(
-                                                                    Number(
-                                                                        e.target
-                                                                            .value,
-                                                                    ),
-                                                                )
-                                                            }
+                                                                    val === ""
+                                                                        ? undefined
+                                                                        : Number(
+                                                                              val,
+                                                                          ),
+                                                                );
+                                                            }}
                                                         />
                                                     </FormField>
                                                 )}
@@ -394,16 +401,20 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? 1
+                                                                field.value ?? ""
                                                             }
-                                                            onChange={(e) =>
+                                                            onChange={(e) => {
+                                                                const val =
+                                                                    e.target
+                                                                        .value;
                                                                 field.onChange(
-                                                                    Number(
-                                                                        e.target
-                                                                            .value,
-                                                                    ),
-                                                                )
-                                                            }
+                                                                    val === ""
+                                                                        ? undefined
+                                                                        : Number(
+                                                                              val,
+                                                                          ),
+                                                                );
+                                                            }}
                                                         />
                                                     </FormField>
                                                 )}
@@ -493,16 +504,20 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             }
                                                             {...field}
                                                             value={
-                                                                field.value ?? 1
+                                                                field.value ?? ""
                                                             }
-                                                            onChange={(e) =>
+                                                            onChange={(e) => {
+                                                                const val =
+                                                                    e.target
+                                                                        .value;
                                                                 field.onChange(
-                                                                    Number(
-                                                                        e.target
-                                                                            .value,
-                                                                    ),
-                                                                )
-                                                            }
+                                                                    val === ""
+                                                                        ? undefined
+                                                                        : Number(
+                                                                              val,
+                                                                          ),
+                                                                );
+                                                            }}
                                                         />
                                                     </FormField>
                                                 )}
