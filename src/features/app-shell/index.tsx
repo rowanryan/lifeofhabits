@@ -23,7 +23,7 @@ function AppShell({
         <AppShellProvider navigationLinks={navigation}>
             <div
                 className={cn(
-                    "flex flex-col min-h-screen bg-appshell @container/shell",
+                    "flex flex-col min-h-svh bg-appshell @container/shell",
                     className,
                 )}
                 {...props}
@@ -49,7 +49,7 @@ function AppShellContent({
             )}
             {...props}
         >
-            <div className="bg-background flex-1 rounded-t-xl @xl/shell:rounded-xl border @xl/shell:shadow-sm">
+            <div className="bg-background flex-1 rounded-t-xl @xl/shell:rounded-xl border-t border-x @xl/shell:shadow-sm">
                 {children}
             </div>
         </main>
