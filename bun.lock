@@ -13,7 +13,6 @@
         "@hookform/resolvers": "^5.2.2",
         "@icons-pack/react-simple-icons": "^13.11.2",
         "@neondatabase/serverless": "^1.0.2",
-        "@polar-sh/nextjs": "^0.9.4",
         "@sentry/nextjs": "10",
         "@t3-oss/env-nextjs": "^0.13.8",
         "@tanstack/react-query": "^5.90.21",
@@ -551,12 +550,6 @@
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.5.6", "", { "os": "win32", "cpu": "x64" }, "sha512-hbQlYcCq5dlAX9Qx+kFb0FHue6vbjlf0FrNzSKdYK2APUf7tGfGxQCk2ihEREmbR6ZMc0MVAD5RIX/41gpUzTw=="],
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
-
-    "@polar-sh/adapter-utils": ["@polar-sh/adapter-utils@0.4.4", "", { "dependencies": { "@polar-sh/sdk": "^0.46.0" } }, "sha512-0fvscT82EMoo+otgnw7YsbzxmatxTpc457DytZY9Lr+6B9XNBI/wP7THK0nV3Qdaipd66Pp9hyZI9Dzusj1KzQ=="],
-
-    "@polar-sh/nextjs": ["@polar-sh/nextjs@0.9.4", "", { "dependencies": { "@polar-sh/adapter-utils": "0.4.4", "@polar-sh/sdk": "^0.46.0" }, "peerDependencies": { "next": "^15.0.0 || ^16.0.0" } }, "sha512-CN6qjaVXVR5OojcpjtlXF7FcVnCEXAKB4vyOECP3n3YjD7DdJ4/PPtKvc2/TVXC9bM8m6pcUOI7Y9f7K5T0jNA=="],
-
-    "@polar-sh/sdk": ["@polar-sh/sdk@0.46.2", "", { "dependencies": { "standardwebhooks": "^1.0.0", "zod": "^3.25.65 || ^4.0.0" } }, "sha512-xHRnSeyXdBCD4kN41u7/Pb71vRTFwxm+QNZtWT4SUN2p2hf/6/IY+k8T8jTgCfDoSjEBoAGTl2SUQ6Mq2wAtWA=="],
 
     "@prisma/instrumentation": ["@prisma/instrumentation@7.2.0", "", { "dependencies": { "@opentelemetry/instrumentation": "^0.207.0" }, "peerDependencies": { "@opentelemetry/api": "^1.8" } }, "sha512-Rh9Z4x5kEj1OdARd7U18AtVrnL6rmLSI0qYShaB4W7Wx5BKbgzndWF+QnuzMb7GLfVdlT5aYCXoPQVYuYtVu0g=="],
 
