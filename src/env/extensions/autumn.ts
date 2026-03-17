@@ -3,7 +3,6 @@ import z from "zod";
 
 export const env = createEnv({
     server: {
-        AUTUMN_PROD_SECRET_KEY: z.string(),
         AUTUMN_SECRET_KEY: z.string(),
     },
 

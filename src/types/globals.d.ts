@@ -8,16 +8,11 @@ declare module "next-intl" {
     }
 }
 
-interface PrivateMetadata {
-    internalCustomerId?: string;
-    polarCustomerId?: string;
-    subscriptionId?: string;
-}
-
 declare global {
     interface CustomJwtSessionClaims {
         role?: "admin" | "user";
+        firstName?: string;
+        lastName?: string;
+        priamryEmailAddress?: string;
     }
-
-    interface UserPrivateMetadata extends PrivateMetadata {}
 }

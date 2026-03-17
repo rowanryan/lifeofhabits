@@ -1,11 +1,4 @@
 import { generateText, streamText } from "ai";
-import { env } from "@/env";
-import { api } from "./polar";
-
-export type AIParams = {
-    polarCustomerId: string;
-    spendLimit: number | null;
-};
 
 export class AIError extends Error {
     constructor(
@@ -20,47 +13,16 @@ export class AIError extends Error {
     }
 }
 
+// TODO: Implement the AI class with Autumn
 export class AI {
-    constructor(private readonly params: AIParams) {}
-
     // Helpers
     private async _canConsume() {
-        const customerState = await api.customers.getState({
-            id: this.params.polarCustomerId,
-        });
-
-        const subscription = customerState.activeSubscriptions.at(0);
-
-        if (!subscription) {
-            throw new AIError("Subscription not found");
-        }
-
-        const meter = subscription.meters.find(
-            meter => meter.id === env.POLAR_CREDITS_METER_ID
-        );
-        if (!meter) {
-            throw new AIError("Credits meter not found");
-        }
-
-        if (!this.params.spendLimit) {
-            return true;
-        }
-
-        return meter.consumedUnits < this.params.spendLimit;
+        return true;
     }
 
+    // biome-ignore lint/correctness/noUnusedFunctionParameters: We need this for the private methods
     private async _consumeCredits({ amount }: { amount: number }) {
-        await api.events.ingest({
-            events: [
-                {
-                    name: "credit_usage",
-                    customerId: this.params.polarCustomerId,
-                    metadata: {
-                        credits: amount,
-                    },
-                },
-            ],
-        });
+        return;
     }
 
     // Methods
