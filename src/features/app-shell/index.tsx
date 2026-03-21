@@ -78,7 +78,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
                         className={cn(
                             "flex flex-col items-center rounded-4xl py-2 px-6 gap-1",
                             link.isActive &&
-                                "bg-foreground/10 border border-border/50",
+                                "bg-foreground/5 border-2 border-border/50",
                         )}
                     >
                         {link.icon && <link.icon className="size-5" />}

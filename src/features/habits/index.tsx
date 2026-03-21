@@ -40,7 +40,10 @@ export function Habits({
                 const schedule = rRuleToSchedule(habit.rrule);
 
                 return (
-                    <Item key={habit.id} className="bg-muted/70">
+                    <Item
+                        key={habit.id}
+                        className="bg-muted/50 border border-border/50 shadow-xs"
+                    >
                         <ItemContent>
                             <ItemTitle>{habit.name}</ItemTitle>
                             {schedule && (
