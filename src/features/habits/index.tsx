@@ -1,10 +1,7 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { CheckCircleIcon, EyeIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
     Item,
@@ -14,22 +11,17 @@ import {
     ItemGroup,
     ItemTitle,
 } from "@/components/ui/item";
+import type { Habit } from "@/db/schema";
 import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
 import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
-import { deleteHabit } from "./actions";
 import { DeleteHabit } from "./components/DeleteHabit";
 import { HabitDetails } from "./components/HabitDetails";
 
 export type HabitsProps = {
     showMarkAsDone?: boolean;
     showDelete?: boolean;
-    habits: Array<{
-        id: string;
-        name: string;
-        description: string | null;
-        rrule: string;
-    }>;
+    habits: Array<Habit>;
 } & React.ComponentProps<typeof ItemGroup>;
 
 export function Habits({
@@ -41,29 +33,6 @@ export function Habits({
 }: HabitsProps) {
     const t = useTranslations("Habits");
     const getKey = useScheduleTranslation();
-    const queryClient = useQueryClient();
-
-    const deleteAction = useAction(deleteHabit, {
-        onExecute() {
-            toast.loading(t("Details.Delete.Toast.Loading"), {
-                id: "delete-habit-toast",
-            });
-        },
-        async onSuccess() {
-            await queryClient.invalidateQueries({ queryKey: ["habits"] });
-
-            toast.success(t("Details.Delete.Toast.Success"), {
-                id: "delete-habit-toast",
-            });
-
-            deleteAction.reset();
-        },
-        onError() {
-            toast.error(t("Details.Delete.Toast.Error"), {
-                id: "delete-habit-toast",
-            });
-        },
-    });
 
     return (
         <ItemGroup className={cn("gap-2 rounded-2xl", className)} {...props}>
@@ -113,12 +82,7 @@ export function Habits({
                             </HabitDetails>
 
                             {showDelete && (
-                                <DeleteHabit
-                                    id={habit.id}
-                                    onDelete={() =>
-                                        deleteAction.execute({ id: habit.id })
-                                    }
-                                >
+                                <DeleteHabit id={habit.id}>
                                     <Button size="xs" variant="destructive">
                                         <TrashIcon /> Delete
                                     </Button>

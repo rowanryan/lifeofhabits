@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { db } from "@/db";
+import { Habits } from "@/features/habits";
 import { CreateHabit } from "@/features/habits/components/CreateHabit";
 
 export default function Page() {
@@ -58,7 +59,7 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <p>Habits</p>
+                            <Habits showDelete habits={data} />
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">

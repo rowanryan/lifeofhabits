@@ -1,12 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { id } from "@instantdb/react";
 import { useTranslations } from "next-intl";
-import { useAction } from "next-safe-action/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { match } from "ts-pattern";
 import z from "zod";
 import { FormField } from "@/components/FormField";
@@ -30,12 +28,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { db } from "@/db";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { days, months, type Schedule, ScheduleSchema } from "@/lib/schedule";
+import {
+    days,
+    months,
+    type Schedule,
+    ScheduleSchema,
+    scheduleToRRule,
+} from "@/lib/schedule";
 import { cn } from "@/lib/utils";
-import { createHabit } from "../actions";
 
 const formSchema = z.object({
     name: z.string().min(1),
@@ -73,7 +76,6 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
     const [isOpen, setIsOpen] = useState(false);
     const t = useTranslations("Habits.Create");
     const isMobile = useIsMobile();
-    const queryClient = useQueryClient();
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -90,35 +92,27 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
         form.setValue("schedule", defaultScheduleValues[interval]);
     }, [interval, form]);
 
-    const createAction = useAction(createHabit, {
-        onExecute() {
-            toast.loading(t("Toast.Loading"), {
-                id: "create-habit-toast",
-            });
-        },
-        async onSuccess() {
-            await queryClient.invalidateQueries({ queryKey: ["habits"] });
-
-            toast.success(t("Toast.Success"), {
-                id: "create-habit-toast",
-            });
-
-            setIsOpen(false);
-            form.reset();
-            createAction.reset();
-        },
-        onError() {
-            toast.error(t("Toast.Error"), {
-                id: "create-habit-toast",
-            });
-        },
-    });
-
     const onSubmit = useCallback(
         (data: FormValues) => {
-            createAction.execute(data);
+            const habit = db.tx.habits[id()];
+
+            if (habit) {
+                const rrule = scheduleToRRule(data.schedule);
+
+                db.transact(
+                    habit.create({
+                        rrule,
+                        userId: "123",
+                        name: data.name,
+                        description: data.description,
+                    }),
+                );
+
+                setIsOpen(false);
+                form.reset();
+            }
         },
-        [createAction],
+        [form.reset],
     );
 
     return (
@@ -673,21 +667,11 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                 </div>
 
                 <DrawerFooter>
-                    <Button
-                        type="submit"
-                        form="create-habit-form"
-                        disabled={createAction.isExecuting}
-                    >
-                        {createAction.isExecuting && <Spinner />}
+                    <Button type="submit" form="create-habit-form">
                         {t("Form.Submit")}
                     </Button>
                     <DrawerClose asChild>
-                        <Button
-                            variant="secondary"
-                            disabled={createAction.isExecuting}
-                        >
-                            {t("Form.Cancel")}
-                        </Button>
+                        <Button variant="secondary">{t("Form.Cancel")}</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>

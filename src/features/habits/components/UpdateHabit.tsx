@@ -1,12 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useAction } from "next-safe-action/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { match } from "ts-pattern";
 import z from "zod";
 import { FormField } from "@/components/FormField";
@@ -30,8 +27,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { db } from "@/db";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
     days,
@@ -39,9 +36,9 @@ import {
     rRuleToSchedule,
     type Schedule,
     ScheduleSchema,
+    scheduleToRRule,
 } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
-import { updateHabit } from "../actions";
 
 const formSchema = z.object({
     name: z.string().min(1),
@@ -75,7 +72,7 @@ const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
 export type UpdateHabitProps = React.PropsWithChildren<{
     id: string;
     name: string;
-    description: string | null;
+    description: string | undefined;
     rrule: string;
 }> &
     React.ComponentProps<typeof Drawer>;
@@ -92,7 +89,6 @@ export function UpdateHabit({
     const t = useTranslations("Habits.Edit");
     const tForm = useTranslations("Habits.Create.Form");
     const isMobile = useIsMobile();
-    const queryClient = useQueryClient();
 
     const initialSchedule = useMemo(
         () => rRuleToSchedule(rrule) ?? defaultScheduleValues.weekday,
@@ -116,34 +112,25 @@ export function UpdateHabit({
         }
     }, [interval, initialSchedule.interval, form]);
 
-    const updateAction = useAction(updateHabit, {
-        onExecute() {
-            toast.loading(t("Toast.Loading"), {
-                id: "update-habit-toast",
-            });
-        },
-        async onSuccess() {
-            await queryClient.invalidateQueries({ queryKey: ["habits"] });
-
-            toast.success(t("Toast.Success"), {
-                id: "update-habit-toast",
-            });
-
-            setIsOpen(false);
-            updateAction.reset();
-        },
-        onError() {
-            toast.error(t("Toast.Error"), {
-                id: "update-habit-toast",
-            });
-        },
-    });
-
     const onSubmit = useCallback(
         (data: FormValues) => {
-            updateAction.execute({ id, ...data });
+            const habit = db.tx.habits[id];
+
+            if (habit) {
+                const rrule = scheduleToRRule(data.schedule);
+
+                db.transact(
+                    habit.update({
+                        rrule,
+                        name: data.name,
+                        description: data.description,
+                    }),
+                );
+
+                setIsOpen(false);
+            }
         },
-        [updateAction, id],
+        [id],
     );
 
     return (
@@ -699,21 +686,11 @@ export function UpdateHabit({
                 </div>
 
                 <DrawerFooter>
-                    <Button
-                        type="submit"
-                        form="update-habit-form"
-                        disabled={updateAction.isExecuting}
-                    >
-                        {updateAction.isExecuting && <Spinner />}
+                    <Button type="submit" form="update-habit-form">
                         {t("Submit")}
                     </Button>
                     <DrawerClose asChild>
-                        <Button
-                            variant="secondary"
-                            disabled={updateAction.isExecuting}
-                        >
-                            {t("Cancel")}
-                        </Button>
+                        <Button variant="secondary">{t("Cancel")}</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>

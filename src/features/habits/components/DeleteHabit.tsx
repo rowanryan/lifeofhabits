@@ -1,4 +1,7 @@
+"use client";
+
 import { useTranslations } from "next-intl";
+import { useCallback } from "react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -11,20 +14,23 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { db } from "@/db";
 
 export type DeleteHabitProps = {
     id: string;
-    onDelete: () => void;
     children: React.ReactNode;
 } & React.ComponentProps<typeof AlertDialog>;
 
-export function DeleteHabit({
-    id,
-    children,
-    onDelete,
-    ...props
-}: DeleteHabitProps) {
+export function DeleteHabit({ id, children, ...props }: DeleteHabitProps) {
     const t = useTranslations("Habits.Details.Delete");
+
+    const onDelete = useCallback(() => {
+        const habit = db.tx.habits[id];
+
+        if (habit) {
+            db.transact(habit.delete());
+        }
+    }, [id]);
 
     return (
         <AlertDialog {...props}>
