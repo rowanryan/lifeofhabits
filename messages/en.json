@@ -1,4 +1,35 @@
 {
+    "Validation": {
+        "required": "This field is required",
+        "stringEmpty": "Cannot be empty",
+        "stringMin": "Must be at least {min} characters",
+        "stringMax": "Must be at most {max} characters",
+        "invalidType": "Invalid input",
+        "invalidEmail": "Invalid email address",
+        "invalidUrl": "Invalid URL",
+        "invalidUuid": "Invalid UUID",
+        "invalidCuid": "Invalid CUID",
+        "invalidFormat": "Invalid format",
+        "invalidString": "Invalid string",
+        "invalidEnumValue": "Invalid option selected",
+        "invalidLiteral": "Invalid value",
+        "invalidUnion": "Invalid input",
+        "invalidUnionDiscriminator": "Invalid discriminator value",
+        "invalidDate": "Invalid date",
+        "invalidIntersection": "Invalid intersection",
+        "invalidKey": "Invalid key",
+        "invalidElement": "Invalid element",
+        "numberMin": "Must be at least {min}",
+        "numberMax": "Must be at most {max}",
+        "arrayMin": "Must have at least {min} items",
+        "arrayMax": "Must have at most {max} items",
+        "setMin": "Must have at least {min} items",
+        "setMax": "Must have at most {max} items",
+        "notMultipleOf": "Must be a multiple of {multipleOf}",
+        "notFinite": "Must be a finite number",
+        "unrecognizedKeys": "Unrecognized keys: {keys}"
+    },
+
     "Common": {
         "Errors": {
             "ServerAction": {

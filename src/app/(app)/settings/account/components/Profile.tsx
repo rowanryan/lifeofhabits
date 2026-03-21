@@ -1,7 +1,6 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
@@ -24,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
+import { useZodResolver } from "@/hooks/use-zod-error-map";
 import { getFullName, getInitials } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -35,9 +35,10 @@ export function Profile() {
     const { user } = useUser();
     const t = useTranslations("Settings.Account.Profile");
     const [isLoading, setIsLoading] = useState(false);
+    const resolver = useZodResolver<z.infer<typeof formSchema>>(formSchema);
 
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+        resolver,
         defaultValues: {
             firstName: "",
             lastName: "",

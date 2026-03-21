@@ -5,7 +5,6 @@ import type {
     EmailAddressResource,
     SessionVerificationLevel,
 } from "@clerk/types";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useZodResolver } from "@/hooks/use-zod-error-map";
 import { VerifyEmailDialog } from "./VerifyEmailDialog";
 
 type AddEmailAddressProps = React.PropsWithChildren;
@@ -53,9 +53,10 @@ export function AddEmailAddress({ children }: AddEmailAddressProps) {
     const t = useTranslations(
         "Settings.Account.EmailAddresses.CreateEmailAddress",
     );
+    const resolver = useZodResolver<z.infer<typeof formSchema>>(formSchema);
 
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+        resolver,
         defaultValues: {
             emailAddress: "",
         },

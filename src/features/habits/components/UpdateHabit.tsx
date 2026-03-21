@@ -1,6 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -37,7 +36,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/db";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { DayNumberPicker } from "./DayNumberPicker";
+import { useZodResolver } from "@/hooks/use-zod-error-map";
 import {
     days,
     intervals,
@@ -47,9 +46,10 @@ import {
     scheduleToRRule,
 } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import { DayNumberPicker } from "./DayNumberPicker";
 
 const formSchema = z.object({
-    name: z.string().min(1, { error: "Cannot be empty" }),
+    name: z.string().min(1),
     description: z
         .string()
         .nullable()
@@ -85,6 +85,7 @@ export function UpdateHabit({
     const t = useTranslations("Habits.Edit");
     const tForm = useTranslations("Habits.Create.Form");
     const isMobile = useIsMobile();
+    const resolver = useZodResolver<FormValues>(formSchema);
 
     const initialSchedule = useMemo(
         () => rRuleToSchedule(rrule) ?? defaultScheduleValues.weekday,
@@ -92,7 +93,7 @@ export function UpdateHabit({
     );
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
+        resolver,
         defaultValues: {
             name,
             description,
@@ -252,10 +253,7 @@ export function UpdateHabit({
                                         <Controller
                                             control={form.control}
                                             name="schedule.time"
-                                            render={({
-                                                field,
-                                                fieldState,
-                                            }) => (
+                                            render={({ field, fieldState }) => (
                                                 <FormField
                                                     label={tForm("Time")}
                                                     isInvalid={
@@ -270,7 +268,10 @@ export function UpdateHabit({
                                                                 fieldState.invalid
                                                             }
                                                             {...field}
-                                                            value={field.value ?? ""}
+                                                            value={
+                                                                field.value ??
+                                                                ""
+                                                            }
                                                         />
                                                         {field.value && (
                                                             <InputGroupAddon align="inline-end">
@@ -297,10 +298,7 @@ export function UpdateHabit({
                                         <Controller
                                             control={form.control}
                                             name="schedule.dayNumber"
-                                            render={({
-                                                field,
-                                                fieldState,
-                                            }) => (
+                                            render={({ field, fieldState }) => (
                                                 <FormField
                                                     label={tForm("DayNumber")}
                                                     isInvalid={
@@ -310,7 +308,9 @@ export function UpdateHabit({
                                                 >
                                                     <DayNumberPicker
                                                         value={field.value}
-                                                        onChange={field.onChange}
+                                                        onChange={
+                                                            field.onChange
+                                                        }
                                                         label={tForm(
                                                             "DayNumber",
                                                         )}

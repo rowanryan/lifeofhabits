@@ -1,6 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { id } from "@instantdb/react";
 import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -37,8 +36,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/db";
-import { DayNumberPicker } from "./DayNumberPicker";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useZodResolver } from "@/hooks/use-zod-error-map";
 import {
     days,
     intervals,
@@ -47,9 +46,10 @@ import {
     scheduleToRRule,
 } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import { DayNumberPicker } from "./DayNumberPicker";
 
 const formSchema = z.object({
-    name: z.string().min(1, { error: "Cannot be empty" }),
+    name: z.string().min(1),
     description: z
         .string()
         .optional()
@@ -73,9 +73,10 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
     const t = useTranslations("Habits.Create");
     const isMobile = useIsMobile();
     const { user } = db.useAuth();
+    const resolver = useZodResolver<FormValues>(formSchema);
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
+        resolver,
         defaultValues: {
             name: "",
             description: "",
@@ -293,7 +294,9 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                 >
                                                     <DayNumberPicker
                                                         value={field.value}
-                                                        onChange={field.onChange}
+                                                        onChange={
+                                                            field.onChange
+                                                        }
                                                         label={t(
                                                             "Form.DayNumber",
                                                         )}
