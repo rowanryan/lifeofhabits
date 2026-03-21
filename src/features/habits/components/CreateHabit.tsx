@@ -33,6 +33,7 @@ import { db } from "@/db";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
     days,
+    intervals,
     months,
     type Schedule,
     ScheduleSchema,
@@ -41,7 +42,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
-    name: z.string().min(1),
+    name: z.string().min(1, { error: "Cannot be empty" }),
     description: z
         .string()
         .optional()
@@ -50,15 +51,6 @@ const formSchema = z.object({
 });
 
 type FormValues = z.input<typeof formSchema>;
-
-const intervals = [
-    "minute",
-    "hour",
-    "day",
-    "month",
-    "weekday",
-    "year",
-] as const;
 
 const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
     minute: { interval: "minute", count: 1 },

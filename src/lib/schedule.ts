@@ -26,6 +26,15 @@ export const months = [
     "december",
 ] as const;
 
+export const intervals = [
+    "minute",
+    "hour",
+    "day",
+    "month",
+    "weekday",
+    "year",
+] as const;
+
 export const DaysSchema = z.enum(days);
 
 export const MonthsSchema = z.enum(months);
