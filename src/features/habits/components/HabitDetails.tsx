@@ -1,9 +1,11 @@
 "use client";
 
-import { CheckCircleIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { id as createId } from "@instantdb/react";
+import { MinusIcon, PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
 import {
     Drawer,
     DrawerClose,
@@ -14,6 +16,8 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+import { db } from "@/db";
+import type { Completion } from "@/db/schema";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
 import { rRuleToSchedule } from "@/lib/schedule";
@@ -26,6 +30,9 @@ export type HabitDetailsProps = React.PropsWithChildren<{
     name: string;
     description: string | undefined;
     rrule: string;
+    completions?: Completion[];
+    requiredCompletions?: number;
+    dateString?: string;
 }> &
     React.ComponentProps<typeof Drawer>;
 
@@ -34,6 +41,9 @@ export function HabitDetails({
     name,
     description,
     rrule,
+    completions = [],
+    requiredCompletions = 1,
+    dateString,
     children,
     ...props
 }: HabitDetailsProps) {
@@ -47,6 +57,33 @@ export function HabitDetails({
         () => (schedule ? getKey(schedule) : null),
         [getKey, schedule],
     );
+
+    const currentCompletions = completions.length;
+    const isComplete = currentCompletions >= requiredCompletions;
+    const canDecrement = currentCompletions > 0;
+
+    const handleIncrement = () => {
+        if (!dateString || isComplete) return;
+        const completion = db.tx.completions[createId()];
+        if (completion) {
+            db.transact([
+                completion
+                    .update({ habitId: id, dateString })
+                    .link({ habit: id }),
+            ]);
+        }
+    };
+
+    const handleDecrement = () => {
+        if (!dateString || !canDecrement) return;
+        const completionToDelete = completions[0];
+        if (completionToDelete) {
+            const completion = db.tx.completions[completionToDelete.id];
+            if (completion) {
+                db.transact([completion.delete()]);
+            }
+        }
+    };
 
     return (
         <Drawer
@@ -80,10 +117,29 @@ export function HabitDetails({
                 </div>
 
                 <DrawerFooter>
-                    <Button variant="secondary">
-                        <CheckCircleIcon className="text-success" />{" "}
-                        {t("Details.MarkAsDone.ButtonLabel")}
-                    </Button>
+                    {dateString && (
+                        <ButtonGroup className="w-full">
+                            <Button
+                                variant="secondary"
+                                size="icon"
+                                disabled={!canDecrement}
+                                onClick={handleDecrement}
+                            >
+                                <MinusIcon />
+                            </Button>
+                            <ButtonGroupText className="flex-1 justify-center">
+                                {currentCompletions} / {requiredCompletions}
+                            </ButtonGroupText>
+                            <Button
+                                variant="secondary"
+                                size="icon"
+                                disabled={isComplete}
+                                onClick={handleIncrement}
+                            >
+                                <PlusIcon />
+                            </Button>
+                        </ButtonGroup>
+                    )}
 
                     <UpdateHabit
                         id={id}

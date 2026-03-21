@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { db } from "@/db";
-import type { Habit } from "@/db/schema";
 import { Habits } from "@/features/habits";
 import { CreateHabit } from "@/features/habits/components/CreateHabit";
 import { useRelativeDate } from "@/hooks/use-relative-date";
@@ -47,8 +46,14 @@ export default function Page() {
     const dateString = format(currentDate, "yyyy-MM-dd");
 
     const { data, isLoading, error } = db.useQuery({
-        habits: {},
+        habits: {
+            completions: {
+                $: { where: { dateString } },
+            },
+        },
     });
+
+    type HabitWithCompletions = NonNullable<typeof data>["habits"][number];
 
     const habits = useMemo(() => {
         if (data) {
@@ -56,7 +61,7 @@ export default function Page() {
             const start = startOfDay(targetDate);
             const end = endOfDay(targetDate);
 
-            const filteredHabits: Habit[] = [];
+            const filteredHabits: HabitWithCompletions[] = [];
             for (const habit of data.habits) {
                 try {
                     const rule = rrulestr(habit.rrule);
@@ -149,7 +154,7 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <Habits showMarkAsDone habits={data} />
+                            <Habits showMarkAsDone habits={data} dateString={dateString} />
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">
