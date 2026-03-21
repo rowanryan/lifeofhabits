@@ -61,7 +61,7 @@ export function Habits({
                         <ItemActions className="w-full">
                             {showMarkAsDone && (
                                 <Button
-                                    size="xs"
+                                    size="sm"
                                     variant="outline"
                                     className="gap-2"
                                 >
@@ -76,14 +76,14 @@ export function Habits({
                                 description={habit.description}
                                 rrule={habit.rrule}
                             >
-                                <Button size="xs" variant="outline">
+                                <Button size="sm" variant="outline">
                                     <EyeIcon /> View details
                                 </Button>
                             </HabitDetails>
 
                             {showDelete && (
                                 <DeleteHabit id={habit.id}>
-                                    <Button size="xs" variant="destructive">
+                                    <Button size="sm" variant="destructive">
                                         <TrashIcon /> Delete
                                     </Button>
                                 </DeleteHabit>
