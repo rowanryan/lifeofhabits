@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth, useUser } from "@clerk/nextjs";
-import { ChevronRightIcon, LogOutIcon, MenuIcon } from "lucide-react";
+import { ChevronRightIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -20,10 +20,10 @@ import { getFullName, getInitials } from "@/lib/utils";
 import { useAppShell } from "../providers/AppShellProvider";
 
 export type MobileMenuProps = {
-    className?: string;
+    children: React.ReactNode;
 };
 
-export function MobileMenu({ className }: MobileMenuProps) {
+export function MobileMenu({ children }: MobileMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
     const previousPathnameRef = useRef(pathname);
@@ -42,11 +42,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className={className}>
-                    <MenuIcon />
-                </Button>
-            </SheetTrigger>
+            <SheetTrigger asChild>{children}</SheetTrigger>
 
             <SheetContent
                 side="bottom"
@@ -65,7 +61,7 @@ export function MobileMenu({ className }: MobileMenuProps) {
                             className="w-full justify-start"
                         >
                             <Link href={link.href}>
-                                {link.icon}
+                                {link.icon && <link.icon className="size-5" />}
                                 {link.label}
                             </Link>
                         </Button>
