@@ -96,7 +96,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
     return (
         <div
             className={cn(
-                "sticky top-0 inset-x-0 z-50 transition-all duration-200 ease-out",
+                "sticky max-md:hidden top-0 inset-x-0 z-50 transition-all duration-200 ease-out",
                 isScrolled && "px-2 md:px-6 pt-2",
             )}
         >
