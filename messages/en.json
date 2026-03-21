@@ -295,20 +295,6 @@
                 "friday": "Every Friday",
                 "saturday": "Every Saturday",
                 "sunday": "Every Sunday"
-            },
-            "Yearly": {
-                "january": "Every January",
-                "february": "Every February",
-                "march": "Every March",
-                "april": "Every April",
-                "may": "Every May",
-                "june": "Every June",
-                "july": "Every July",
-                "august": "Every August",
-                "september": "Every September",
-                "october": "Every October",
-                "november": "Every November",
-                "december": "Every December"
             }
         },
 
@@ -324,13 +310,11 @@
                 "IntervalOptions": {
                     "day": "Daily",
                     "weekday": "Weekly",
-                    "month": "Monthly",
-                    "year": "Yearly in a specific month"
+                    "month": "Monthly"
                 },
                 "Time": "Time of day (optional)",
                 "DayNumber": "Day of month (optional)",
                 "Day": "Day of the week",
-                "Month": "Month of the year",
                 "Days": {
                     "monday": "Monday",
                     "tuesday": "Tuesday",
@@ -339,20 +323,6 @@
                     "friday": "Friday",
                     "saturday": "Saturday",
                     "sunday": "Sunday"
-                },
-                "Months": {
-                    "january": "January",
-                    "february": "February",
-                    "march": "March",
-                    "april": "April",
-                    "may": "May",
-                    "june": "June",
-                    "july": "July",
-                    "august": "August",
-                    "september": "September",
-                    "october": "October",
-                    "november": "November",
-                    "december": "December"
                 },
                 "Submit": "Create habit",
                 "Cancel": "Cancel"

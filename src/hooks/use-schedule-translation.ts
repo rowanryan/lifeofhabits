@@ -34,10 +34,6 @@ export function useScheduleTranslation() {
             return { key: `Weekday.${schedule.day}` };
         }
 
-        if (schedule.interval === "year") {
-            return { key: `Yearly.${schedule.month}` };
-        }
-
         return { key: "Daily" };
     }, []);
 

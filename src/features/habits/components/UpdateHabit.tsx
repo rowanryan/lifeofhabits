@@ -40,7 +40,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import {
     days,
     intervals,
-    months,
     rRuleToSchedule,
     type Schedule,
     ScheduleSchema,
@@ -63,7 +62,6 @@ const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
     day: { interval: "day" },
     weekday: { interval: "weekday", day: "monday" },
     month: { interval: "month" },
-    year: { interval: "year", month: "january" },
 };
 
 export type UpdateHabitProps = React.PropsWithChildren<{
@@ -374,60 +372,6 @@ export function UpdateHabit({
                                                                     )}
                                                                 </SelectItem>
                                                             ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </FormField>
-                                            )}
-                                        />
-                                    </FieldGroup>
-                                ))
-                                .with("year", () => (
-                                    <FieldGroup>
-                                        <Controller
-                                            control={form.control}
-                                            name="schedule.month"
-                                            render={({ field, fieldState }) => (
-                                                <FormField
-                                                    label={tForm("Month")}
-                                                    isInvalid={
-                                                        fieldState.invalid
-                                                    }
-                                                    error={fieldState.error}
-                                                >
-                                                    <Select
-                                                        value={
-                                                            field.value ??
-                                                            "january"
-                                                        }
-                                                        onValueChange={
-                                                            field.onChange
-                                                        }
-                                                    >
-                                                        <SelectTrigger
-                                                            aria-invalid={
-                                                                fieldState.invalid
-                                                            }
-                                                            className="w-full"
-                                                        >
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {months.map(
-                                                                (month) => (
-                                                                    <SelectItem
-                                                                        key={
-                                                                            month
-                                                                        }
-                                                                        value={
-                                                                            month
-                                                                        }
-                                                                    >
-                                                                        {tForm(
-                                                                            `Months.${month}`,
-                                                                        )}
-                                                                    </SelectItem>
-                                                                ),
-                                                            )}
                                                         </SelectContent>
                                                     </Select>
                                                 </FormField>
