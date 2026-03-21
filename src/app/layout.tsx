@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Figtree, Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
+import NextTopLoader from "nextjs-toploader";
 import { InstantAuth } from "@/components/InstantAuth";
 import { env } from "@/env";
 import { Providers } from "./providers";
@@ -39,6 +40,7 @@ export default function RootLayout({
             >
                 <Providers>
                     <InstantAuth />
+                    <NextTopLoader showSpinner height={0} />
                     {children}
                     <Toaster closeButton richColors position="top-center" />
                 </Providers>
