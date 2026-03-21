@@ -11,7 +11,6 @@ export const env = createEnv({
         NODE_ENV: z
             .enum(["development", "test", "production"])
             .default("development"),
-        DATABASE_URL: z.string(),
         APP_NAME: z.string().default("Next Boiler"),
         APP_ENV: z.enum(["development", "production"]).default("development"),
     },
