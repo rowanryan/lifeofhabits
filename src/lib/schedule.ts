@@ -75,6 +75,8 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
         if (schedule.time) {
             const { hour, minute } = parseTime(schedule.time);
             ruleStart.setHours(hour, minute, 0, 0);
+        } else {
+            ruleStart.setHours(0, 0, 0, 0);
         }
         const rule = new RRule({
             freq: Frequency.DAILY,
