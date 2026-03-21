@@ -264,7 +264,7 @@ function PageLayout({
     return (
         <div
             className={cn(
-                "@container/layout flex flex-1 flex-col p-4 pt-6 container mx-auto",
+                "@container/layout flex flex-1 flex-col p-4 md:pt-6 container mx-auto",
                 className,
             )}
             {...props}
