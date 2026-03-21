@@ -28,6 +28,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { db } from "@/db";
 import type { Habit } from "@/db/schema";
+import { Habits } from "@/features/habits";
 import { CreateHabit } from "@/features/habits/components/CreateHabit";
 import { useRelativeDate } from "@/hooks/use-relative-date";
 import { useLogStore } from "@/stores/useLogStore";
@@ -148,7 +149,7 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <p>Habits</p>
+                            <Habits showMarkAsDone habits={data} />
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">

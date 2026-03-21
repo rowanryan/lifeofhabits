@@ -1,3 +1,5 @@
+"use client";
+
 import { OAUTH_PROVIDERS } from "@/config/clerk";
 import { UserConnectedAccounts } from "@/features/user-connected-accounts";
 import { UserEmailAddresses } from "@/features/user-email-addresses";
