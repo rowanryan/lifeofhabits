@@ -351,6 +351,7 @@
             "Close": "Close",
             "MarkAsDone": {
                 "ButtonLabel": "Mark as done",
+                "Undo": "Undo",
                 "Title": "Notes",
                 "Description": "Add any notes about this habit for this day. You can use this to track your progress or add any other information you want to remember.",
                 "Cancel": "Cancel",

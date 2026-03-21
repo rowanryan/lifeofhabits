@@ -1,7 +1,6 @@
 "use client";
 
-import { id } from "@instantdb/react";
-import { CheckCircleIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { EyeIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +11,12 @@ import {
     ItemGroup,
     ItemTitle,
 } from "@/components/ui/item";
-import { db } from "@/db";
 import type { Completion, Habit } from "@/db/schema";
 import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
 import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import { CompleteButton } from "./components/CompleteButton";
+import { CompletionCounterButton } from "./components/CompletionCounterButton";
 import { DeleteHabit } from "./components/DeleteHabit";
 import { HabitDetails } from "./components/HabitDetails";
 
@@ -40,26 +40,12 @@ export function Habits({
     const t = useTranslations("Habits");
     const getKey = useScheduleTranslation();
 
-    const handleAddCompletion = (habitId: string) => {
-        if (!dateString) return;
-        const completion = db.tx.completions[id()];
-        if (completion) {
-            db.transact([
-                completion
-                    .update({ habitId, dateString })
-                    .link({ habit: habitId }),
-            ]);
-        }
-    };
-
     return (
         <ItemGroup className={cn("gap-2 rounded-2xl", className)} {...props}>
             {habits.map((habit) => {
                 const schedule = rRuleToSchedule(habit.rrule);
                 const completions = "completions" in habit ? habit.completions : [];
-                const currentCompletions = completions.length;
                 const requiredCompletions = habit.requiredCompletions;
-                const isComplete = currentCompletions >= requiredCompletions;
 
                 return (
                     <Item
@@ -85,16 +71,23 @@ export function Habits({
                         </ItemContent>
                         <ItemActions className="w-full">
                             {showMarkAsDone && dateString && (
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="gap-2"
-                                    disabled={isComplete}
-                                    onClick={() => handleAddCompletion(habit.id)}
-                                >
-                                    <CheckCircleIcon className="text-success" />{" "}
-                                    {currentCompletions} / {requiredCompletions}
-                                </Button>
+                                requiredCompletions === 1 ? (
+                                    <CompleteButton
+                                        size="sm"
+                                        variant="outline"
+                                        habitId={habit.id}
+                                        dateString={dateString}
+                                        completions={completions}
+                                        allowUndo={false}
+                                    />
+                                ) : (
+                                    <CompletionCounterButton
+                                        habitId={habit.id}
+                                        dateString={dateString}
+                                        completions={completions}
+                                        requiredCompletions={requiredCompletions}
+                                    />
+                                )
                             )}
 
                             <HabitDetails
