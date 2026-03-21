@@ -23,10 +23,15 @@ const _schema = i.schema({
         }),
 
         habits: i.entity({
+            userId: i.string().indexed(),
             description: i.string().optional(),
             name: i.string(),
             rrule: i.string(),
-            userId: i.string().indexed(),
+            requiredCompletions: i.number(),
+        }),
+
+        completions: i.entity({
+            habitId: i.string().indexed(),
         }),
     },
     links: {
@@ -69,6 +74,20 @@ const _schema = i.schema({
                 on: "$users",
                 has: "many",
                 label: "habits",
+            },
+        },
+
+        completionsHabit: {
+            forward: {
+                on: "completions",
+                has: "one",
+                label: "habit",
+                onDelete: "cascade",
+            },
+            reverse: {
+                on: "habits",
+                has: "many",
+                label: "completions",
             },
         },
     },
