@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/db";
+import { DayNumberPicker } from "./DayNumberPicker";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
     days,
@@ -290,23 +291,12 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     }
                                                     error={fieldState.error}
                                                 >
-                                                    <Input
-                                                        type="number"
-                                                        min={1}
-                                                        max={31}
-                                                        aria-invalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        {...field}
-                                                        onChange={(e) => {
-                                                            const val =
-                                                                e.target.value;
-                                                            if (val !== "") {
-                                                                field.onChange(
-                                                                    Number(val),
-                                                                );
-                                                            }
-                                                        }}
+                                                    <DayNumberPicker
+                                                        value={field.value}
+                                                        onChange={field.onChange}
+                                                        label={t(
+                                                            "Form.DayNumber",
+                                                        )}
                                                     />
                                                 </FormField>
                                             )}
