@@ -61,7 +61,7 @@ type FormValues = z.input<typeof formSchema>;
 const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
     day: { interval: "day" },
     weekday: { interval: "weekday", day: "monday" },
-    month: { interval: "month" },
+    month: { interval: "month", dayNumber: 1 },
 };
 
 export type UpdateHabitProps = React.PropsWithChildren<{
@@ -315,15 +315,14 @@ export function UpdateHabit({
                                                             fieldState.invalid
                                                         }
                                                         {...field}
-                                                        value={field.value ?? ""}
                                                         onChange={(e) => {
                                                             const val =
                                                                 e.target.value;
-                                                            field.onChange(
-                                                                val === ""
-                                                                    ? undefined
-                                                                    : Number(val),
-                                                            );
+                                                            if (val !== "") {
+                                                                field.onChange(
+                                                                    Number(val),
+                                                                );
+                                                            }
                                                         }}
                                                     />
                                                 </FormField>

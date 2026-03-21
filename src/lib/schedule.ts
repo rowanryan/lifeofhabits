@@ -30,7 +30,7 @@ export const ScheduleSchema = z.discriminatedUnion("interval", [
     }),
     z.object({
         interval: z.literal("month"),
-        dayNumber: z.number().int().positive().max(31).optional(),
+        dayNumber: z.number().int().positive().max(31),
     }),
 ]);
 
@@ -86,10 +86,12 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     }
 
     if (schedule.interval === "month") {
+        const ruleStart = new Date(start);
+        ruleStart.setHours(0, 0, 0, 0);
         const rule = new RRule({
             freq: Frequency.MONTHLY,
-            bymonthday: schedule.dayNumber ? [schedule.dayNumber] : undefined,
-            dtstart: start,
+            bymonthday: [schedule.dayNumber],
+            dtstart: ruleStart,
         });
         return rule.toString();
     }
@@ -130,7 +132,7 @@ export function rRuleToSchedule(rruleStr: string): Schedule | null {
             const bymonthday = rule.options.bymonthday;
             return ScheduleSchema.parse({
                 interval: "month",
-                dayNumber: bymonthday?.length ? bymonthday[0] : undefined,
+                dayNumber: bymonthday?.length ? bymonthday[0] : 1,
             });
         }
 

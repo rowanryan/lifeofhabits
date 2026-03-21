@@ -313,7 +313,7 @@
                     "month": "Monthly"
                 },
                 "Time": "Time of day (optional)",
-                "DayNumber": "Day of month (optional)",
+                "DayNumber": "Day of month",
                 "Day": "Day of the week",
                 "Days": {
                     "monday": "Monday",
