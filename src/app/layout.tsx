@@ -20,6 +20,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: env.APP_NAME,
+    applicationName: env.APP_NAME,
+    appleWebApp: {
+        title: env.APP_NAME,
+        statusBarStyle: "black-translucent",
+    },
 };
 
 export default function RootLayout({
