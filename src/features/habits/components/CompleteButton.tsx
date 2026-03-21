@@ -11,18 +11,23 @@ export type CompleteButtonProps = {
     habitId: string;
     dateString: string;
     completions: Completion[];
+    requiredCompletions?: number;
     allowUndo?: boolean;
+    showCounter?: boolean;
 } & Omit<React.ComponentProps<typeof Button>, "onClick" | "children">;
 
 export function CompleteButton({
     habitId,
     dateString,
     completions,
+    requiredCompletions = 1,
     allowUndo = false,
+    showCounter = false,
     ...props
 }: CompleteButtonProps) {
     const t = useTranslations("Habits");
-    const isComplete = completions.length > 0;
+    const currentCompletions = completions.length;
+    const isComplete = currentCompletions >= requiredCompletions;
 
     const handleComplete = () => {
         const completion = db.tx.completions[createId()];
@@ -61,7 +66,9 @@ export function CompleteButton({
             {...props}
         >
             <CheckCircleIcon className="text-success" />
-            {t("Details.MarkAsDone.ButtonLabel")}
+            {showCounter
+                ? `${currentCompletions} / ${requiredCompletions}`
+                : t("Details.MarkAsDone.ButtonLabel")}
         </Button>
     );
 }

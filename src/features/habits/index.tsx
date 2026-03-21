@@ -16,7 +16,6 @@ import { useScheduleTranslation } from "@/hooks/use-schedule-translation";
 import { rRuleToSchedule } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
 import { CompleteButton } from "./components/CompleteButton";
-import { CompletionCounterButton } from "./components/CompletionCounterButton";
 import { DeleteHabit } from "./components/DeleteHabit";
 import { HabitDetails } from "./components/HabitDetails";
 
@@ -71,23 +70,16 @@ export function Habits({
                         </ItemContent>
                         <ItemActions className="w-full">
                             {showMarkAsDone && dateString && (
-                                requiredCompletions === 1 ? (
-                                    <CompleteButton
-                                        size="sm"
-                                        variant="outline"
-                                        habitId={habit.id}
-                                        dateString={dateString}
-                                        completions={completions}
-                                        allowUndo={false}
-                                    />
-                                ) : (
-                                    <CompletionCounterButton
-                                        habitId={habit.id}
-                                        dateString={dateString}
-                                        completions={completions}
-                                        requiredCompletions={requiredCompletions}
-                                    />
-                                )
+                                <CompleteButton
+                                    size="sm"
+                                    variant="outline"
+                                    habitId={habit.id}
+                                    dateString={dateString}
+                                    completions={completions}
+                                    requiredCompletions={requiredCompletions}
+                                    allowUndo={false}
+                                    showCounter={requiredCompletions > 1}
+                                />
                             )}
 
                             <HabitDetails
