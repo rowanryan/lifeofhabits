@@ -10,13 +10,13 @@ This skill covers how to create forms in this project using react-hook-form, zod
 ## Required Imports
 
 ```tsx
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { FormField } from "@/components/FormField";
 import { FieldGroup, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useZodResolver } from "@/hooks/use-zod-error-map";
 ```
 
 ## Form Setup Pattern
@@ -35,15 +35,21 @@ const formSchema = z.object({
 
 ### 2. Initialize useForm Hook
 
+Use the `useZodResolver` hook to get a resolver with translated error messages:
+
 ```tsx
+const resolver = useZodResolver<z.infer<typeof formSchema>>(formSchema);
+
 const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver,
     defaultValues: {
         fieldName: "",
         email: "",
     },
 });
 ```
+
+**Important**: Always pass the form type as a generic parameter to `useZodResolver<FormType>(schema)` to ensure proper type inference.
 
 ### 3. Create Submit Handler
 
@@ -181,19 +187,56 @@ useEffect(() => {
 
 ## Validation Examples
 
-Common zod validators:
+Common zod validators (no hardcoded error messages needed - they come from translations):
 
 ```tsx
 const formSchema = z.object({
     required: z.string().min(1),
-    email: z.string().email(),
+    email: z.email(),
     minLength: z.string().min(3),
     maxLength: z.string().max(100),
     number: z.coerce.number().min(0),
     optional: z.string().optional(),
-    url: z.string().url(),
+    url: z.url(),
 });
 ```
+
+## Translated Validation Errors
+
+This project uses a custom `useZodResolver` hook that automatically translates zod validation errors using next-intl. Error messages are defined in `messages/en.json` under the `Validation` key.
+
+### How It Works
+
+1. **Error Map**: `src/lib/zod-error-map.ts` maps zod error codes to translation keys
+2. **Hook**: `src/hooks/use-zod-error-map.ts` provides `useZodResolver` which creates a resolver with translated errors
+3. **Translations**: `messages/en.json` contains the `Validation` section with all error messages
+
+### Adding New Error Messages
+
+If you need a custom error message, add it to `messages/en.json`:
+
+```json
+{
+    "Validation": {
+        "customError": "Your custom error message"
+    }
+}
+```
+
+Then handle it in `src/lib/zod-error-map.ts`.
+
+### Available Translation Keys
+
+| Key | Message | Used For |
+|-----|---------|----------|
+| `required` | This field is required | Missing required fields |
+| `stringEmpty` | Cannot be empty | `z.string().min(1)` |
+| `stringMin` | Must be at least {min} characters | `z.string().min(n)` |
+| `stringMax` | Must be at most {max} characters | `z.string().max(n)` |
+| `invalidEmail` | Invalid email address | `z.email()` |
+| `invalidUrl` | Invalid URL | `z.url()` |
+| `numberMin` | Must be at least {min} | `z.number().min(n)` |
+| `numberMax` | Must be at most {max} | `z.number().max(n)` |
 
 ## Reference Implementation
 
