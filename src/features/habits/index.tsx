@@ -43,7 +43,8 @@ export function Habits({
         <ItemGroup className={cn("gap-2 rounded-2xl", className)} {...props}>
             {habits.map((habit) => {
                 const schedule = rRuleToSchedule(habit.rrule);
-                const completions = "completions" in habit ? habit.completions : [];
+                const completions =
+                    "completions" in habit ? habit.completions : [];
                 const requiredCompletions = habit.requiredCompletions;
 
                 return (

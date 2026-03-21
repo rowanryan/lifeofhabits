@@ -174,7 +174,11 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <Habits showMarkAsDone habits={data} dateString={dateString} />
+                            <Habits
+                                showMarkAsDone
+                                habits={data}
+                                dateString={dateString}
+                            />
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">

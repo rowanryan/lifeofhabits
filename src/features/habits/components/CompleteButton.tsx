@@ -60,11 +60,7 @@ export function CompleteButton({
     }
 
     return (
-        <Button
-            disabled={isComplete}
-            onClick={handleComplete}
-            {...props}
-        >
+        <Button disabled={isComplete} onClick={handleComplete} {...props}>
             <CheckCircleIcon className="text-success" />
             {showCounter
                 ? `${currentCompletions} / ${requiredCompletions}`

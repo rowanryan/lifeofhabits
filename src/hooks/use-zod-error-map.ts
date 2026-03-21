@@ -5,7 +5,7 @@ import type z from "zod";
 import { createZodErrorMap } from "@/lib/zod-error-map";
 
 export function useZodResolver<TFieldValues extends FieldValues>(
-    schema: z.ZodType
+    schema: z.ZodType,
 ): Resolver<TFieldValues> {
     const t = useTranslations("Validation");
 
@@ -14,8 +14,8 @@ export function useZodResolver<TFieldValues extends FieldValues>(
             const errorMap = createZodErrorMap((key, params) =>
                 t(
                     key as Parameters<typeof t>[0],
-                    params as Parameters<typeof t>[1]
-                )
+                    params as Parameters<typeof t>[1],
+                ),
             );
 
             const result = await schema.safeParseAsync(values, {
@@ -47,7 +47,7 @@ export function useZodResolver<TFieldValues extends FieldValues>(
                 errors,
             } as ResolverResult<TFieldValues>;
         },
-        [schema, t]
+        [schema, t],
     );
 
     return resolver as Resolver<TFieldValues>;

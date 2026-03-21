@@ -1,6 +1,6 @@
 type TranslationFunction = (
     key: string,
-    values?: Record<string, unknown>
+    values?: Record<string, unknown>,
 ) => string;
 
 type ZodIssue = {

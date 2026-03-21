@@ -75,8 +75,8 @@ export function HabitDetails({
                             {t(`Schedule.${key.key}` as any, key.params as any)}
                         </DrawerDescription>
                     )}
-                    {dateString && (
-                        requiredCompletions === 1 ? (
+                    {dateString &&
+                        (requiredCompletions === 1 ? (
                             <CompleteButton
                                 variant="secondary"
                                 habitId={id}
@@ -92,8 +92,7 @@ export function HabitDetails({
                                 completions={completions}
                                 requiredCompletions={requiredCompletions}
                             />
-                        )
-                    )}
+                        ))}
                 </DrawerHeader>
 
                 <div className={cn("overflow-y-auto px-4", isMobile && "px-6")}>

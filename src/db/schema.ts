@@ -102,7 +102,13 @@ const schema: AppSchema = _schema;
 
 // Types
 type Habit = InstaQLEntity<_AppSchema, "habits", object, undefined, true>;
-type Completion = InstaQLEntity<_AppSchema, "completions", object, undefined, true>;
+type Completion = InstaQLEntity<
+    _AppSchema,
+    "completions",
+    object,
+    undefined,
+    true
+>;
 
 export type { AppSchema, Habit, Completion };
 export default schema;
