@@ -21,6 +21,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { db } from "@/db";
 import { cn, getFullName, getInitials } from "@/lib/utils";
 
 export type UserButtonProps = {
@@ -120,7 +121,13 @@ export function UserButton({ className }: UserButtonProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => signOut({ redirectUrl: "/" })}>
+                <DropdownMenuItem
+                    onClick={() => {
+                        db.auth
+                            .signOut()
+                            .then(() => signOut({ redirectUrl: "/" }));
+                    }}
+                >
                     <LogOutIcon />
                     {tAuth("SignOut")}
                 </DropdownMenuItem>

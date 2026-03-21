@@ -70,7 +70,7 @@ function AppShellHeader({ className }: AppShellHeaderProps) {
         const maxFirstThreeLinks = navigationLinks.slice(0, 3);
 
         return (
-            <div className="fixed bottom-3 z-50 inset-x-0 w-fit gap-0 mx-auto rounded-full backdrop-blur-lg bg-appshell/50 flex items-center justify-between py-1 px-1 shadow-sm border border-border/50">
+            <div className="fixed bottom-4 z-50 inset-x-0 w-fit gap-0 mx-auto rounded-full backdrop-blur-lg bg-appshell/50 flex items-center justify-between py-1 px-1 shadow-sm border border-border/50">
                 {maxFirstThreeLinks.map((link) => (
                     <Link
                         key={link.href}

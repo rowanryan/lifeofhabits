@@ -52,9 +52,7 @@ function PageTitle({
                 </p>
             )}
 
-            <h2 className="text-2xl @xl/layout:text-3xl font-semibold tracking-tight">
-                {title}
-            </h2>
+            <h2 className="text-3xl font-semibold tracking-tight">{title}</h2>
 
             {description && (
                 <p className="text-muted-foreground text-pretty">
@@ -278,7 +276,7 @@ function PageLayout({
                     title={title}
                     prefix={prefix}
                     description={description}
-                    className="mb-4 @xl/layout:mt-2"
+                    className="mb-4 md:mt-2"
                 />
             )}
 

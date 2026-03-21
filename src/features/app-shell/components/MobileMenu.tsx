@@ -16,6 +16,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import { db } from "@/db";
 import { getFullName, getInitials } from "@/lib/utils";
 import { useAppShell } from "../providers/AppShellProvider";
 
@@ -114,7 +115,11 @@ export function MobileMenu({ children }: MobileMenuProps) {
                         <Button
                             variant="destructive"
                             className="w-full justify-start"
-                            onClick={() => signOut({ redirectUrl: "/" })}
+                            onClick={() => {
+                                db.auth
+                                    .signOut()
+                                    .then(() => signOut({ redirectUrl: "/" }));
+                            }}
                         >
                             <LogOutIcon />
                             {tAuth("SignOut")}
