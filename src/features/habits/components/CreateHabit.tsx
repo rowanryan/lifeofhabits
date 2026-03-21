@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { id } from "@instantdb/react";
+import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -21,6 +22,12 @@ import {
 } from "@/components/ui/drawer";
 import { FieldGroup, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
+} from "@/components/ui/input-group";
 import {
     Select,
     SelectContent,
@@ -363,14 +370,30 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                     }
                                                     error={fieldState.error}
                                                 >
-                                                    <Input
-                                                        type="time"
-                                                        aria-invalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        {...field}
-                                                        value={field.value ?? ""}
-                                                    />
+                                                    <InputGroup>
+                                                        <InputGroupInput
+                                                            type="time"
+                                                            aria-invalid={
+                                                                fieldState.invalid
+                                                            }
+                                                            {...field}
+                                                            value={field.value ?? ""}
+                                                        />
+                                                        {field.value && (
+                                                            <InputGroupAddon align="inline-end">
+                                                                <InputGroupButton
+                                                                    size="icon-xs"
+                                                                    onClick={() =>
+                                                                        field.onChange(
+                                                                            undefined,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <XIcon />
+                                                                </InputGroupButton>
+                                                            </InputGroupAddon>
+                                                        )}
+                                                    </InputGroup>
                                                 </FormField>
                                             )}
                                         />
