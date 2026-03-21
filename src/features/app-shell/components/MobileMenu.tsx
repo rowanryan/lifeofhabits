@@ -17,8 +17,7 @@ import {
 } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn, getFullName, getInitials } from "@/lib/utils";
+import { getFullName, getInitials } from "@/lib/utils";
 import { useAppShell } from "../providers/AppShellProvider";
 
 export type MobileMenuProps = {
@@ -34,7 +33,6 @@ export function MobileMenu({ children }: MobileMenuProps) {
     const { signOut } = useAuth();
     const tAuth = useTranslations("AppShell.Auth");
     const tMobileMenu = useTranslations("AppShell.MobileMenu");
-    const isMobile = useIsMobile();
 
     useEffect(() => {
         if (previousPathnameRef.current !== pathname) {
