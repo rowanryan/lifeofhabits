@@ -8,16 +8,17 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
+    Drawer,
+    DrawerContent,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
-import { getFullName, getInitials } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn, getFullName, getInitials } from "@/lib/utils";
 import { useAppShell } from "../providers/AppShellProvider";
 
 export type MobileMenuProps = {
@@ -33,6 +34,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
     const { signOut } = useAuth();
     const tAuth = useTranslations("AppShell.Auth");
     const tMobileMenu = useTranslations("AppShell.MobileMenu");
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         if (previousPathnameRef.current !== pathname) {
@@ -42,91 +44,97 @@ export function MobileMenu({ children }: MobileMenuProps) {
     }, [pathname]);
 
     return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>{children}</SheetTrigger>
+        <Drawer direction="bottom" open={isOpen} onOpenChange={setIsOpen}>
+            <DrawerTrigger asChild>{children}</DrawerTrigger>
 
-            <SheetContent
-                side="bottom"
-                className="h-full! max-h-[calc(100vh-3.5rem)] overflow-y-auto"
-            >
-                <SheetHeader>
-                    <SheetTitle>{tMobileMenu("Title")}</SheetTitle>
-                </SheetHeader>
+            <DrawerContent className="h-full!">
+                <DrawerHeader>
+                    <DrawerTitle>{tMobileMenu("Title")}</DrawerTitle>
+                </DrawerHeader>
 
-                <nav className="flex flex-1 flex-col gap-1 px-3">
-                    {navigationLinks.map((link) => (
-                        <Button
-                            key={link.href}
-                            asChild
-                            variant={link.isActive ? "secondary" : "ghost"}
-                            className="w-full justify-start"
-                        >
-                            <Link href={link.href}>
-                                {link.icon && <link.icon className="size-5" />}
-                                {link.label}
-                            </Link>
-                        </Button>
-                    ))}
-                </nav>
+                <div className="overflow-y-auto">
+                    <nav className="flex flex-1 flex-col gap-1">
+                        {navigationLinks.map((link) => (
+                            <Button
+                                key={link.href}
+                                asChild
+                                variant={link.isActive ? "secondary" : "ghost"}
+                                className="w-full justify-start"
+                            >
+                                <Link href={link.href}>
+                                    {link.icon && (
+                                        <link.icon className="size-5" />
+                                    )}
+                                    {link.label}
+                                </Link>
+                            </Button>
+                        ))}
+                    </nav>
 
-                <Separator className="my-4" />
+                    <Separator className="my-4" />
 
-                {user && (
-                    <div className="px-4 pb-4 space-y-4">
-                        <Link
-                            href="/settings/account"
-                            className="flex items-center group gap-2 text-left text-sm"
-                        >
-                            <Avatar className="size-8 rounded-lg">
-                                <AvatarImage
-                                    src={user.imageUrl}
-                                    alt={
-                                        getFullName(
+                    {user && (
+                        <div className="px-4 pb-4 space-y-4">
+                            <Link
+                                href="/settings/account"
+                                className="flex items-center group gap-2 text-left text-sm"
+                            >
+                                <Avatar className="size-8 rounded-lg">
+                                    <AvatarImage
+                                        src={user.imageUrl}
+                                        alt={
+                                            getFullName(
+                                                user.firstName,
+                                                user.lastName,
+                                            ) ?? "Unknown"
+                                        }
+                                    />
+                                    <AvatarFallback className="rounded-lg">
+                                        {getInitials(
                                             user.firstName,
                                             user.lastName,
-                                        ) ?? "Unknown"
-                                    }
-                                />
-                                <AvatarFallback className="rounded-lg">
-                                    {getInitials(
-                                        user.firstName,
-                                        user.lastName,
-                                    ) ?? "?"}
-                                </AvatarFallback>
-                            </Avatar>
+                                        ) ?? "?"}
+                                    </AvatarFallback>
+                                </Avatar>
 
-                            <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">
-                                    {getFullName(
-                                        user.firstName,
-                                        user.lastName,
-                                    ) ?? "Unknown"}
-                                </span>
-                                {user.primaryEmailAddress?.emailAddress && (
-                                    <span className="truncate text-xs">
-                                        {user.primaryEmailAddress.emailAddress}
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-medium">
+                                        {getFullName(
+                                            user.firstName,
+                                            user.lastName,
+                                        ) ?? "Unknown"}
                                     </span>
-                                )}
-                            </div>
+                                    {user.primaryEmailAddress?.emailAddress && (
+                                        <span className="truncate text-xs">
+                                            {
+                                                user.primaryEmailAddress
+                                                    .emailAddress
+                                            }
+                                        </span>
+                                    )}
+                                </div>
 
-                            <ChevronRightIcon className="shrink-0 size-5" />
-                        </Link>
+                                <ChevronRightIcon className="shrink-0 size-5" />
+                            </Link>
 
-                        <Button
-                            variant="destructive"
-                            className="w-full justify-start"
-                            onClick={() => {
-                                db.auth
-                                    .signOut()
-                                    .then(() => signOut({ redirectUrl: "/" }));
-                            }}
-                        >
-                            <LogOutIcon />
-                            {tAuth("SignOut")}
-                        </Button>
-                    </div>
-                )}
-            </SheetContent>
-        </Sheet>
+                            <Button
+                                variant="destructive"
+                                className="w-full justify-start"
+                                onClick={() => {
+                                    db.auth
+                                        .signOut()
+                                        .then(() =>
+                                            signOut({ redirectUrl: "/" }),
+                                        );
+                                }}
+                            >
+                                <LogOutIcon />
+                                {tAuth("SignOut")}
+                            </Button>
+                        </div>
+                    )}
+                </div>
+            </DrawerContent>
+        </Drawer>
     );
 }

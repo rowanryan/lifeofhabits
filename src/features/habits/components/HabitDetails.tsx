@@ -57,7 +57,7 @@ export function HabitDetails({
         >
             <DrawerTrigger asChild>{children}</DrawerTrigger>
 
-            <DrawerContent className={cn(isMobile && "h-full")}>
+            <DrawerContent>
                 <DrawerHeader>
                     <DrawerTitle>{name}</DrawerTitle>
                     {key && (

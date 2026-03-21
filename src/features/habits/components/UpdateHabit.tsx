@@ -9,7 +9,6 @@ import z from "zod";
 import { FormField } from "@/components/FormField";
 import { Button } from "@/components/ui/button";
 import {
-    Drawer,
     DrawerClose,
     DrawerContent,
     DrawerDescription,
@@ -17,6 +16,7 @@ import {
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
+    NestedDrawer,
 } from "@/components/ui/drawer";
 import { FieldGroup, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -75,7 +75,7 @@ export type UpdateHabitProps = React.PropsWithChildren<{
     description: string | undefined;
     rrule: string;
 }> &
-    React.ComponentProps<typeof Drawer>;
+    React.ComponentProps<typeof NestedDrawer>;
 
 export function UpdateHabit({
     id,
@@ -134,7 +134,7 @@ export function UpdateHabit({
     );
 
     return (
-        <Drawer
+        <NestedDrawer
             open={isOpen}
             onOpenChange={setIsOpen}
             direction={isMobile ? "bottom" : "right"}
@@ -142,7 +142,7 @@ export function UpdateHabit({
         >
             <DrawerTrigger asChild>{children}</DrawerTrigger>
 
-            <DrawerContent className={cn(isMobile ? "h-full" : "max-w-lg!")}>
+            <DrawerContent className={cn(isMobile && "max-w-lg!")}>
                 <DrawerHeader>
                     <DrawerTitle>{t("Title")}</DrawerTitle>
                     <DrawerDescription>{t("Description")}</DrawerDescription>
@@ -694,6 +694,6 @@ export function UpdateHabit({
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
-        </Drawer>
+        </NestedDrawer>
     );
 }
