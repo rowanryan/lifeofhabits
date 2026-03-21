@@ -13,10 +13,8 @@
         "i18n:check": "i18n-check --source en --locales messages",
         "test:unit": "vitest run unit --config ./vitest.config.mts",
         "test:unit:watch": "vitest unit --config ./vitest.config.mts",
-        "db:generate": "bunx drizzle-kit generate",
-        "db:migrate": "bunx drizzle-kit migrate",
-        "db:studio": "bunx drizzle-kit studio",
-        "db:push": "bunx drizzle-kit push",
+        "db:push": "bunx instant-cli@latest push",
+        "db:pull": "bunx instant-cli@latest pull",
         "prepare": "husky"
     },
     "dependencies": {
@@ -27,6 +25,7 @@
         "@faker-js/faker": "^10.3.0",
         "@hookform/resolvers": "^5.2.2",
         "@icons-pack/react-simple-icons": "^13.11.2",
+        "@instantdb/react": "^0.22.169",
         "@neondatabase/serverless": "^1.0.2",
         "@sentry/nextjs": "10",
         "@t3-oss/env-nextjs": "^0.13.8",

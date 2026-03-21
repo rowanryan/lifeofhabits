@@ -1,9 +1,8 @@
 import type { OAuthStrategy } from "@clerk/types";
 import { SiGoogle } from "@icons-pack/react-simple-icons";
 import type { ComponentType, SVGProps } from "react";
-import { FaMicrosoft } from "react-icons/fa";
 
-export const OAUTH_PROVIDER_IDS = ["google", "microsoft"] as const;
+export const OAUTH_PROVIDER_IDS = ["google"] as const;
 
 export type OAuthProviderId = (typeof OAUTH_PROVIDER_IDS)[number];
 
@@ -23,16 +22,10 @@ export const OAUTH_PROVIDERS: OAuthProvider[] = [
         name: "Google",
         icon: SiGoogle,
     },
-    {
-        id: "microsoft",
-        strategy: "oauth_microsoft",
-        name: "Microsoft",
-        icon: FaMicrosoft,
-    },
 ];
 
 export function getOAuthProvider(
-    id: OAuthProviderId,
+    id: OAuthProviderId
 ): OAuthProvider | undefined {
-    return OAUTH_PROVIDERS.find((provider) => provider.id === id);
+    return OAUTH_PROVIDERS.find(provider => provider.id === id);
 }

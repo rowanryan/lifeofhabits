@@ -1,10 +1,11 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import z from "zod";
 import { env as clerkEnv } from "./extensions/clerk";
+import { env as instantEnv } from "./extensions/instant";
 import { env as sentryEnv } from "./extensions/sentry";
 
 export const env = createEnv({
-    extends: [clerkEnv, sentryEnv],
+    extends: [clerkEnv, sentryEnv, instantEnv],
 
     server: {
         NODE_ENV: z
