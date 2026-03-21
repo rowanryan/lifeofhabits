@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { AlertCircleIcon, CalendarSyncIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DataLoader } from "@/components/DataLoader";
@@ -17,20 +16,14 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
-import { Habits } from "@/features/habits";
+import { db } from "@/db";
 import { CreateHabit } from "@/features/habits/components/CreateHabit";
-import { getHabits } from "./actions";
 
 export default function Page() {
     const t = useTranslations("Habits");
 
-    const {
-        data: habits,
-        isLoading,
-        error,
-    } = useQuery({
-        queryKey: ["habits"],
-        queryFn: async () => (await getHabits()).data,
+    const { data, isLoading, error } = db.useQuery({
+        habits: {},
     });
 
     return (
@@ -44,7 +37,7 @@ export default function Page() {
             </ButtonGroup>
 
             <DataLoader
-                data={habits}
+                data={data?.habits}
                 isLoading={isLoading}
                 error={error}
                 loader={
@@ -65,7 +58,7 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <Habits showDelete habits={data} />
+                            <p>Habits</p>
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">

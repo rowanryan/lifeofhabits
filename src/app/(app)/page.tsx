@@ -1,7 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { addDays, format, subDays } from "date-fns";
+import { addDays, endOfDay, format, startOfDay, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -11,6 +10,8 @@ import {
     PlusIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useMemo } from "react";
+import { rrulestr } from "rrule";
 import { DataLoader } from "@/components/DataLoader";
 import { PageLayout } from "@/components/PageLayout";
 import { PageSection } from "@/components/PageSection";
@@ -25,11 +26,11 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
-import { Habits } from "@/features/habits";
+import { db } from "@/db";
+import type { Habit } from "@/db/schema";
 import { CreateHabit } from "@/features/habits/components/CreateHabit";
 import { useRelativeDate } from "@/hooks/use-relative-date";
 import { useLogStore } from "@/stores/useLogStore";
-import { getHabits } from "./actions";
 import { Calendar } from "./components/Calendar";
 
 export default function Page() {
@@ -44,14 +45,33 @@ export default function Page() {
     const nextDate = addDays(currentDate, 1);
     const dateString = format(currentDate, "yyyy-MM-dd");
 
-    const {
-        data: habits,
-        isLoading,
-        error,
-    } = useQuery({
-        queryKey: ["habits", { date: dateString }],
-        queryFn: async () => (await getHabits({ date: dateString })).data,
+    const { data, isLoading, error } = db.useQuery({
+        habits: {},
     });
+
+    const habits = useMemo(() => {
+        if (data) {
+            const targetDate = new Date(dateString);
+            const start = startOfDay(targetDate);
+            const end = endOfDay(targetDate);
+
+            const filteredHabits: Habit[] = [];
+            for (const habit of data.habits) {
+                try {
+                    const rule = rrulestr(habit.rrule);
+                    const occurrences = rule.between(start, end, true);
+
+                    if (occurrences.length > 0) {
+                        filteredHabits.push(habit);
+                    }
+                } catch {
+                    // Skip habits with invalid rrule
+                }
+            }
+
+            return filteredHabits;
+        }
+    }, [data, dateString]);
 
     return (
         <PageLayout
@@ -128,7 +148,7 @@ export default function Page() {
                 {(data) => (
                     <PageSection>
                         {data.length > 0 ? (
-                            <Habits showMarkAsDone habits={data} />
+                            <p>Habits</p>
                         ) : (
                             <Empty>
                                 <EmptyMedia variant="icon">

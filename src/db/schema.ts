@@ -1,6 +1,6 @@
 // Docs: https://www.instantdb.com/docs/modeling-data
 
-import { i } from "@instantdb/react";
+import { type InstaQLEntity, i } from "@instantdb/react";
 
 const _schema = i.schema({
     entities: {
@@ -80,5 +80,8 @@ type _AppSchema = typeof _schema;
 interface AppSchema extends _AppSchema {}
 const schema: AppSchema = _schema;
 
-export type { AppSchema };
+// Types
+type Habit = InstaQLEntity<_AppSchema, "habits", object, undefined, true>;
+
+export type { AppSchema, Habit };
 export default schema;
