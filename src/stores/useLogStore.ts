@@ -5,7 +5,7 @@ type LogStore = {
     setCurrentDate: (date: Date) => void;
 };
 
-export const useLogStore = create<LogStore>(set => ({
+export const useLogStore = create<LogStore>((set) => ({
     currentDate: new Date(),
-    setCurrentDate: date => set({ currentDate: date }),
+    setCurrentDate: (date) => set({ currentDate: date }),
 }));

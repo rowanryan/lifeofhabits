@@ -13,7 +13,7 @@ export function useScheduleTranslation() {
             params?: Record<string, unknown>;
         }
     >(
-        schedule => {
+        (schedule) => {
             if (schedule.interval === "minute") {
                 return {
                     key: "Every.minute",
@@ -49,7 +49,7 @@ export function useScheduleTranslation() {
                         count: schedule.count,
                         startMonth: t(
                             // biome-ignore lint/suspicious/noExplicitAny: dynamic key from schedule type
-                            `StartMonth.${schedule.startMonth}` as any
+                            `StartMonth.${schedule.startMonth}` as any,
                         ),
                     },
                 };
@@ -65,7 +65,7 @@ export function useScheduleTranslation() {
 
             return { key: "Every.minute", params: { count: 1 } };
         },
-        [t]
+        [t],
     );
 
     return getKey;

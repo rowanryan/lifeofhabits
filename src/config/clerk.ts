@@ -25,7 +25,7 @@ export const OAUTH_PROVIDERS: OAuthProvider[] = [
 ];
 
 export function getOAuthProvider(
-    id: OAuthProviderId
+    id: OAuthProviderId,
 ): OAuthProvider | undefined {
-    return OAUTH_PROVIDERS.find(provider => provider.id === id);
+    return OAUTH_PROVIDERS.find((provider) => provider.id === id);
 }
