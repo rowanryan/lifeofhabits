@@ -285,33 +285,12 @@
         "Schedule": {
             "Every": {
                 "minute": "Every {count, plural, =1 {minute} other {# minutes}}",
-                "hour": "Every {count, plural, =1 {hour} other {# hours}} starting at {startTime}",
-                "day": "Every {count, plural, =1 {day} other {# days}} starting on {startDay}",
-                "month": "Every {count, plural, =1 {month} other {# months}} starting in {startMonth}"
+                "hour": "Every {count, plural, =1 {hour} other {# hours}} starting at {startTime}"
             },
-            "StartDay": {
-                "monday": "Monday",
-                "tuesday": "Tuesday",
-                "wednesday": "Wednesday",
-                "thursday": "Thursday",
-                "friday": "Friday",
-                "saturday": "Saturday",
-                "sunday": "Sunday"
-            },
-            "StartMonth": {
-                "january": "January",
-                "february": "February",
-                "march": "March",
-                "april": "April",
-                "may": "May",
-                "june": "June",
-                "july": "July",
-                "august": "August",
-                "september": "September",
-                "october": "October",
-                "november": "November",
-                "december": "December"
-            },
+            "Daily": "Daily",
+            "DailyAt": "Daily at {time}",
+            "Monthly": "Monthly",
+            "MonthlyOn": "Monthly on the {dayNumber, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
             "Weekday": {
                 "monday": "Every Monday",
                 "tuesday": "Every Tuesday",
@@ -349,15 +328,15 @@
                 "IntervalOptions": {
                     "minute": "Every X minutes",
                     "hour": "Every X hours",
-                    "day": "Every X days",
-                    "month": "Every X months",
+                    "day": "Daily",
+                    "month": "Monthly",
                     "weekday": "Weekly on a specific day",
                     "year": "Yearly in a specific month"
                 },
                 "Count": "Repeat every",
                 "StartTime": "Starting at",
-                "StartDay": "Starting on",
-                "StartMonth": "Starting in",
+                "Time": "Time of day (optional)",
+                "DayNumber": "Day of month (optional)",
                 "Day": "Day of the week",
                 "Month": "Month of the year",
                 "Days": {

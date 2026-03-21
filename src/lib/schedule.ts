@@ -56,13 +56,11 @@ export const ScheduleSchema = z.discriminatedUnion("interval", [
     }),
     z.object({
         interval: z.literal("day"),
-        count: z.number().int().positive(),
-        startDay: DaysSchema,
+        time: z.string().regex(timeRegex).optional(),
     }),
     z.object({
         interval: z.literal("month"),
-        count: z.number().int().positive(),
-        startMonth: MonthsSchema,
+        dayNumber: z.number().int().positive().max(31).optional(),
     }),
     z.object({
         interval: z.literal("weekday"),
@@ -162,31 +160,23 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     }
 
     if (schedule.interval === "day") {
-        const dayIndex = DaysSchema.options.indexOf(schedule.startDay);
         const ruleStart = new Date(start);
-        const currentDay = ruleStart.getDay();
-        const targetDay = (dayIndex + 1) % 7;
-        const daysUntilTarget = (targetDay - currentDay + 7) % 7;
-        ruleStart.setDate(ruleStart.getDate() + daysUntilTarget);
+        if (schedule.time) {
+            const { hour, minute } = parseTime(schedule.time);
+            ruleStart.setHours(hour, minute, 0, 0);
+        }
         const rule = new RRule({
             freq: Frequency.DAILY,
-            interval: schedule.count,
             dtstart: ruleStart,
         });
         return rule.toString();
     }
 
     if (schedule.interval === "month") {
-        const monthIndex = monthToNumber[schedule.startMonth] - 1;
-        const ruleStart = new Date(start);
-        ruleStart.setMonth(monthIndex, 1);
-        if (ruleStart < start) {
-            ruleStart.setFullYear(ruleStart.getFullYear() + 1);
-        }
         const rule = new RRule({
             freq: Frequency.MONTHLY,
-            interval: schedule.count,
-            dtstart: ruleStart,
+            bymonthday: schedule.dayNumber ? [schedule.dayNumber] : undefined,
+            dtstart: start,
         });
         return rule.toString();
     }
@@ -238,21 +228,20 @@ export function rRuleToSchedule(rruleStr: string): Schedule | null {
         }
 
         if (rule.options.freq === Frequency.DAILY) {
-            const dayNum = dtstart?.getDay() ?? 0;
-            const dayIndex = dayNum === 0 ? 6 : dayNum - 1;
+            const hour = dtstart?.getHours();
+            const minute = dtstart?.getMinutes();
+            const hasTime = hour !== undefined && minute !== undefined && (hour !== 0 || minute !== 0);
             return ScheduleSchema.parse({
                 interval: "day",
-                count: rule.options.interval,
-                startDay: weekdayToDay[dayIndex],
+                time: hasTime ? formatTime(hour, minute) : undefined,
             });
         }
 
         if (rule.options.freq === Frequency.MONTHLY) {
-            const monthNum = (dtstart?.getMonth() ?? 0) + 1;
+            const bymonthday = rule.options.bymonthday;
             return ScheduleSchema.parse({
                 interval: "month",
-                count: rule.options.interval,
-                startMonth: numberToMonth[monthNum],
+                dayNumber: bymonthday?.length ? bymonthday[0] : undefined,
             });
         }
 

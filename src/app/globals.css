@@ -167,4 +167,23 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    /* Fix iOS time/date input overflow in standalone PWA mode */
+    input[type="time"],
+    input[type="date"],
+    input[type="datetime-local"] {
+        -webkit-appearance: none;
+        appearance: none;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Ensure time input respects container width on iOS */
+    @supports (-webkit-touch-callout: none) {
+        input[type="time"],
+        input[type="date"],
+        input[type="datetime-local"] {
+            min-height: 2.25rem;
+        }
+    }
 }
