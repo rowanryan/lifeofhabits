@@ -26,14 +26,7 @@ export const months = [
     "december",
 ] as const;
 
-export const intervals = [
-    "minute",
-    "hour",
-    "day",
-    "month",
-    "weekday",
-    "year",
-] as const;
+export const intervals = ["day", "weekday", "month", "year"] as const;
 
 export const DaysSchema = z.enum(days);
 
@@ -45,15 +38,6 @@ export type Month = z.infer<typeof MonthsSchema>;
 export type Day = z.infer<typeof DaysSchema>;
 
 export const ScheduleSchema = z.discriminatedUnion("interval", [
-    z.object({
-        interval: z.literal("minute"),
-        count: z.number().int().positive(),
-    }),
-    z.object({
-        interval: z.literal("hour"),
-        count: z.number().int().positive(),
-        startTime: z.string().regex(timeRegex),
-    }),
     z.object({
         interval: z.literal("day"),
         time: z.string().regex(timeRegex).optional(),
@@ -138,27 +122,6 @@ function formatTime(hour: number, minute: number): string {
 export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     const start = dtstart ?? new Date();
 
-    if (schedule.interval === "minute") {
-        const rule = new RRule({
-            freq: Frequency.MINUTELY,
-            interval: schedule.count,
-            dtstart: start,
-        });
-        return rule.toString();
-    }
-
-    if (schedule.interval === "hour") {
-        const { hour, minute } = parseTime(schedule.startTime);
-        const ruleStart = new Date(start);
-        ruleStart.setHours(hour, minute, 0, 0);
-        const rule = new RRule({
-            freq: Frequency.HOURLY,
-            interval: schedule.count,
-            dtstart: ruleStart,
-        });
-        return rule.toString();
-    }
-
     if (schedule.interval === "day") {
         const ruleStart = new Date(start);
         if (schedule.time) {
@@ -210,27 +173,13 @@ export function rRuleToSchedule(rruleStr: string): Schedule | null {
         const bymonth = rule.options.bymonth;
         const dtstart = rule.options.dtstart;
 
-        if (rule.options.freq === Frequency.MINUTELY) {
-            return ScheduleSchema.parse({
-                interval: "minute",
-                count: rule.options.interval,
-            });
-        }
-
-        if (rule.options.freq === Frequency.HOURLY) {
-            const hour = dtstart?.getHours() ?? 0;
-            const minute = dtstart?.getMinutes() ?? 0;
-            return ScheduleSchema.parse({
-                interval: "hour",
-                count: rule.options.interval,
-                startTime: formatTime(hour, minute),
-            });
-        }
-
         if (rule.options.freq === Frequency.DAILY) {
             const hour = dtstart?.getHours();
             const minute = dtstart?.getMinutes();
-            const hasTime = hour !== undefined && minute !== undefined && (hour !== 0 || minute !== 0);
+            const hasTime =
+                hour !== undefined &&
+                minute !== undefined &&
+                (hour !== 0 || minute !== 0);
             return ScheduleSchema.parse({
                 interval: "day",
                 time: hasTime ? formatTime(hour, minute) : undefined,

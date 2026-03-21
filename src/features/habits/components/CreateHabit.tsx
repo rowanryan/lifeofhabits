@@ -60,11 +60,9 @@ const formSchema = z.object({
 type FormValues = z.input<typeof formSchema>;
 
 const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
-    minute: { interval: "minute", count: 1 },
-    hour: { interval: "hour", count: 1, startTime: "09:00" },
     day: { interval: "day" },
-    month: { interval: "month" },
     weekday: { interval: "weekday", day: "monday" },
+    month: { interval: "month" },
     year: { interval: "year", month: "january" },
 };
 
@@ -105,6 +103,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                         userId: user.id,
                         name: data.name,
                         description: data.description,
+                        requiredCompletions: 1,
                     }),
                     habit.link({
                         user: user.id,
@@ -235,134 +234,12 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                             </FieldGroup>
 
                             {match(interval)
-                                .with("minute", () => (
-                                    <FieldGroup>
-                                        <Controller
-                                            control={form.control}
-                                            name="schedule.count"
-                                            render={({ field, fieldState }) => (
-                                                <FormField
-                                                    label={t("Form.Count")}
-                                                    isInvalid={
-                                                        fieldState.invalid
-                                                    }
-                                                    error={fieldState.error}
-                                                >
-                                                    <Input
-                                                        type="number"
-                                                        min={1}
-                                                        aria-invalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        {...field}
-                                                        value={
-                                                            field.value ?? ""
-                                                        }
-                                                        onChange={(e) => {
-                                                            const val =
-                                                                e.target.value;
-                                                            field.onChange(
-                                                                val === ""
-                                                                    ? undefined
-                                                                    : Number(
-                                                                          val,
-                                                                      ),
-                                                            );
-                                                        }}
-                                                    />
-                                                </FormField>
-                                            )}
-                                        />
-                                    </FieldGroup>
-                                ))
-                                .with("hour", () => (
-                                    <>
-                                        <FieldGroup>
-                                            <Controller
-                                                control={form.control}
-                                                name="schedule.count"
-                                                render={({
-                                                    field,
-                                                    fieldState,
-                                                }) => (
-                                                    <FormField
-                                                        label={t("Form.Count")}
-                                                        isInvalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        error={fieldState.error}
-                                                    >
-                                                        <Input
-                                                            type="number"
-                                                            min={1}
-                                                            aria-invalid={
-                                                                fieldState.invalid
-                                                            }
-                                                            {...field}
-                                                            value={
-                                                                field.value ??
-                                                                ""
-                                                            }
-                                                            onChange={(e) => {
-                                                                const val =
-                                                                    e.target
-                                                                        .value;
-                                                                field.onChange(
-                                                                    val === ""
-                                                                        ? undefined
-                                                                        : Number(
-                                                                              val,
-                                                                          ),
-                                                                );
-                                                            }}
-                                                        />
-                                                    </FormField>
-                                                )}
-                                            />
-                                        </FieldGroup>
-                                        <FieldGroup>
-                                            <Controller
-                                                control={form.control}
-                                                name="schedule.startTime"
-                                                render={({
-                                                    field,
-                                                    fieldState,
-                                                }) => (
-                                                    <FormField
-                                                        label={t(
-                                                            "Form.StartTime",
-                                                        )}
-                                                        isInvalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        error={fieldState.error}
-                                                    >
-                                                        <Input
-                                                            type="time"
-                                                            aria-invalid={
-                                                                fieldState.invalid
-                                                            }
-                                                            {...field}
-                                                            value={
-                                                                field.value ??
-                                                                "09:00"
-                                                            }
-                                                        />
-                                                    </FormField>
-                                                )}
-                                            />
-                                        </FieldGroup>
-                                    </>
-                                ))
                                 .with("day", () => (
                                     <FieldGroup>
                                         <Controller
                                             control={form.control}
                                             name="schedule.time"
-                                            render={({
-                                                field,
-                                                fieldState,
-                                            }) => (
+                                            render={({ field, fieldState }) => (
                                                 <FormField
                                                     label={t("Form.Time")}
                                                     isInvalid={
@@ -377,7 +254,10 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                                 fieldState.invalid
                                                             }
                                                             {...field}
-                                                            value={field.value ?? ""}
+                                                            value={
+                                                                field.value ??
+                                                                ""
+                                                            }
                                                         />
                                                         {field.value && (
                                                             <InputGroupAddon align="inline-end">
@@ -404,10 +284,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                         <Controller
                                             control={form.control}
                                             name="schedule.dayNumber"
-                                            render={({
-                                                field,
-                                                fieldState,
-                                            }) => (
+                                            render={({ field, fieldState }) => (
                                                 <FormField
                                                     label={t("Form.DayNumber")}
                                                     isInvalid={
@@ -423,14 +300,18 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
                                                             fieldState.invalid
                                                         }
                                                         {...field}
-                                                        value={field.value ?? ""}
+                                                        value={
+                                                            field.value ?? ""
+                                                        }
                                                         onChange={(e) => {
                                                             const val =
                                                                 e.target.value;
                                                             field.onChange(
                                                                 val === ""
                                                                     ? undefined
-                                                                    : Number(val),
+                                                                    : Number(
+                                                                          val,
+                                                                      ),
                                                             );
                                                         }}
                                                     />

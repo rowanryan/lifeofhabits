@@ -60,11 +60,9 @@ const formSchema = z.object({
 type FormValues = z.input<typeof formSchema>;
 
 const defaultScheduleValues: Record<Schedule["interval"], Schedule> = {
-    minute: { interval: "minute", count: 1 },
-    hour: { interval: "hour", count: 1, startTime: "09:00" },
     day: { interval: "day" },
-    month: { interval: "month" },
     weekday: { interval: "weekday", day: "monday" },
+    month: { interval: "month" },
     year: { interval: "year", month: "january" },
 };
 
@@ -250,125 +248,6 @@ export function UpdateHabit({
                             </FieldGroup>
 
                             {match(interval)
-                                .with("minute", () => (
-                                    <FieldGroup>
-                                        <Controller
-                                            control={form.control}
-                                            name="schedule.count"
-                                            render={({ field, fieldState }) => (
-                                                <FormField
-                                                    label={tForm("Count")}
-                                                    isInvalid={
-                                                        fieldState.invalid
-                                                    }
-                                                    error={fieldState.error}
-                                                >
-                                                    <Input
-                                                        type="number"
-                                                        min={1}
-                                                        aria-invalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        {...field}
-                                                        value={
-                                                            field.value ?? ""
-                                                        }
-                                                        onChange={(e) => {
-                                                            const val =
-                                                                e.target.value;
-                                                            field.onChange(
-                                                                val === ""
-                                                                    ? undefined
-                                                                    : Number(
-                                                                          val,
-                                                                      ),
-                                                            );
-                                                        }}
-                                                    />
-                                                </FormField>
-                                            )}
-                                        />
-                                    </FieldGroup>
-                                ))
-                                .with("hour", () => (
-                                    <>
-                                        <FieldGroup>
-                                            <Controller
-                                                control={form.control}
-                                                name="schedule.count"
-                                                render={({
-                                                    field,
-                                                    fieldState,
-                                                }) => (
-                                                    <FormField
-                                                        label={tForm("Count")}
-                                                        isInvalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        error={fieldState.error}
-                                                    >
-                                                        <Input
-                                                            type="number"
-                                                            min={1}
-                                                            aria-invalid={
-                                                                fieldState.invalid
-                                                            }
-                                                            {...field}
-                                                            value={
-                                                                field.value ??
-                                                                ""
-                                                            }
-                                                            onChange={(e) => {
-                                                                const val =
-                                                                    e.target
-                                                                        .value;
-                                                                field.onChange(
-                                                                    val === ""
-                                                                        ? undefined
-                                                                        : Number(
-                                                                              val,
-                                                                          ),
-                                                                );
-                                                            }}
-                                                        />
-                                                    </FormField>
-                                                )}
-                                            />
-                                        </FieldGroup>
-                                        <FieldGroup>
-                                            <Controller
-                                                control={form.control}
-                                                name="schedule.startTime"
-                                                render={({
-                                                    field,
-                                                    fieldState,
-                                                }) => (
-                                                    <FormField
-                                                        label={tForm(
-                                                            "StartTime",
-                                                        )}
-                                                        isInvalid={
-                                                            fieldState.invalid
-                                                        }
-                                                        error={fieldState.error}
-                                                    >
-                                                        <Input
-                                                            type="time"
-                                                            aria-invalid={
-                                                                fieldState.invalid
-                                                            }
-                                                            {...field}
-                                                            value={
-                                                                field.value ??
-                                                                "09:00"
-                                                            }
-                                                        />
-                                                    </FormField>
-                                                )}
-                                            />
-                                        </FieldGroup>
-                                    </>
-                                ))
                                 .with("day", () => (
                                     <FieldGroup>
                                         <Controller

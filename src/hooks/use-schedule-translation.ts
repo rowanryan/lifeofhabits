@@ -10,23 +10,6 @@ export function useScheduleTranslation() {
             params?: Record<string, unknown>;
         }
     >((schedule) => {
-        if (schedule.interval === "minute") {
-            return {
-                key: "Every.minute",
-                params: { count: schedule.count },
-            };
-        }
-
-        if (schedule.interval === "hour") {
-            return {
-                key: "Every.hour",
-                params: {
-                    count: schedule.count,
-                    startTime: schedule.startTime,
-                },
-            };
-        }
-
         if (schedule.interval === "day") {
             if (schedule.time) {
                 return {
@@ -55,7 +38,7 @@ export function useScheduleTranslation() {
             return { key: `Yearly.${schedule.month}` };
         }
 
-        return { key: "Every.minute", params: { count: 1 } };
+        return { key: "Daily" };
     }, []);
 
     return getKey;
