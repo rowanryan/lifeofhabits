@@ -1,6 +1,6 @@
 "use client";
 
-import { addDays, endOfDay, format, startOfDay, subDays } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import {
     AlertCircleIcon,
     ArrowLeftIcon,
@@ -58,8 +58,28 @@ export default function Page() {
     const habits = useMemo(() => {
         if (data) {
             const targetDate = new Date(dateString);
-            const start = startOfDay(targetDate);
-            const end = endOfDay(targetDate);
+            const start = new Date(
+                Date.UTC(
+                    targetDate.getFullYear(),
+                    targetDate.getMonth(),
+                    targetDate.getDate(),
+                    0,
+                    0,
+                    0,
+                    0,
+                ),
+            );
+            const end = new Date(
+                Date.UTC(
+                    targetDate.getFullYear(),
+                    targetDate.getMonth(),
+                    targetDate.getDate(),
+                    23,
+                    59,
+                    59,
+                    999,
+                ),
+            );
 
             const filteredHabits: HabitWithCompletions[] = [];
             for (const habit of data.habits) {

@@ -71,12 +71,32 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     const start = dtstart ?? new Date();
 
     if (schedule.interval === "day") {
-        const ruleStart = new Date(start);
+        let ruleStart: Date;
         if (schedule.time) {
             const { hour, minute } = parseTime(schedule.time);
-            ruleStart.setHours(hour, minute, 0, 0);
+            ruleStart = new Date(
+                Date.UTC(
+                    start.getFullYear(),
+                    start.getMonth(),
+                    start.getDate(),
+                    hour,
+                    minute,
+                    0,
+                    0,
+                ),
+            );
         } else {
-            ruleStart.setHours(0, 0, 0, 0);
+            ruleStart = new Date(
+                Date.UTC(
+                    start.getFullYear(),
+                    start.getMonth(),
+                    start.getDate(),
+                    0,
+                    0,
+                    0,
+                    0,
+                ),
+            );
         }
         const rule = new RRule({
             freq: Frequency.DAILY,
@@ -86,8 +106,17 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     }
 
     if (schedule.interval === "month") {
-        const ruleStart = new Date(start);
-        ruleStart.setHours(0, 0, 0, 0);
+        const ruleStart = new Date(
+            Date.UTC(
+                start.getFullYear(),
+                start.getMonth(),
+                start.getDate(),
+                0,
+                0,
+                0,
+                0,
+            ),
+        );
         const rule = new RRule({
             freq: Frequency.MONTHLY,
             bymonthday: [schedule.dayNumber],
@@ -97,10 +126,21 @@ export function scheduleToRRule(schedule: Schedule, dtstart?: Date): string {
     }
 
     if (schedule.interval === "weekday") {
+        const ruleStart = new Date(
+            Date.UTC(
+                start.getFullYear(),
+                start.getMonth(),
+                start.getDate(),
+                0,
+                0,
+                0,
+                0,
+            ),
+        );
         const rule = new RRule({
             freq: Frequency.WEEKLY,
             byweekday: [dayToWeekday[schedule.day]],
-            dtstart: start,
+            dtstart: ruleStart,
         });
         return rule.toString();
     }
@@ -116,8 +156,8 @@ export function rRuleToSchedule(rruleStr: string): Schedule | null {
         const dtstart = rule.options.dtstart;
 
         if (rule.options.freq === Frequency.DAILY) {
-            const hour = dtstart?.getHours();
-            const minute = dtstart?.getMinutes();
+            const hour = dtstart?.getUTCHours();
+            const minute = dtstart?.getUTCMinutes();
             const hasTime =
                 hour !== undefined &&
                 minute !== undefined &&
