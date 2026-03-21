@@ -76,6 +76,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
     const [isOpen, setIsOpen] = useState(false);
     const t = useTranslations("Habits.Create");
     const isMobile = useIsMobile();
+    const { user } = db.useAuth();
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -96,23 +97,26 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
         (data: FormValues) => {
             const habit = db.tx.habits[id()];
 
-            if (habit) {
+            if (habit && user) {
                 const rrule = scheduleToRRule(data.schedule);
 
-                db.transact(
+                db.transact([
                     habit.create({
                         rrule,
-                        userId: "123",
+                        userId: user.id,
                         name: data.name,
                         description: data.description,
                     }),
-                );
+                    habit.link({
+                        user: user.id,
+                    }),
+                ]);
 
                 setIsOpen(false);
                 form.reset();
             }
         },
-        [form.reset],
+        [user, form.reset],
     );
 
     return (

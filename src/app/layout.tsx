@@ -3,6 +3,7 @@ import { Figtree, Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
+import { InstantAuth } from "@/components/InstantAuth";
 import { env } from "@/env";
 import { Providers } from "./providers";
 
@@ -33,6 +34,7 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <Providers>
+                    <InstantAuth />
                     <NextTopLoader showSpinner />
                     {children}
                     <Toaster closeButton richColors position="top-center" />
