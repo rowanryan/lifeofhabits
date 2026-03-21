@@ -78,7 +78,7 @@ export function CreateHabit({ children, ...props }: CreateHabitProps) {
         defaultValues: {
             name: "",
             description: "",
-            schedule: defaultScheduleValues.weekday,
+            schedule: defaultScheduleValues.day,
         },
     });
 
